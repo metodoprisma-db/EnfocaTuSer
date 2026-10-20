@@ -1,0 +1,38 @@
+export const ASSETS = {
+  logo:
+    "https://d1yei2z3i6k35z.cloudfront.net/16481184/6a5a04ba3b6369.92594905_Logo_Enfoca-tu-Ser_web.png",
+  mark:
+    "https://d1yei2z3i6k35z.cloudfront.net/16481184/6a5a04dde1fa75.72176931_isotipo_Enfoca-tu-Ser_web.png",
+  butterfly:
+    "https://d1yei2z3i6k35z.cloudfront.net/16481184/6a5a0517b32a53.66254743_Mariposa_Enfoca-tu-ser_2k_web.png",
+  favicon:
+    "https://d1yei2z3i6k35z.cloudfront.net/16481184/6a5a04fd3c8749.82601406_Mariposa_Enfoca-tu-Ser_favicom.png",
+  mentors:
+    "https://d1yei2z3i6k35z.cloudfront.net/16481184/6a9f3158bd1864.30020764_EnfocaTuSe_Perfil.png",
+  clarissa:
+    "https://d1yei2z3i6k35z.cloudfront.net/16481184/6a511e9b48cc47.40674928_WhatsAppImage2026-05-27at10.33.37PM3.jpeg",
+} as const;
+
+export const LOCAL_STORAGE_KEY = "enfoca-tu-ser:v2";
+export const LEGACY_LOCAL_STORAGE_KEY = "enfoca-tu-ser:v1";
+export const TIMEZONE_PROMPT_STORAGE_KEY =
+  "enfoca-tu-ser:timezone-do-not-ask";
+export const JOURNAL_PAGE_SIZE = 20;
+
+export const GIFT_CHAT_URL =
+  process.env.NEXT_PUBLIC_GIFT_CHAT_URL?.trim() ||
+  "https://calendly.com/enfoca-tu-ser/charla-cercana";
+
+export const SUPPORT_URL =
+  process.env.NEXT_PUBLIC_SUPPORT_URL?.trim() || GIFT_CHAT_URL;
+
+export const MEMBERSHIP_CHECKOUT_URL =
+  process.env.NEXT_PUBLIC_MEMBERSHIP_CHECKOUT_URL?.trim() || SUPPORT_URL;
+
+export const ENFORCE_SUBSCRIPTION =
+  process.env.NEXT_PUBLIC_ENFORCE_SUBSCRIPTION === "true";
+
+export const hasSupabaseEnvironment = Boolean(
+  process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() &&
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim(),
+);
