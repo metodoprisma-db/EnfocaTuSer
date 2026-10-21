@@ -1,6 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 import { JOURNAL_PAGE_SIZE } from "@/lib/constants";
+import { mergeAccountData } from "@/lib/supabase/merge";
 import type {
   AppAnnouncement,
   AppData,
@@ -9,29 +10,6 @@ import type {
   ProgressEntry,
   UserAssessment,
 } from "@/types/app";
-
-function mergeProgress(local: ProgressEntry[], remote: ProgressEntry[]) {
-  const map = new Map<string, ProgressEntry>();
-  [...remote, ...local].forEach((entry) => {
-    map.set(entry.kind + ":" + entry.itemIndex, entry);
-  });
-  return Array.from(map.values());
-}
-
-function mergeById<T extends { id: string }>(local: T[], remote: T[]) {
-  const map = new Map<string, T>();
-  [...remote, ...local].forEach((entry) => map.set(entry.id, entry));
-  return Array.from(map.values());
-}
-
-function mergeAssessments(
-  local: UserAssessment[],
-  remote: UserAssessment[],
-) {
-  const map = new Map<UserAssessment["stage"], UserAssessment>();
-  [...local, ...remote].forEach((entry) => map.set(entry.stage, entry));
-  return Array.from(map.values());
-}
 
 function mapProgress(row: {
   id: string;
@@ -119,95 +97,92 @@ function throwIfError(error: { message: string } | null) {
   }
 }
 
+async function applyPendingDeletes(
+  client: SupabaseClient,
+  userId: string,
+  local: AppData,
+) {
+  if (local.sync.clearAll) {
+    for (const table of [
+      "journal_entries",
+      "practice_sessions",
+      "user_progress",
+      "user_assessments",
+    ]) {
+      const { error } = await client.from(table).delete().eq("user_id", userId);
+      throwIfError(error);
+    }
+    const { error } = await client
+      .from("profiles")
+      .update({ last_compass_emotion: "Temor", gift_unlocked_at: null })
+      .eq("id", userId);
+    throwIfError(error);
+    return;
+  }
+
+  if (local.sync.pendingJournalDeletes.length > 0) {
+    const { error } = await client
+      .from("journal_entries")
+      .delete()
+      .eq("user_id", userId)
+      .in("id", local.sync.pendingJournalDeletes);
+    throwIfError(error);
+  }
+
+  for (const entry of local.sync.pendingProgressDeletes) {
+    const { error } = await client
+      .from("user_progress")
+      .delete()
+      .eq("user_id", userId)
+      .eq("item_type", entry.kind)
+      .eq("item_index", entry.itemIndex);
+    throwIfError(error);
+  }
+}
+
+async function applyPendingProfilePatch(
+  client: SupabaseClient,
+  userId: string,
+  local: AppData,
+) {
+  const patch = local.sync.profilePatch;
+  const payload: Record<string, unknown> = {};
+  if (patch.lastCompassEmotion !== undefined) {
+    payload.last_compass_emotion = patch.lastCompassEmotion;
+  }
+  if (patch.timezone !== undefined) payload.timezone = patch.timezone;
+  if (patch.timezoneManual !== undefined) {
+    payload.timezone_manual = patch.timezoneManual;
+  }
+  if (patch.presenceDaysCount !== undefined) {
+    payload.presence_days_count = patch.presenceDaysCount;
+  }
+  if (patch.currentRhythmCount !== undefined) {
+    payload.current_rhythm_count = patch.currentRhythmCount;
+  }
+  if (patch.lastActiveDate !== undefined) {
+    payload.last_active_date = patch.lastActiveDate;
+  }
+  if (patch.giftUnlockedAt !== undefined) {
+    payload.gift_unlocked_at = patch.giftUnlockedAt;
+  }
+
+  if (Object.keys(payload).length > 0) {
+    const { error } = await client
+      .from("profiles")
+      .update(payload)
+      .eq("id", userId);
+    throwIfError(error);
+  }
+}
+
 export async function syncDataWithSupabase(
   client: SupabaseClient,
   userId: string,
   local: AppData,
 ) {
-  if (local.progress.length > 0) {
-    const payload = local.progress.map((entry) => ({
-      user_id: userId,
-      item_type: entry.kind,
-      item_index: entry.itemIndex,
-      completed_at: entry.completedAt,
-    }));
-    const { error } = await client
-      .from("user_progress")
-      .upsert(payload, { onConflict: "user_id,item_type,item_index" });
-    throwIfError(error);
-  }
-
-  if (local.practiceSessions.length > 0) {
-    const payload = local.practiceSessions.map((entry) => ({
-      id: entry.id,
-      user_id: userId,
-      feeling: entry.feeling,
-      situation: entry.situation || null,
-      body_place: entry.bodyPlace || null,
-      thoughts_released: entry.thoughtsReleased,
-      intensity_before: entry.intensityBefore,
-      intensity_after: entry.intensityAfter,
-      release_note: entry.releaseNote || null,
-      created_at: entry.createdAt,
-    }));
-    const { error } = await client
-      .from("practice_sessions")
-      .upsert(payload, { onConflict: "id" });
-    throwIfError(error);
-  }
-
-  if (local.journalEntries.length > 0) {
-    const payload = local.journalEntries.map((entry) => ({
-      id: entry.id,
-      user_id: userId,
-      entry_type: entry.entryType,
-      item_index: entry.itemIndex,
-      title: entry.title,
-      content: entry.content,
-      practice_session_id: entry.practiceSessionId,
-      created_at: entry.createdAt,
-    }));
-    const { error } = await client
-      .from("journal_entries")
-      .upsert(payload, { onConflict: "id" });
-    throwIfError(error);
-  }
-
-  if (local.assessments.length > 0) {
-    const payload = local.assessments.map((entry) => ({
-      id: entry.id,
-      user_id: userId,
-      stage: entry.stage,
-      calm_score: entry.calmScore,
-      self_kindness_score: entry.selfKindnessScore,
-      clarity_score: entry.clarityScore,
-      peace_score: entry.peaceScore,
-      reflection_note: entry.reflectionNote || null,
-      created_at: entry.createdAt,
-    }));
-    const { error } = await client
-      .from("user_assessments")
-      .upsert(payload, { onConflict: "user_id,stage" });
-    throwIfError(error);
-  }
-
-  const completedDiscoveries = new Set(
-    local.progress
-      .filter((entry) => entry.kind === "discovery")
-      .map((entry) => entry.itemIndex),
-  );
-  const firstFiveCompleted = [0, 1, 2, 3, 4].every((index) =>
-    completedDiscoveries.has(index),
-  );
-  if (firstFiveCompleted) {
-    const unlockedAt = local.giftUnlockedAt ?? new Date().toISOString();
-    const { error } = await client
-      .from("profiles")
-      .update({ gift_unlocked_at: unlockedAt })
-      .eq("id", userId)
-      .is("gift_unlocked_at", null);
-    throwIfError(error);
-  }
+  await applyPendingDeletes(client, userId, local);
+  await applyPendingProfilePatch(client, userId, local);
 
   const [
     progressResult,
@@ -262,15 +237,109 @@ export async function syncDataWithSupabase(
   const remoteJournal = (journalResult.data ?? []).map(mapJournal);
   const remoteAssessments = (assessmentResult.data ?? []).map(mapAssessment);
   const profile = profileResult.data;
-  const syncedUserIds = Array.from(new Set([...local.syncedUserIds, userId]));
+  const merged = mergeAccountData(
+    {
+      progress: local.progress,
+      practiceSessions: local.practiceSessions,
+      journalEntries: local.journalEntries,
+      assessments: local.assessments,
+      pendingJournalDeletes: local.sync.pendingJournalDeletes,
+      pendingProgressDeletes: local.sync.pendingProgressDeletes,
+    },
+    {
+      progress: remoteProgress,
+      practiceSessions: remotePractices,
+      journalEntries: remoteJournal,
+      assessments: remoteAssessments,
+    },
+  );
+
+  if (merged.progress.length > 0) {
+    const { error } = await client.from("user_progress").upsert(
+      merged.progress.map((entry) => ({
+        user_id: userId,
+        item_type: entry.kind,
+        item_index: entry.itemIndex,
+        completed_at: entry.completedAt,
+      })),
+      { onConflict: "user_id,item_type,item_index" },
+    );
+    throwIfError(error);
+  }
+  if (merged.practiceSessions.length > 0) {
+    const { error } = await client.from("practice_sessions").upsert(
+      merged.practiceSessions.map((entry) => ({
+        id: entry.id,
+        user_id: userId,
+        feeling: entry.feeling,
+        situation: entry.situation || null,
+        body_place: entry.bodyPlace || null,
+        thoughts_released: entry.thoughtsReleased,
+        intensity_before: entry.intensityBefore,
+        intensity_after: entry.intensityAfter,
+        release_note: entry.releaseNote || null,
+        created_at: entry.createdAt,
+      })),
+      { onConflict: "id" },
+    );
+    throwIfError(error);
+  }
+  if (merged.journalEntries.length > 0) {
+    const { error } = await client.from("journal_entries").upsert(
+      merged.journalEntries.map((entry) => ({
+        id: entry.id,
+        user_id: userId,
+        entry_type: entry.entryType,
+        item_index: entry.itemIndex,
+        title: entry.title,
+        content: entry.content,
+        practice_session_id: entry.practiceSessionId,
+        created_at: entry.createdAt,
+      })),
+      { onConflict: "id" },
+    );
+    throwIfError(error);
+  }
+  if (merged.assessments.length > 0) {
+    const { error } = await client.from("user_assessments").upsert(
+      merged.assessments.map((entry) => ({
+        id: entry.id,
+        user_id: userId,
+        stage: entry.stage,
+        calm_score: entry.calmScore,
+        self_kindness_score: entry.selfKindnessScore,
+        clarity_score: entry.clarityScore,
+        peace_score: entry.peaceScore,
+        reflection_note: entry.reflectionNote || null,
+        created_at: entry.createdAt,
+      })),
+      { onConflict: "user_id,stage" },
+    );
+    throwIfError(error);
+  }
+
+  const completedDiscoveries = new Set(
+    merged.progress
+      .filter((entry) => entry.kind === "discovery")
+      .map((entry) => entry.itemIndex),
+  );
+  if ([0, 1, 2, 3, 4].every((index) => completedDiscoveries.has(index))) {
+    const unlockedAt = local.giftUnlockedAt ?? new Date().toISOString();
+    const { error } = await client
+      .from("profiles")
+      .update({ gift_unlocked_at: unlockedAt })
+      .eq("id", userId)
+      .is("gift_unlocked_at", null);
+    throwIfError(error);
+  }
 
   return {
     ...local,
     version: 2,
-    progress: mergeProgress(local.progress, remoteProgress),
-    practiceSessions: mergeById(local.practiceSessions, remotePractices),
-    journalEntries: mergeById(local.journalEntries, remoteJournal),
-    assessments: mergeAssessments(local.assessments, remoteAssessments),
+    progress: merged.progress,
+    practiceSessions: merged.practiceSessions,
+    journalEntries: merged.journalEntries,
+    assessments: merged.assessments,
     profile: {
       email: profile?.email ?? local.profile.email,
       billingEmail: profile?.billing_email ?? local.profile.billingEmail,
@@ -293,7 +362,13 @@ export async function syncDataWithSupabase(
       profile?.last_compass_emotion ?? local.lastCompassEmotion,
     giftUnlockedAt:
       profile?.gift_unlocked_at ?? local.giftUnlockedAt,
-    syncedUserIds,
+    syncedUserIds: [userId],
+    sync: {
+      pendingJournalDeletes: [],
+      pendingProgressDeletes: [],
+      clearAll: false,
+      profilePatch: {},
+    },
   } satisfies AppData;
 }
 

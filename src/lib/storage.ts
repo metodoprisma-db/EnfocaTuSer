@@ -2,6 +2,15 @@ import {
   LEGACY_LOCAL_STORAGE_KEY,
   LOCAL_STORAGE_KEY,
 } from "@/lib/constants";
+import {
+  accountStorageKey,
+  claimGuestRecord,
+  guestStorageKey,
+  migrationStorageKey,
+  readScopedRecord,
+  writeScopedRecord,
+  type GuestRecord,
+} from "@/lib/storage-scope";
 import type { AppData, UserProfile } from "@/types/app";
 
 function localDate() {
@@ -42,6 +51,12 @@ export function createEmptyData(): AppData {
     lastCompassEmotion: "Temor",
     giftUnlockedAt: null,
     syncedUserIds: [],
+    sync: {
+      pendingJournalDeletes: [],
+      pendingProgressDeletes: [],
+      clearAll: false,
+      profilePatch: {},
+    },
   };
 }
 
@@ -53,71 +68,171 @@ export function createId() {
   return "00000000-0000-4000-8000-" + Date.now().toString().padStart(12, "0").slice(-12);
 }
 
-export function readLocalData(): AppData {
-  if (typeof window === "undefined") {
-    return createEmptyData();
-  }
+function normalizeData(parsed: Partial<AppData> | null | undefined): AppData {
+  if (!parsed) return createEmptyData();
+  const defaultProfile = createDefaultProfile();
+  const parsedProfile = parsed.profile as Partial<UserProfile> | undefined;
 
+  return {
+    version: 2,
+    progress: Array.isArray(parsed.progress) ? parsed.progress : [],
+    practiceSessions: Array.isArray(parsed.practiceSessions)
+      ? parsed.practiceSessions
+      : [],
+    journalEntries: Array.isArray(parsed.journalEntries)
+      ? parsed.journalEntries
+      : [],
+    assessments: Array.isArray(parsed.assessments) ? parsed.assessments : [],
+    profile: {
+      ...defaultProfile,
+      ...(parsedProfile ?? {}),
+    },
+    lastCompassEmotion:
+      typeof parsed.lastCompassEmotion === "string"
+        ? parsed.lastCompassEmotion
+        : "Temor",
+    giftUnlockedAt:
+      typeof parsed.giftUnlockedAt === "string"
+        ? parsed.giftUnlockedAt
+        : null,
+    syncedUserIds: Array.isArray(parsed.syncedUserIds)
+      ? parsed.syncedUserIds.filter(
+          (userId): userId is string => typeof userId === "string",
+        )
+      : [],
+    sync: {
+      pendingJournalDeletes: Array.isArray(
+        parsed.sync?.pendingJournalDeletes,
+      )
+        ? parsed.sync.pendingJournalDeletes.filter(
+            (id): id is string => typeof id === "string",
+          )
+        : [],
+      pendingProgressDeletes: Array.isArray(
+        parsed.sync?.pendingProgressDeletes,
+      )
+        ? parsed.sync.pendingProgressDeletes.filter(
+            (entry) =>
+              Boolean(entry) &&
+              (entry.kind === "discovery" || entry.kind === "extra") &&
+              Number.isInteger(entry.itemIndex),
+          )
+        : [],
+      clearAll: parsed.sync?.clearAll === true,
+      profilePatch:
+        parsed.sync?.profilePatch && typeof parsed.sync.profilePatch === "object"
+          ? parsed.sync.profilePatch
+          : {},
+    },
+  };
+}
+
+function readLegacyData() {
+  if (typeof window === "undefined") return null;
   try {
     const raw =
       window.localStorage.getItem(LOCAL_STORAGE_KEY) ??
       window.localStorage.getItem(LEGACY_LOCAL_STORAGE_KEY);
-    if (!raw) {
-      return createEmptyData();
-    }
-
-    const parsed = JSON.parse(raw) as Partial<AppData>;
-    const defaultProfile = createDefaultProfile();
-    const parsedProfile = parsed.profile as Partial<UserProfile> | undefined;
-    return {
-      version: 2,
-      progress: Array.isArray(parsed.progress) ? parsed.progress : [],
-      practiceSessions: Array.isArray(parsed.practiceSessions)
-        ? parsed.practiceSessions
-        : [],
-      journalEntries: Array.isArray(parsed.journalEntries)
-        ? parsed.journalEntries
-        : [],
-      assessments: Array.isArray(parsed.assessments)
-        ? parsed.assessments
-        : [],
-      profile: {
-        ...defaultProfile,
-        ...(parsedProfile ?? {}),
-      },
-      lastCompassEmotion:
-        typeof parsed.lastCompassEmotion === "string"
-          ? parsed.lastCompassEmotion
-          : "Temor",
-      giftUnlockedAt:
-        typeof parsed.giftUnlockedAt === "string"
-          ? parsed.giftUnlockedAt
-          : null,
-      syncedUserIds: Array.isArray(parsed.syncedUserIds)
-        ? parsed.syncedUserIds
-        : [],
-    };
+    return raw ? normalizeData(JSON.parse(raw) as Partial<AppData>) : null;
   } catch {
-    return createEmptyData();
+    return null;
   }
+}
+
+export function readGuestData(): AppData {
+  if (typeof window === "undefined") return createEmptyData();
+  const record = readScopedRecord<GuestRecord<Partial<AppData>>>(
+    window.localStorage,
+    guestStorageKey(),
+  );
+  if (record && !record.claimedBy) return normalizeData(record.data);
+
+  const legacy = readLegacyData();
+  if (legacy && legacy.syncedUserIds.length === 0) {
+    writeScopedRecord(window.localStorage, guestStorageKey(), {
+      data: legacy,
+      claimedBy: null,
+    } satisfies GuestRecord<AppData>);
+    return legacy;
+  }
+  return createEmptyData();
+}
+
+export function readUserData(userId: string): AppData {
+  if (typeof window === "undefined") return createEmptyData();
+  const stored = readScopedRecord<Partial<AppData>>(
+    window.localStorage,
+    accountStorageKey(userId),
+  );
+  if (stored) return normalizeData(stored);
+
+  const legacy = readLegacyData();
+  if (
+    legacy &&
+    legacy.syncedUserIds.length === 1 &&
+    legacy.syncedUserIds[0] === userId
+  ) {
+    writeScopedRecord(window.localStorage, accountStorageKey(userId), legacy);
+    return legacy;
+  }
+  return createEmptyData();
+}
+
+export function claimGuestDataForUser(userId: string) {
+  if (typeof window === "undefined") return null;
+  const record = claimGuestRecord<Partial<AppData>>(
+    window.localStorage,
+    userId,
+  );
+  return record ? normalizeData(record.data) : null;
+}
+
+export function completeGuestMigration(userId: string) {
+  if (typeof window === "undefined") return false;
+  try {
+    const guest = readScopedRecord<GuestRecord<Partial<AppData>>>(
+      window.localStorage,
+      guestStorageKey(),
+    );
+    if (guest?.claimedBy === userId) {
+      const replaced = writeScopedRecord(window.localStorage, guestStorageKey(), {
+        data: createEmptyData(),
+        claimedBy: userId,
+      } satisfies GuestRecord<AppData>);
+      if (!replaced) return false;
+    }
+    window.localStorage.removeItem(migrationStorageKey(userId));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function writeScopedData(data: AppData, userId: string | null) {
+  if (typeof window === "undefined") return false;
+  if (userId) {
+    return writeScopedRecord(
+      window.localStorage,
+      accountStorageKey(userId),
+      data,
+    );
+  }
+  return writeScopedRecord(window.localStorage, guestStorageKey(), {
+    data,
+    claimedBy: null,
+  } satisfies GuestRecord<AppData>);
+}
+
+export function readLocalData() {
+  return readGuestData();
 }
 
 export function writeLocalData(data: AppData) {
-  if (typeof window === "undefined") {
-    return;
-  }
-
-  try {
-    window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
-  } catch {
-    // La aplicación conserva el estado de React aunque el navegador bloquee storage.
-  }
+  return writeScopedData(data, null);
 }
 
 export function exportLocalData(data: AppData) {
-  if (typeof window === "undefined") {
-    return;
-  }
+  if (typeof window === "undefined") return;
 
   const blob = new Blob(
     [

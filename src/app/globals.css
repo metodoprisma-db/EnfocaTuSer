@@ -295,8 +295,12 @@ h3 {
   background: var(--etq-salvia);
 }
 
+.sync-dot.pending,
 .sync-dot.connecting {
   background: var(--etq-champagne);
+}
+
+.sync-dot.connecting {
   animation: pulse 1.4s infinite;
 }
 

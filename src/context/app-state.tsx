@@ -17,13 +17,18 @@ import {
   JOURNAL_PAGE_SIZE,
 } from "@/lib/constants";
 import {
+  claimGuestDataForUser,
+  completeGuestMigration,
   createEmptyData,
   createId,
   exportLocalData,
-  readLocalData,
-  writeLocalData,
+  readGuestData,
+  readUserData,
+  writeScopedData,
 } from "@/lib/storage";
+import { SerialSyncQueue } from "@/lib/sync-queue";
 import { getBrowserSupabaseClient } from "@/lib/supabase/client";
+import { mergeAccountData } from "@/lib/supabase/merge";
 import {
   loadCurrentAnnouncement,
   loadOlderJournalEntries,
@@ -41,7 +46,7 @@ import type {
   UserAssessment,
 } from "@/types/app";
 
-type SyncStatus = "local" | "connecting" | "synced" | "error";
+type SyncStatus = "local" | "pending" | "connecting" | "synced" | "error";
 
 interface NewJournalEntry {
   entryType: JournalEntryType;
@@ -217,6 +222,58 @@ function inclusiveJourneyDays(data: AppData) {
   return Math.max(1, Math.floor((end - start) / 86_400_000) + 1);
 }
 
+function mergeLocalMigration(account: AppData, guest: AppData | null): AppData {
+  if (!guest) return account;
+  const merged = mergeAccountData(
+    {
+      progress: account.progress,
+      practiceSessions: account.practiceSessions,
+      journalEntries: account.journalEntries,
+      assessments: account.assessments,
+      pendingJournalDeletes: account.sync.pendingJournalDeletes,
+      pendingProgressDeletes: account.sync.pendingProgressDeletes,
+    },
+    {
+      progress: guest.progress,
+      practiceSessions: guest.practiceSessions,
+      journalEntries: guest.journalEntries,
+      assessments: guest.assessments,
+    },
+  );
+  const progressDeletes = new Map(
+    [...account.sync.pendingProgressDeletes, ...guest.sync.pendingProgressDeletes].map(
+      (entry) => [`${entry.kind}:${entry.itemIndex}`, entry],
+    ),
+  );
+
+  return {
+    ...account,
+    progress: merged.progress,
+    practiceSessions: merged.practiceSessions,
+    journalEntries: merged.journalEntries,
+    assessments: merged.assessments,
+    lastCompassEmotion:
+      account.lastCompassEmotion === "Temor"
+        ? guest.lastCompassEmotion
+        : account.lastCompassEmotion,
+    giftUnlockedAt: account.giftUnlockedAt ?? guest.giftUnlockedAt,
+    sync: {
+      pendingJournalDeletes: Array.from(
+        new Set([
+          ...account.sync.pendingJournalDeletes,
+          ...guest.sync.pendingJournalDeletes,
+        ]),
+      ),
+      pendingProgressDeletes: Array.from(progressDeletes.values()),
+      clearAll: account.sync.clearAll,
+      profilePatch: {
+        ...guest.sync.profilePatch,
+        ...account.sync.profilePatch,
+      },
+    },
+  };
+}
+
 export function AppStateProvider({ children }: { children: ReactNode }) {
   const [data, setData] = useState<AppData>(createEmptyData);
   const [hydrated, setHydrated] = useState(false);
@@ -232,6 +289,9 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const clientRef = useRef<SupabaseClient | null>(null);
   const userRef = useRef<User | null>(null);
   const dataRef = useRef(data);
+  const revisionRef = useRef(0);
+  const identityRef = useRef("guest");
+  const syncQueueRef = useRef<SerialSyncQueue<AppData, AppData> | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -245,13 +305,11 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       window.clearInterval(intervalId);
     };
   }, []);
-  const syncingRef = useRef(false);
-
   useEffect(() => {
     let active = true;
     queueMicrotask(() => {
       if (!active) return;
-      const stored = readLocalData();
+      const stored = readGuestData();
       const detectedTimezone = browserTimezone();
       const withTimezone = stored.profile.timezone
         ? stored
@@ -266,7 +324,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       dataRef.current = presence.data;
       setData(presence.data);
       setRhythmResumed(presence.resumed);
-      writeLocalData(presence.data);
+      if (!writeScopedData(presence.data, null)) setSyncStatus("error");
       setHydrated(true);
     });
     return () => {
@@ -275,29 +333,25 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const persist = useCallback((next: AppData, synchronize = true) => {
+    revisionRef.current += 1;
     dataRef.current = next;
     setData(next);
-    writeLocalData(next);
+    const currentUser = userRef.current;
+    const stored = writeScopedData(next, currentUser?.id ?? null);
 
     const client = clientRef.current;
-    const currentUser = userRef.current;
-    if (!synchronize || !client || !currentUser || syncingRef.current) {
+    if (!stored) setSyncStatus("error");
+    if (!synchronize || !client || !currentUser) {
+      if (stored && !currentUser) setSyncStatus("local");
       return;
     }
 
-    syncingRef.current = true;
-    setSyncStatus("connecting");
-    void syncDataWithSupabase(client, currentUser.id, next)
-      .then((merged) => {
-        dataRef.current = merged;
-        setData(merged);
-        writeLocalData(merged);
-        setSyncStatus("synced");
-      })
-      .catch(() => setSyncStatus("error"))
-      .finally(() => {
-        syncingRef.current = false;
-      });
+    if (stored) setSyncStatus("pending");
+    syncQueueRef.current?.request({
+      identity: currentUser.id,
+      revision: revisionRef.current,
+      value: next,
+    });
   }, []);
 
   useEffect(() => {
@@ -309,32 +363,20 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     clientRef.current = client;
     let active = true;
 
-    void loadCurrentAnnouncement(client)
-      .then((nextAnnouncement) => {
-        if (active) setAnnouncement(nextAnnouncement);
-      })
-      .catch(() => {
-        if (active) setAnnouncement(null);
-      });
-
-    const connectUser = async (nextUser: User | null) => {
-      if (!active) return;
-      userRef.current = nextUser;
-      setUser(nextUser);
-      if (!nextUser) {
-        setSyncStatus("local");
-        setRemoteHasMore(false);
-        return;
-      }
-
-      setSyncStatus("connecting");
-      syncingRef.current = true;
-      try {
-        const merged = await syncDataWithSupabase(
-          client,
-          nextUser.id,
-          dataRef.current,
-        );
+    syncQueueRef.current = new SerialSyncQueue<AppData, AppData>({
+      execute: async (job) => {
+        if (active && identityRef.current === job.identity) {
+          setSyncStatus("connecting");
+        }
+        return syncDataWithSupabase(client, job.identity, job.value);
+      },
+      isCurrent: (job) =>
+        active &&
+        identityRef.current === job.identity &&
+        userRef.current?.id === job.identity &&
+        revisionRef.current === job.revision,
+      onSuccess: (merged, job) => {
+        completeGuestMigration(job.identity);
         const detectedTimezone = browserTimezone();
         const needsTimezone = !merged.profile.timezone;
         const withTimezone = needsTimezone
@@ -347,60 +389,145 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
           withTimezone,
           withTimezone.profile.timezone ?? detectedTimezone,
         );
-
-        const profileUpdates: Record<string, unknown> = {};
+        const profilePatch = { ...presence.data.sync.profilePatch };
         if (needsTimezone) {
-          profileUpdates.timezone = detectedTimezone;
-          profileUpdates.timezone_manual = false;
+          profilePatch.timezone = detectedTimezone;
+          profilePatch.timezoneManual = false;
         }
         if (presence.changed) {
-          profileUpdates.presence_days_count =
+          profilePatch.presenceDaysCount =
             presence.data.profile.presenceDaysCount;
-          profileUpdates.current_rhythm_count =
+          profilePatch.currentRhythmCount =
             presence.data.profile.currentRhythmCount;
-          profileUpdates.last_active_date =
-            presence.data.profile.lastActiveDate;
+          profilePatch.lastActiveDate = presence.data.profile.lastActiveDate;
         }
-        if (Object.keys(profileUpdates).length > 0) {
-          const { error } = await client
-            .from("profiles")
-            .update(profileUpdates)
-            .eq("id", nextUser.id);
-          if (error) throw error;
-        }
+        const needsProfileSync = Object.keys(profilePatch).length > 0;
+        const next = needsProfileSync
+          ? {
+              ...presence.data,
+              sync: { ...presence.data.sync, profilePatch },
+            }
+          : presence.data;
 
-        if (active) {
-          dataRef.current = presence.data;
-          setData(presence.data);
-          setRhythmResumed(presence.resumed);
-          writeLocalData(presence.data);
+        dataRef.current = next;
+        setData(next);
+        setRhythmResumed(presence.resumed);
+        const stored = writeScopedData(next, job.identity);
+        setRemoteHasMore(merged.journalEntries.length >= JOURNAL_PAGE_SIZE);
+
+        if (!stored) {
+          setSyncStatus("error");
+          return;
+        }
+        if (needsProfileSync) {
+          revisionRef.current += 1;
+          setSyncStatus("pending");
+          syncQueueRef.current?.request({
+            identity: job.identity,
+            revision: revisionRef.current,
+            value: next,
+          });
+        } else {
           setSyncStatus("synced");
-          setRemoteHasMore(
-            presence.data.journalEntries.length >= JOURNAL_PAGE_SIZE,
+        }
+      },
+      onError: (_error, job) => {
+        if (active && identityRef.current === job.identity) {
+          setSyncStatus(
+            writeScopedData(job.value, job.identity) ? "pending" : "error",
           );
         }
-      } catch {
-        if (active) setSyncStatus("error");
-      } finally {
-        syncingRef.current = false;
+      },
+    });
+
+    void loadCurrentAnnouncement(client)
+      .then((nextAnnouncement) => {
+        if (active) setAnnouncement(nextAnnouncement);
+      })
+      .catch(() => {
+        if (active) setAnnouncement(null);
+      });
+
+    const connectUser = async (nextUser: User | null) => {
+      if (!active) return;
+      const nextIdentity = nextUser?.id ?? "guest";
+      if (identityRef.current === nextIdentity) {
+        userRef.current = nextUser;
+        setUser(nextUser);
+        return;
       }
+
+      identityRef.current = nextIdentity;
+      userRef.current = nextUser;
+      setUser(nextUser);
+      if (!nextUser) {
+        revisionRef.current += 1;
+        const guest = readGuestData();
+        const detectedTimezone = browserTimezone();
+        const withTimezone = guest.profile.timezone
+          ? guest
+          : {
+              ...guest,
+              profile: { ...guest.profile, timezone: detectedTimezone },
+            };
+        const presence = applyPresence(
+          withTimezone,
+          withTimezone.profile.timezone ?? detectedTimezone,
+        );
+        dataRef.current = presence.data;
+        setData(presence.data);
+        setRhythmResumed(presence.resumed);
+        setSyncStatus(
+          writeScopedData(presence.data, null) ? "local" : "error",
+        );
+        setRemoteHasMore(false);
+        return;
+      }
+
+      const account = readUserData(nextUser.id);
+      const guest = claimGuestDataForUser(nextUser.id);
+      const candidate = mergeLocalMigration(account, guest);
+      revisionRef.current += 1;
+      dataRef.current = candidate;
+      setData(candidate);
+      const stored = writeScopedData(candidate, nextUser.id);
+      setSyncStatus(stored ? "pending" : "error");
+      syncQueueRef.current?.request({
+        identity: nextUser.id,
+        revision: revisionRef.current,
+        value: candidate,
+      });
     };
 
-    void client.auth.getUser().then(({ data: authData }) => {
-      void connectUser(authData.user);
+    let authEventReceived = false;
+    void client.auth.getUser().then(({ data: authData, error }) => {
+      if (!authEventReceived && !error) void connectUser(authData.user);
     });
 
     const {
       data: { subscription },
     } = client.auth.onAuthStateChange((_event, session) => {
+      authEventReceived = true;
       queueMicrotask(() => {
         void connectUser(session?.user ?? null);
       });
     });
 
+    const retryPending = () => {
+      if (syncQueueRef.current?.hasPending()) {
+        setSyncStatus("pending");
+        syncQueueRef.current.retry();
+      }
+    };
+    window.addEventListener("online", retryPending);
+    window.addEventListener("focus", retryPending);
+
     return () => {
       active = false;
+      window.removeEventListener("online", retryPending);
+      window.removeEventListener("focus", retryPending);
       subscription.unsubscribe();
+      syncQueueRef.current = null;
     };
   }, [hydrated]);
 
@@ -417,19 +544,20 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       }
 
       let progress = current.progress;
+      let pendingProgressDeletes = current.sync.pendingProgressDeletes;
       if (existing) {
         progress = progress.filter((entry) => entry.id !== existing.id);
-        const client = clientRef.current;
-        const currentUser = userRef.current;
-        if (client && currentUser) {
-          void client
-            .from("user_progress")
-            .delete()
-            .eq("user_id", currentUser.id)
-            .eq("item_type", kind)
-            .eq("item_index", itemIndex);
-        }
+        pendingProgressDeletes = [
+          ...pendingProgressDeletes.filter(
+            (entry) =>
+              entry.kind !== kind || entry.itemIndex !== itemIndex,
+          ),
+          { kind, itemIndex },
+        ];
       } else {
+        pendingProgressDeletes = pendingProgressDeletes.filter(
+          (entry) => entry.kind !== kind || entry.itemIndex !== itemIndex,
+        );
         progress = [
           ...progress,
           {
@@ -450,8 +578,11 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
             completedInOrder >= 5
               ? current.giftUnlockedAt ?? new Date().toISOString()
               : current.giftUnlockedAt,
+          sync: {
+            ...current.sync,
+            pendingProgressDeletes,
+          },
         },
-        !existing,
       );
     },
     [persist],
@@ -529,7 +660,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       const nextAssessment: UserAssessment = {
         ...assessment,
         id: existing?.id ?? createId(),
-        createdAt: existing?.createdAt ?? new Date().toISOString(),
+        createdAt: new Date().toISOString(),
       };
       persist({
         ...current,
@@ -553,18 +684,14 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
           journalEntries: current.journalEntries.filter(
             (entry) => entry.id !== id,
           ),
+          sync: {
+            ...current.sync,
+            pendingJournalDeletes: Array.from(
+              new Set([...current.sync.pendingJournalDeletes, id]),
+            ),
+          },
         },
-        false,
       );
-      const client = clientRef.current;
-      const currentUser = userRef.current;
-      if (client && currentUser) {
-        void client
-          .from("journal_entries")
-          .delete()
-          .eq("id", id)
-          .eq("user_id", currentUser.id);
-      }
     },
     [persist],
   );
@@ -572,18 +699,17 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const setCompassEmotion = useCallback(
     (emotion: string) => {
       const current = dataRef.current;
-      persist({ ...current, lastCompassEmotion: emotion }, false);
-      const client = clientRef.current;
-      const currentUser = userRef.current;
-      if (client && currentUser) {
-        void client
-          .from("profiles")
-          .update({ last_compass_emotion: emotion })
-          .eq("id", currentUser.id)
-          .then(({ error }) => {
-            if (error) setSyncStatus("error");
-          });
-      }
+      persist({
+        ...current,
+        lastCompassEmotion: emotion,
+        sync: {
+          ...current.sync,
+          profilePatch: {
+            ...current.sync.profilePatch,
+            lastCompassEmotion: emotion,
+          },
+        },
+      });
     },
     [persist],
   );
@@ -599,21 +725,16 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
           timezone,
           timezoneManual: manual,
         },
+        sync: {
+          ...current.sync,
+          profilePatch: {
+            ...current.sync.profilePatch,
+            timezone,
+            timezoneManual: manual,
+          },
+        },
       };
-      persist(next, false);
-
-      const client = clientRef.current;
-      const currentUser = userRef.current;
-      if (client && currentUser) {
-        const { error } = await client
-          .from("profiles")
-          .update({ timezone, timezone_manual: manual })
-          .eq("id", currentUser.id);
-        if (error) {
-          setSyncStatus("error");
-          throw error;
-        }
-      }
+      persist(next);
     },
     [persist],
   );
@@ -630,45 +751,33 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     );
     if (error) throw new Error(error.message);
     const normalized = String(claimedEmail ?? email).trim().toLowerCase();
+    if (userRef.current?.id !== currentUser.id) {
+      throw new Error("La sesión cambió antes de completar la operación.");
+    }
     const next = {
       ...dataRef.current,
       profile: { ...dataRef.current.profile, billingEmail: normalized },
     };
     dataRef.current = next;
     setData(next);
-    writeLocalData(next);
+    if (!writeScopedData(next, currentUser.id)) setSyncStatus("error");
     return normalized;
   }, []);
 
   const clearData = useCallback(async () => {
-    const client = clientRef.current;
     const currentUser = userRef.current;
-    if (client && currentUser) {
-      await Promise.all([
-        client.from("journal_entries").delete().eq("user_id", currentUser.id),
-        client.from("practice_sessions").delete().eq("user_id", currentUser.id),
-        client.from("user_progress").delete().eq("user_id", currentUser.id),
-        client.from("user_assessments").delete().eq("user_id", currentUser.id),
-      ]);
-      await client
-        .from("profiles")
-        .update({
-          last_compass_emotion: "Temor",
-          gift_unlocked_at: null,
-        })
-        .eq("id", currentUser.id);
-    }
-
     const empty = {
       ...createEmptyData(),
       profile: dataRef.current.profile,
+      sync: {
+        ...createEmptyData().sync,
+        clearAll: Boolean(currentUser),
+      },
     };
-    dataRef.current = empty;
-    setData(empty);
+    persist(empty, Boolean(currentUser));
     setVisibleJournalCount(JOURNAL_PAGE_SIZE);
     setRemoteHasMore(false);
-    writeLocalData(empty);
-  }, []);
+  }, [persist]);
 
   const loadOlder = useCallback(async () => {
     const sorted = sortJournal(dataRef.current.journalEntries);
@@ -676,23 +785,28 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     const currentUser = userRef.current;
     const cursor = sorted.at(-1);
     if (client && currentUser && cursor && remoteHasMore) {
+      const requestedUserId = currentUser.id;
       try {
         const older = await loadOlderJournalEntries(
           client,
           currentUser.id,
           cursor,
         );
+        if (userRef.current?.id !== requestedUserId) return;
         const map = new Map(
           dataRef.current.journalEntries.map((entry) => [entry.id, entry]),
         );
-        older.forEach((entry) => map.set(entry.id, entry));
+        const deletedIds = new Set(dataRef.current.sync.pendingJournalDeletes);
+        older
+          .filter((entry) => !deletedIds.has(entry.id))
+          .forEach((entry) => map.set(entry.id, entry));
         const next = {
           ...dataRef.current,
           journalEntries: Array.from(map.values()),
         };
         dataRef.current = next;
         setData(next);
-        writeLocalData(next);
+        if (!writeScopedData(next, requestedUserId)) setSyncStatus("error");
         setRemoteHasMore(older.length === JOURNAL_PAGE_SIZE);
       } catch {
         setSyncStatus("error");
