@@ -5,9 +5,10 @@ import {
 import {
   accountStorageKey,
   claimGuestRecord,
+  completeGuestRecord,
   guestStorageKey,
-  migrationStorageKey,
   readScopedRecord,
+  writeGuestRecord,
   writeMigratedRecord,
   writeScopedRecord,
   type GuestRecord,
@@ -201,23 +202,7 @@ export function claimGuestDataForUser(userId: string) {
 
 export function completeGuestMigration(userId: string) {
   if (typeof window === "undefined") return false;
-  try {
-    const guest = readScopedRecord<GuestRecord<Partial<AppData>>>(
-      window.localStorage,
-      guestStorageKey(),
-    );
-    if (guest?.claimedBy === userId) {
-      const replaced = writeScopedRecord(window.localStorage, guestStorageKey(), {
-        data: createEmptyData(),
-        claimedBy: userId,
-      } satisfies GuestRecord<AppData>);
-      if (!replaced) return false;
-    }
-    window.localStorage.removeItem(migrationStorageKey(userId));
-    return true;
-  } catch {
-    return false;
-  }
+  return completeGuestRecord(window.localStorage, userId);
 }
 
 export function writeScopedData(data: AppData, userId: string | null) {
@@ -229,10 +214,7 @@ export function writeScopedData(data: AppData, userId: string | null) {
       data,
     );
   }
-  return writeScopedRecord(window.localStorage, guestStorageKey(), {
-    data,
-    claimedBy: null,
-  } satisfies GuestRecord<AppData>);
+  return writeGuestRecord(window.localStorage, data);
 }
 
 export function readLocalData() {

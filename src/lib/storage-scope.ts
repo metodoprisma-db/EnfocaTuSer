@@ -65,6 +65,17 @@ export interface GuestRecord<T = unknown> {
   claimedBy: string | null;
 }
 
+export function writeGuestRecord<T>(storage: StorageLike, data: T) {
+  const key = guestStorageKey();
+  const existing = readScopedRecord<GuestRecord<T>>(storage, key);
+  if (existing?.claimedBy) return true;
+
+  return writeScopedRecord(storage, key, {
+    data,
+    claimedBy: null,
+  } satisfies GuestRecord<T>);
+}
+
 export function claimGuestRecord<T>(
   storage: StorageLike,
   userId: string,
@@ -85,4 +96,17 @@ export function claimGuestRecord<T>(
   const claimed = { ...record, claimedBy: userId };
   if (!writeScopedRecord(storage, guestKey, claimed)) return null;
   return claimed;
+}
+
+export function completeGuestRecord(storage: StorageLike, userId: string) {
+  try {
+    const guest = readScopedRecord<GuestRecord>(storage, guestStorageKey());
+    if (guest?.claimedBy === userId) {
+      storage.removeItem(guestStorageKey());
+    }
+    storage.removeItem(migrationStorageKey(userId));
+    return true;
+  } catch {
+    return false;
+  }
 }

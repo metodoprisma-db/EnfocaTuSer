@@ -8,8 +8,10 @@ import { SerialSyncQueue } from "../src/lib/sync-queue.ts";
 import {
   accountStorageKey,
   claimGuestRecord,
+  completeGuestRecord,
   guestStorageKey,
   readScopedRecord,
+  writeGuestRecord,
   writeMigratedRecord,
   writeScopedRecord,
   type StorageLike,
@@ -125,6 +127,35 @@ test("una reclamación confirmada se puede reanudar tras una interrupción", () 
     data: { journal: ["contenido recuperable"] },
     claimedBy: "account-a",
   });
+});
+
+test("la hidratación preserva una reclamación fallida hasta sincronizarla con su cuenta", () => {
+  const storage = memoryStorage();
+  const privateData = { journal: ["contenido privado"] };
+  assert.equal(writeGuestRecord(storage, privateData), true);
+
+  assert.deepEqual(claimGuestRecord(storage, "account-a"), {
+    data: privateData,
+    claimedBy: "account-a",
+  });
+
+  // La sincronización falla y una recarga hidrata primero el estado invitado vacío.
+  assert.equal(writeGuestRecord(storage, { journal: [] }), true);
+  assert.deepEqual(claimGuestRecord(storage, "account-a"), {
+    data: privateData,
+    claimedBy: "account-a",
+  });
+  assert.equal(claimGuestRecord(storage, "account-b"), null);
+
+  // El reintento confirma los datos en la cuenta correcta antes de limpiar la copia.
+  writeScopedRecord(storage, accountStorageKey("account-a"), privateData);
+  assert.equal(completeGuestRecord(storage, "account-a"), true);
+  assert.deepEqual(
+    readScopedRecord(storage, accountStorageKey("account-a")),
+    privateData,
+  );
+  assert.equal(readScopedRecord(storage, accountStorageKey("account-b")), null);
+  assert.equal(claimGuestRecord(storage, "account-b"), null);
 });
 
 test("serializa escrituras consecutivas y no aplica respuestas antiguas", async () => {
