@@ -42,6 +42,24 @@ export function writeScopedRecord(
   }
 }
 
+export function writeMigratedRecord(
+  storage: StorageLike,
+  destinationKey: string,
+  value: unknown,
+  legacyKeys: string[],
+) {
+  if (!writeScopedRecord(storage, destinationKey, value)) return false;
+
+  for (const key of legacyKeys) {
+    try {
+      storage.removeItem(key);
+    } catch {
+      // The destination record is already durable and takes precedence.
+    }
+  }
+  return true;
+}
+
 export interface GuestRecord<T = unknown> {
   data: T;
   claimedBy: string | null;
@@ -51,16 +69,20 @@ export function claimGuestRecord<T>(
   storage: StorageLike,
   userId: string,
 ): GuestRecord<T> | null {
-  const migrationKey = migrationStorageKey(userId);
-  const existing = readScopedRecord<GuestRecord<T>>(storage, migrationKey);
-  if (existing?.claimedBy === userId) return existing;
-
   const guestKey = guestStorageKey();
   const record = readScopedRecord<GuestRecord<T>>(storage, guestKey);
-  if (!record || record.claimedBy) return null;
+  if (record?.claimedBy === userId) return record;
+  if (record?.claimedBy) return null;
+
+  if (!record) {
+    const previousMigration = readScopedRecord<GuestRecord<T>>(
+      storage,
+      migrationStorageKey(userId),
+    );
+    return previousMigration?.claimedBy === userId ? previousMigration : null;
+  }
 
   const claimed = { ...record, claimedBy: userId };
-  if (!writeScopedRecord(storage, migrationKey, claimed)) return null;
   if (!writeScopedRecord(storage, guestKey, claimed)) return null;
   return claimed;
 }

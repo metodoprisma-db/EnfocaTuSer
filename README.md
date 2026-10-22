@@ -73,8 +73,12 @@ npm run build
 La sincronización usa espacios locales separados para invitada y para cada UUID
 autenticado. Al iniciar sesión, el espacio invitado se reclama para una sola
 cuenta antes de subirlo y solo se elimina después de una sincronización completa.
+Las claves heredadas se consumen únicamente después de copiarlas al espacio
+nuevo, y una reclamación interrumpida puede retomarse sin duplicar titulares.
 Las escrituras remotas son seriales, las respuestas obsoletas se descartan y las
 eliminaciones pendientes se conservan como tombstones hasta ser confirmadas.
+El diario pagina por el cursor de la última fila remota recibida y solicita una
+fila adicional para determinar si existe otra página sin falsos positivos.
 
 Estrategia de conflictos:
 

@@ -1,6 +1,10 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 import { JOURNAL_PAGE_SIZE } from "@/lib/constants";
+import {
+  createJournalPage,
+  type JournalCursor,
+} from "@/lib/journal-pagination";
 import { mergeAccountData } from "@/lib/supabase/merge";
 import type {
   AppAnnouncement,
@@ -210,7 +214,7 @@ export async function syncDataWithSupabase(
       .eq("user_id", userId)
       .order("created_at", { ascending: false })
       .order("id", { ascending: false })
-      .limit(JOURNAL_PAGE_SIZE),
+      .limit(JOURNAL_PAGE_SIZE + 1),
     client
       .from("user_assessments")
       .select(
@@ -234,7 +238,11 @@ export async function syncDataWithSupabase(
 
   const remoteProgress = (progressResult.data ?? []).map(mapProgress);
   const remotePractices = (practicesResult.data ?? []).map(mapPractice);
-  const remoteJournal = (journalResult.data ?? []).map(mapJournal);
+  const journalPage = createJournalPage(
+    (journalResult.data ?? []).map(mapJournal),
+    JOURNAL_PAGE_SIZE,
+  );
+  const remoteJournal = journalPage.entries;
   const remoteAssessments = (assessmentResult.data ?? []).map(mapAssessment);
   const profile = profileResult.data;
   const merged = mergeAccountData(
@@ -334,42 +342,45 @@ export async function syncDataWithSupabase(
   }
 
   return {
-    ...local,
-    version: 2,
-    progress: merged.progress,
-    practiceSessions: merged.practiceSessions,
-    journalEntries: merged.journalEntries,
-    assessments: merged.assessments,
-    profile: {
-      email: profile?.email ?? local.profile.email,
-      billingEmail: profile?.billing_email ?? local.profile.billingEmail,
-      displayName: profile?.display_name ?? local.profile.displayName,
-      role: profile?.role === "admin" ? "admin" : "user",
-      timezone: profile?.timezone ?? null,
-      timezoneManual: profile?.timezone_manual ?? false,
-      presenceDaysCount:
-        profile?.presence_days_count ?? local.profile.presenceDaysCount,
-      currentRhythmCount:
-        profile?.current_rhythm_count ?? local.profile.currentRhythmCount,
-      lastActiveDate:
-        profile?.last_active_date ?? local.profile.lastActiveDate,
-      planType: profile?.plan_type ?? local.profile.planType,
-      subscriptionStatus:
-        profile?.subscription_status ?? local.profile.subscriptionStatus,
-      accessUntil: profile?.access_until ?? local.profile.accessUntil,
-    },
-    lastCompassEmotion:
-      profile?.last_compass_emotion ?? local.lastCompassEmotion,
-    giftUnlockedAt:
-      profile?.gift_unlocked_at ?? local.giftUnlockedAt,
-    syncedUserIds: [userId],
-    sync: {
-      pendingJournalDeletes: [],
-      pendingProgressDeletes: [],
-      clearAll: false,
-      profilePatch: {},
-    },
-  } satisfies AppData;
+    data: {
+      ...local,
+      version: 2,
+      progress: merged.progress,
+      practiceSessions: merged.practiceSessions,
+      journalEntries: merged.journalEntries,
+      assessments: merged.assessments,
+      profile: {
+        email: profile?.email ?? local.profile.email,
+        billingEmail: profile?.billing_email ?? local.profile.billingEmail,
+        displayName: profile?.display_name ?? local.profile.displayName,
+        role: profile?.role === "admin" ? "admin" : "user",
+        timezone: profile?.timezone ?? null,
+        timezoneManual: profile?.timezone_manual ?? false,
+        presenceDaysCount:
+          profile?.presence_days_count ?? local.profile.presenceDaysCount,
+        currentRhythmCount:
+          profile?.current_rhythm_count ?? local.profile.currentRhythmCount,
+        lastActiveDate:
+          profile?.last_active_date ?? local.profile.lastActiveDate,
+        planType: profile?.plan_type ?? local.profile.planType,
+        subscriptionStatus:
+          profile?.subscription_status ?? local.profile.subscriptionStatus,
+        accessUntil: profile?.access_until ?? local.profile.accessUntil,
+      },
+      lastCompassEmotion:
+        profile?.last_compass_emotion ?? local.lastCompassEmotion,
+      giftUnlockedAt:
+        profile?.gift_unlocked_at ?? local.giftUnlockedAt,
+      syncedUserIds: [userId],
+      sync: {
+        pendingJournalDeletes: [],
+        pendingProgressDeletes: [],
+        clearAll: false,
+        profilePatch: {},
+      },
+    } satisfies AppData,
+    journalPage,
+  };
 }
 
 export async function loadCurrentAnnouncement(client: SupabaseClient) {
@@ -400,7 +411,7 @@ export async function loadCurrentAnnouncement(client: SupabaseClient) {
 export async function loadOlderJournalEntries(
   client: SupabaseClient,
   userId: string,
-  cursor: JournalEntry,
+  cursor: JournalCursor,
 ) {
   const filter =
     "created_at.lt." +
@@ -419,8 +430,11 @@ export async function loadOlderJournalEntries(
     .or(filter)
     .order("created_at", { ascending: false })
     .order("id", { ascending: false })
-    .limit(JOURNAL_PAGE_SIZE);
+    .limit(JOURNAL_PAGE_SIZE + 1);
 
   throwIfError(error);
-  return (data ?? []).map(mapJournal);
+  return createJournalPage(
+    (data ?? []).map(mapJournal),
+    JOURNAL_PAGE_SIZE,
+  );
 }

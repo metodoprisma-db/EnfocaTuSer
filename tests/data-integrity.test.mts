@@ -3,12 +3,14 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import { mergeAccountData } from "../src/lib/supabase/merge.ts";
+import { createJournalPage } from "../src/lib/journal-pagination.ts";
 import { SerialSyncQueue } from "../src/lib/sync-queue.ts";
 import {
   accountStorageKey,
   claimGuestRecord,
   guestStorageKey,
   readScopedRecord,
+  writeMigratedRecord,
   writeScopedRecord,
   type StorageLike,
 } from "../src/lib/storage-scope.ts";
@@ -44,6 +46,85 @@ test("los datos invitados solo pueden ser reclamados por una cuenta", () => {
 
   assert.equal(claimGuestRecord(storage, "account-a")?.claimedBy, "account-a");
   assert.equal(claimGuestRecord(storage, "account-b"), null);
+});
+
+test("consume datos heredados solo después de copiarlos al espacio nuevo", () => {
+  const storage = memoryStorage();
+  storage.setItem("legacy:v2", JSON.stringify({ journal: ["nota"] }));
+  storage.setItem("legacy:v1", JSON.stringify({ journal: ["nota vieja"] }));
+
+  assert.equal(
+    writeMigratedRecord(
+      storage,
+      guestStorageKey(),
+      { data: { journal: ["nota"] }, claimedBy: null },
+      ["legacy:v2", "legacy:v1"],
+    ),
+    true,
+  );
+  assert.equal(storage.getItem("legacy:v2"), null);
+  assert.equal(storage.getItem("legacy:v1"), null);
+  assert.deepEqual(readScopedRecord(storage, guestStorageKey()), {
+    data: { journal: ["nota"] },
+    claimedBy: null,
+  });
+});
+
+test("conserva los datos heredados si la copia al espacio nuevo falla", () => {
+  const values = new Map([["legacy:v2", JSON.stringify({ journal: ["nota"] })]]);
+  const storage: StorageLike = {
+    getItem: (key) => values.get(key) ?? null,
+    setItem: () => {
+      throw new Error("sin espacio");
+    },
+    removeItem: (key) => void values.delete(key),
+  };
+
+  assert.equal(
+    writeMigratedRecord(storage, guestStorageKey(), { data: {} }, [
+      "legacy:v2",
+    ]),
+    false,
+  );
+  assert.notEqual(storage.getItem("legacy:v2"), null);
+});
+
+test("una reclamación interrumpida no permite que dos cuentas recuperen el mismo contenido", () => {
+  const values = new Map<string, string>();
+  let failGuestWrite = true;
+  const storage: StorageLike = {
+    getItem: (key) => values.get(key) ?? null,
+    setItem: (key, value) => {
+      if (key === guestStorageKey() && failGuestWrite) {
+        failGuestWrite = false;
+        throw new Error("almacenamiento interrumpido");
+      }
+      values.set(key, value);
+    },
+    removeItem: (key) => void values.delete(key),
+  };
+  values.set(
+    guestStorageKey(),
+    JSON.stringify({ data: { journal: ["privado"] }, claimedBy: null }),
+  );
+
+  assert.equal(claimGuestRecord(storage, "account-a"), null);
+  assert.equal(claimGuestRecord(storage, "account-b")?.claimedBy, "account-b");
+  assert.equal(claimGuestRecord(storage, "account-a"), null);
+});
+
+test("una reclamación confirmada se puede reanudar tras una interrupción", () => {
+  const storage = memoryStorage();
+  writeScopedRecord(storage, guestStorageKey(), {
+    data: { journal: ["contenido recuperable"] },
+    claimedBy: null,
+  });
+
+  assert.equal(claimGuestRecord(storage, "account-a")?.claimedBy, "account-a");
+  assert.deepEqual(claimGuestRecord(storage, "account-a"), {
+    data: { journal: ["contenido recuperable"] },
+    claimedBy: "account-a",
+  });
 });
 
 test("serializa escrituras consecutivas y no aplica respuestas antiguas", async () => {
@@ -160,6 +241,57 @@ test("un fallo de la cuenta anterior no bloquea la cuenta nueva", async () => {
 
   assert.deepEqual(applied, ["b"]);
   assert.equal(queue.hasPending(), false);
+});
+
+test("un error de sincronización obsoleto no vuelve a aplicar datos anteriores", async () => {
+  let currentRevision = 1;
+  let localValue = 1;
+  let releaseFirst: (() => void) | undefined;
+  const synced: number[] = [];
+  const queue = new SerialSyncQueue<number, number>({
+    execute: async (job) => {
+      if (job.revision === 1) {
+        await new Promise<void>((resolve) => {
+          releaseFirst = resolve;
+        });
+        throw new Error("respuesta obsoleta");
+      }
+      return job.value;
+    },
+    isCurrent: (job) => job.revision === currentRevision,
+    onSuccess: (value) => synced.push(value),
+    onError: (_error, job) => {
+      localValue = job.value;
+    },
+  });
+
+  queue.request({ identity: "account-a", revision: 1, value: 1 });
+  await Promise.resolve();
+  currentRevision = 2;
+  localValue = 2;
+  queue.request({ identity: "account-a", revision: 2, value: 2 });
+  releaseFirst?.();
+  await queue.whenIdle();
+
+  assert.equal(localValue, 2);
+  assert.deepEqual(synced, [2]);
+  assert.equal(queue.hasPending(), false);
+});
+
+test("la paginación usa el cursor de la página remota y detecta una página adicional", () => {
+  const remoteRows = Array.from({ length: 21 }, (_, index) => ({
+    id: `remote-${String(index).padStart(2, "0")}`,
+    createdAt: new Date(Date.UTC(2026, 9, 21, 12, 0, -index)).toISOString(),
+  }));
+  const page = createJournalPage(remoteRows, 20);
+
+  assert.equal(page.entries.length, 20);
+  assert.equal(page.hasMore, true);
+  assert.deepEqual(page.cursor, {
+    id: remoteRows[19].id,
+    createdAt: remoteRows[19].createdAt,
+  });
+  assert.equal(createJournalPage(remoteRows.slice(0, 20), 20).hasMore, false);
 });
 
 test("los tombstones vencen a filas remotas y la evaluación más nueva gana", () => {

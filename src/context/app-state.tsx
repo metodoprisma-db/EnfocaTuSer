@@ -26,6 +26,7 @@ import {
   readUserData,
   writeScopedData,
 } from "@/lib/storage";
+import type { JournalCursor } from "@/lib/journal-pagination";
 import { SerialSyncQueue } from "@/lib/sync-queue";
 import { getBrowserSupabaseClient } from "@/lib/supabase/client";
 import { mergeAccountData } from "@/lib/supabase/merge";
@@ -47,6 +48,7 @@ import type {
 } from "@/types/app";
 
 type SyncStatus = "local" | "pending" | "connecting" | "synced" | "error";
+type SyncResult = Awaited<ReturnType<typeof syncDataWithSupabase>>;
 
 interface NewJournalEntry {
   entryType: JournalEntryType;
@@ -291,7 +293,8 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const dataRef = useRef(data);
   const revisionRef = useRef(0);
   const identityRef = useRef("guest");
-  const syncQueueRef = useRef<SerialSyncQueue<AppData, AppData> | null>(null);
+  const remoteJournalCursorRef = useRef<JournalCursor | null>(null);
+  const syncQueueRef = useRef<SerialSyncQueue<AppData, SyncResult> | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -363,7 +366,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     clientRef.current = client;
     let active = true;
 
-    syncQueueRef.current = new SerialSyncQueue<AppData, AppData>({
+    syncQueueRef.current = new SerialSyncQueue<AppData, SyncResult>({
       execute: async (job) => {
         if (active && identityRef.current === job.identity) {
           setSyncStatus("connecting");
@@ -375,7 +378,8 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
         identityRef.current === job.identity &&
         userRef.current?.id === job.identity &&
         revisionRef.current === job.revision,
-      onSuccess: (merged, job) => {
+      onSuccess: (result, job) => {
+        const merged = result.data;
         completeGuestMigration(job.identity);
         const detectedTimezone = browserTimezone();
         const needsTimezone = !merged.profile.timezone;
@@ -413,7 +417,10 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
         setData(next);
         setRhythmResumed(presence.resumed);
         const stored = writeScopedData(next, job.identity);
-        setRemoteHasMore(merged.journalEntries.length >= JOURNAL_PAGE_SIZE);
+        if (!remoteJournalCursorRef.current) {
+          remoteJournalCursorRef.current = result.journalPage.cursor;
+          setRemoteHasMore(result.journalPage.hasMore);
+        }
 
         if (!stored) {
           setSyncStatus("error");
@@ -434,7 +441,9 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       onError: (_error, job) => {
         if (active && identityRef.current === job.identity) {
           setSyncStatus(
-            writeScopedData(job.value, job.identity) ? "pending" : "error",
+            writeScopedData(dataRef.current, job.identity)
+              ? "pending"
+              : "error",
           );
         }
       },
@@ -460,6 +469,8 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       identityRef.current = nextIdentity;
       userRef.current = nextUser;
       setUser(nextUser);
+      remoteJournalCursorRef.current = null;
+      setRemoteHasMore(false);
       if (!nextUser) {
         revisionRef.current += 1;
         const guest = readGuestData();
@@ -480,7 +491,6 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
         setSyncStatus(
           writeScopedData(presence.data, null) ? "local" : "error",
         );
-        setRemoteHasMore(false);
         return;
       }
 
@@ -776,18 +786,18 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     };
     persist(empty, Boolean(currentUser));
     setVisibleJournalCount(JOURNAL_PAGE_SIZE);
+    remoteJournalCursorRef.current = null;
     setRemoteHasMore(false);
   }, [persist]);
 
   const loadOlder = useCallback(async () => {
-    const sorted = sortJournal(dataRef.current.journalEntries);
     const client = clientRef.current;
     const currentUser = userRef.current;
-    const cursor = sorted.at(-1);
+    const cursor = remoteJournalCursorRef.current;
     if (client && currentUser && cursor && remoteHasMore) {
       const requestedUserId = currentUser.id;
       try {
-        const older = await loadOlderJournalEntries(
+        const page = await loadOlderJournalEntries(
           client,
           currentUser.id,
           cursor,
@@ -797,7 +807,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
           dataRef.current.journalEntries.map((entry) => [entry.id, entry]),
         );
         const deletedIds = new Set(dataRef.current.sync.pendingJournalDeletes);
-        older
+        page.entries
           .filter((entry) => !deletedIds.has(entry.id))
           .forEach((entry) => map.set(entry.id, entry));
         const next = {
@@ -807,7 +817,8 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
         dataRef.current = next;
         setData(next);
         if (!writeScopedData(next, requestedUserId)) setSyncStatus("error");
-        setRemoteHasMore(older.length === JOURNAL_PAGE_SIZE);
+        remoteJournalCursorRef.current = page.cursor;
+        setRemoteHasMore(page.hasMore);
       } catch {
         setSyncStatus("error");
       }

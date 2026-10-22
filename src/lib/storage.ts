@@ -8,6 +8,7 @@ import {
   guestStorageKey,
   migrationStorageKey,
   readScopedRecord,
+  writeMigratedRecord,
   writeScopedRecord,
   type GuestRecord,
 } from "@/lib/storage-scope";
@@ -146,13 +147,19 @@ export function readGuestData(): AppData {
     guestStorageKey(),
   );
   if (record && !record.claimedBy) return normalizeData(record.data);
+  if (record) return createEmptyData();
 
   const legacy = readLegacyData();
   if (legacy && legacy.syncedUserIds.length === 0) {
-    writeScopedRecord(window.localStorage, guestStorageKey(), {
-      data: legacy,
-      claimedBy: null,
-    } satisfies GuestRecord<AppData>);
+    writeMigratedRecord(
+      window.localStorage,
+      guestStorageKey(),
+      {
+        data: legacy,
+        claimedBy: null,
+      } satisfies GuestRecord<AppData>,
+      [LOCAL_STORAGE_KEY, LEGACY_LOCAL_STORAGE_KEY],
+    );
     return legacy;
   }
   return createEmptyData();
@@ -172,7 +179,12 @@ export function readUserData(userId: string): AppData {
     legacy.syncedUserIds.length === 1 &&
     legacy.syncedUserIds[0] === userId
   ) {
-    writeScopedRecord(window.localStorage, accountStorageKey(userId), legacy);
+    writeMigratedRecord(
+      window.localStorage,
+      accountStorageKey(userId),
+      legacy,
+      [LOCAL_STORAGE_KEY, LEGACY_LOCAL_STORAGE_KEY],
+    );
     return legacy;
   }
   return createEmptyData();

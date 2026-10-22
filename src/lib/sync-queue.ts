@@ -63,9 +63,13 @@ export class SerialSyncQueue<T, TResult> {
           }
         } catch (error) {
           const newerJob = this.peekPending();
-          if (!newerJob) this.pending = job;
-          this.options.onError(error, job);
-          if (!newerJob || newerJob.identity === job.identity) break;
+          if (newerJob) continue;
+
+          this.pending = job;
+          if (this.options.isCurrent(job)) {
+            this.options.onError(error, job);
+          }
+          break;
         }
       }
     } finally {
