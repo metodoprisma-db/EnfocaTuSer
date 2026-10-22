@@ -39,6 +39,7 @@ export function createDefaultProfile(): UserProfile {
     planType: "free_beta",
     subscriptionStatus: "active",
     accessUntil: null,
+    reminderEnabled: false,
   };
 }
 

@@ -20,6 +20,11 @@ export const discoveries: CatalogItem[] = [
     seed: "Puedo escucharme sin convertirme en una batalla.",
     mentorNote:
       "Clarissa y Scarlett te recuerdan que comenzar también puede sentirse suave.",
+    integrationInvitation: {
+      title: "Un momento sin lucha",
+      text: "Cuando una emoción aparezca mientras sigues con tu día, haz una pausa por un instante y dile por dentro: «Esto también puede estar aquí por un momento».",
+      reminder: "Esto puede estar aquí por un momento.",
+    },
   },
   {
     id: "discovery-02",
@@ -40,6 +45,11 @@ export const discoveries: CatalogItem[] = [
     seed: "Puedo mirarme con honestidad y ternura.",
     mentorNote:
       "Clarissa y Scarlett sostienen este momento contigo, sin juicios ni comparaciones.",
+    integrationInvitation: {
+      title: "Tu punto de partida",
+      text: "En un cambio de actividad, pregúntate qué está ocupando más espacio en ti. Nómbralo con una palabra, sin calificarlo como bueno o malo. Solo reconoce desde dónde sigues el día.",
+      reminder: "Puedo mirar dónde estoy sin ponerme nota.",
+    },
   },
   {
     id: "discovery-03",
@@ -60,6 +70,11 @@ export const discoveries: CatalogItem[] = [
     seed: "Soy más amplia que la historia que mi mente cuenta.",
     mentorNote:
       "Clarissa y Scarlett te acompañan a volver del ruido mental a tu presencia.",
+    integrationInvitation: {
+      title: "Vuelve a una sensación",
+      text: "Cuando notes que una historia se repite en tu mente, lleva la atención al contacto de los pies con el piso, la espalda con la silla o el aire en la piel. Quédate ahí unos segundos, sin buscar una explicación.",
+      reminder: "Primero noto; después veo si necesito entender.",
+    },
   },
   {
     id: "discovery-04",
@@ -80,6 +95,11 @@ export const discoveries: CatalogItem[] = [
     seed: "Una creencia aprendida puede abrirse a una nueva mirada.",
     mentorNote:
       "Clarissa y Scarlett te invitan a elegir coherencia antes que autoexigencia.",
+    integrationInvitation: {
+      title: "Prueba otra manera",
+      text: "Si aparece un «esto se hace así» que te aprieta, pregúntate en silencio: «¿Qué opción más amable también sería válida?». No cambies nada por obligación; basta con notar que puede haber más de una forma.",
+      reminder: "Una regla aprendida no es la única opción.",
+    },
   },
   {
     id: "discovery-05",
@@ -100,6 +120,11 @@ export const discoveries: CatalogItem[] = [
     seed: "Incluso mi resistencia merece ser escuchada.",
     mentorNote:
       "Clarissa y Scarlett están cerca mientras quitas esta capa a tu ritmo.",
+    integrationInvitation: {
+      title: "Escucha el freno",
+      text: "Si surgen ganas de postergar, controlar o alejarte, nota el impulso antes de discutir con él. Pregúntate: «¿Qué puede haber detrás de esto?». Puedes seguir, esperar o pedir apoyo; la respuesta queda en tus manos.",
+      reminder: "Mi resistencia también trae información.",
+    },
   },
   {
     id: "discovery-06",
@@ -120,6 +145,11 @@ export const discoveries: CatalogItem[] = [
     seed: "Lo amable también puede encontrar espacio en mí.",
     mentorNote:
       "Clarissa y Scarlett celebran tu recorrido con un encuentro preparado para escucharte.",
+    integrationInvitation: {
+      title: "Recibe algo amable",
+      text: "En una actividad habitual, deja que tu atención encuentre algo agradable o sereno: la temperatura del agua, una voz cercana o una tarea que salió con menos esfuerzo. Recíbelo unos segundos sin usarlo para negar lo difícil.",
+      reminder: "Lo difícil y lo amable pueden compartir el momento.",
+    },
     hasGift: true,
   },
   {
@@ -140,6 +170,11 @@ export const discoveries: CatalogItem[] = [
     seed: "Un movimiento pequeño también cambia mi camino.",
     mentorNote:
       "Clarissa y Scarlett reconocen cada microvictoria que nace desde el ser.",
+    integrationInvitation: {
+      title: "Solo una parte",
+      text: "Si un asunto se siente enorme, separa mentalmente una parte que puedas atender ahora: una llamada, un objeto o una decisión. Lo demás puede quedar fuera de este momento, sin que eso signifique abandonarlo.",
+      reminder: "Ahora, solo esta parte.",
+    },
   },
   {
     id: "discovery-08",
@@ -160,6 +195,11 @@ export const discoveries: CatalogItem[] = [
     seed: "Puedo comprobar los hechos sin entregar mi dirección al miedo.",
     mentorNote:
       "Clarissa y Scarlett te invitan a mirar el pensamiento sin convertirlo en identidad.",
+    integrationInvitation: {
+      title: "Toma distancia de la idea",
+      text: "Cuando una frase dura aparezca como una certeza, cambia «esto es así» por «estoy pensando que esto es así». Después distingue qué dato conoces de verdad y qué parte estás imaginando.",
+      reminder: "Un pensamiento no es todo el panorama.",
+    },
   },
   {
     id: "discovery-09",
@@ -180,6 +220,11 @@ export const discoveries: CatalogItem[] = [
     seed: "Hoy basta con el paso que sí está a mi alcance.",
     mentorNote:
       "Clarissa y Scarlett te acompañan a reconocer valor en lo pequeño.",
+    integrationInvitation: {
+      title: "Encuentra lo posible",
+      text: "En un momento de poca energía, mira qué gesto cabe de verdad: beber agua, sentarte, abrir una ventana, pedir compañía o dejar una tarea para más tarde. Elige uno, solo si te ofrece apoyo.",
+      reminder: "Hoy cuenta lo que sí está a mi alcance.",
+    },
   },
   {
     id: "discovery-10",
@@ -199,6 +244,11 @@ export const discoveries: CatalogItem[] = [
     seed: "Mi paz puede importar más que cerrar una discusión.",
     mentorNote:
       "Clarissa y Scarlett sostienen una firmeza que no necesita atacar.",
+    integrationInvitation: {
+      title: "Deja aire en la conversación",
+      text: "En una conversación tensa, deja pasar unos segundos antes de responder. Pregúntate qué quieres cuidar y elige entre hablar, preguntar o guardar silencio. Tener claridad puede importar más que cerrar el intercambio.",
+      reminder: "No necesito cerrar cada discusión.",
+    },
   },
   {
     id: "discovery-11",
@@ -219,6 +269,11 @@ export const discoveries: CatalogItem[] = [
     seed: "Puedo protegerme y hacer espacio para la paz.",
     mentorNote:
       "Clarissa y Scarlett te acompañan con respeto hacia tu historia y tus límites.",
+    integrationInvitation: {
+      title: "Cuida lo que necesitas",
+      text: "Si un reproche vuelve a tu mente, nombra en silencio qué necesitas ahora: distancia, claridad, descanso, apoyo o un límite. No hace falta justificar lo ocurrido para atender esa necesidad.",
+      reminder: "Reconocer el daño y cuidar mi presente pueden convivir.",
+    },
   },
   {
     id: "discovery-12",
@@ -238,6 +293,11 @@ export const discoveries: CatalogItem[] = [
     seed: "Puedo amar y al mismo tiempo dejar respirar.",
     mentorNote:
       "Clarissa y Scarlett te recuerdan que el amor también incluye espacio.",
+    integrationInvitation: {
+      title: "Agradece sin sujetar",
+      text: "Cuando disfrutes de una persona, un proyecto o algo que valoras, reconoce por un instante lo que aporta a tu vida. Déjalo ser valioso sin pedirle que asegure todo tu bienestar ni que permanezca igual.",
+      reminder: "Querer también puede dejar espacio.",
+    },
   },
   {
     id: "discovery-13",
@@ -258,6 +318,11 @@ export const discoveries: CatalogItem[] = [
     seed: "Sentir tristeza no reduce mi valor.",
     mentorNote:
       "Clarissa y Scarlett reciben tu emoción con discreción y calidez.",
+    integrationInvitation: {
+      title: "Un lugar para la tristeza",
+      text: "Si te resulta cómodo y seguro, puedes observar la tristeza cuando se asome. Quizá sea mientras tomas agua, miras por la ventana o apoyas una mano sobre el pecho. Puedes detenerte en cualquier momento. Si se vuelve intensa, busca compañía o atención profesional.",
+      reminder: "Sentir no significa cargar con todo a solas.",
+    },
   },
   {
     id: "discovery-14",
@@ -277,6 +342,11 @@ export const discoveries: CatalogItem[] = [
     seed: "Puedo recibir amor sin perderme de mí.",
     mentorNote:
       "Clarissa y Scarlett te acompañan a elegirse con responsabilidad afectiva.",
+    integrationInvitation: {
+      title: "Apoyo propio y compartido",
+      text: "Antes de buscar una respuesta afuera, pregúntate: «¿Qué puedo ofrecerme en este momento?». Tal vez sea hablarte con menos dureza, tomar distancia o pedir ayuda con claridad. Sostenerte también puede incluir compañía.",
+      reminder: "Apoyarme también incluye dejarme acompañar.",
+    },
   },
   {
     id: "discovery-15",
@@ -296,6 +366,11 @@ export const discoveries: CatalogItem[] = [
     seed: "Puedo avanzar con suavidad y presencia.",
     mentorNote:
       "Clarissa y Scarlett honran la valentía tranquila que cultivaste en este camino.",
+    integrationInvitation: {
+      title: "Un paso seguro",
+      text: "Ante una decisión pequeña que te dé miedo, puedes notar dónde se siente en el cuerpo, solo si hacerlo te resulta cómodo. Luego busca el movimiento más seguro que aún respete lo importante para ti: acercarte un poco, hacer una pregunta o esperar más información.",
+      reminder: "El miedo puede venir conmigo; el paso lo elijo yo.",
+    },
   },
 ];
 
