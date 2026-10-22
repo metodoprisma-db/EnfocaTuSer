@@ -1,7 +1,5 @@
 import type { MetadataRoute } from "next";
 
-import { ASSETS } from "@/lib/constants";
-
 export default function manifest(): MetadataRoute.Manifest {
   return {
     id: "/",
@@ -19,11 +17,22 @@ export default function manifest(): MetadataRoute.Manifest {
     categories: ["lifestyle", "health"],
     icons: [
       {
-        src: ASSETS.favicon,
+        src: "/icon-192.png",
+        sizes: "192x192",
+        type: "image/png",
+        purpose: "any",
+      },
+      {
+        src: "/icon-512.png",
         sizes: "512x512",
         type: "image/png",
         purpose: "any",
       },
+    ],
+    shortcuts: [
+      { name: "Mi camino", short_name: "Camino", url: "/camino" },
+      { name: "Soltar ahora", short_name: "Soltar", url: "/soltar" },
+      { name: "Mi diario", short_name: "Diario", url: "/diario" },
     ],
   };
 }

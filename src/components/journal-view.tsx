@@ -1,15 +1,48 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Download, FileHeart, LoaderCircle, Save, Trash2 } from "lucide-react";
 
 import { useAppState } from "@/context/app-state";
+import { journalDraftKey, parseJournalDraft } from "@/lib/draft-storage";
 
 export function JournalView() {
-  const { actions, meta } = useAppState();
+  const { actions, meta, state } = useAppState();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
+  const [loadedDraftKey, setLoadedDraftKey] = useState<string | null>(null);
+  const draftKey = useMemo(
+    () => journalDraftKey(state.user?.id),
+    [state.user?.id],
+  );
+
+  useEffect(() => {
+    let active = true;
+    queueMicrotask(() => {
+      if (!active) return;
+      const stored = parseJournalDraft(window.localStorage.getItem(draftKey));
+      setTitle(stored.title);
+      setContent(stored.content);
+      setLoadedDraftKey(draftKey);
+    });
+    return () => {
+      active = false;
+    };
+  }, [draftKey]);
+
+  useEffect(() => {
+    if (loadedDraftKey !== draftKey) return;
+    if (title || content) window.localStorage.setItem(draftKey, JSON.stringify({ title, content }));
+    else window.localStorage.removeItem(draftKey);
+  }, [content, draftKey, loadedDraftKey, title]);
+
+  useEffect(() => {
+    if (!title.trim() && !content.trim()) return;
+    const protectDraft = (event: BeforeUnloadEvent) => event.preventDefault();
+    window.addEventListener("beforeunload", protectDraft);
+    return () => window.removeEventListener("beforeunload", protectDraft);
+  }, [content, title]);
 
   const save = () => {
     const cleanContent = content.trim();
@@ -21,11 +54,20 @@ export function JournalView() {
     });
     setTitle("");
     setContent("");
+    window.localStorage.removeItem(draftKey);
   };
 
   const clearAll = async () => {
-    const confirmed = window.confirm("¿Deseas borrar el progreso, las prácticas y todas las notas guardadas?");
-    if (confirmed) await actions.clearData();
+    const confirmation = window.prompt(
+      "Esta acción borrará el progreso, las prácticas, las evaluaciones y todas las notas de esta cuenta. No se puede deshacer. Escribe BORRAR para confirmar.",
+    );
+    if (confirmation === "BORRAR") await actions.clearData();
+  };
+
+  const deleteEntry = (id: string, entryTitle: string) => {
+    if (window.confirm(`¿Borrar “${entryTitle}”? Esta nota no podrá recuperarse.`)) {
+      actions.deleteJournalEntry(id);
+    }
   };
 
   const loadOlder = async () => {
@@ -50,9 +92,10 @@ export function JournalView() {
         <button className="button button-primary" style={{ width: "100%", marginTop: 18 }} type="button" onClick={save} disabled={!content.trim()}>
           <Save size={17} /> Guardar en mi diario
         </button>
+        {title.trim() || content.trim() ? <p className="draft-status">Borrador guardado en este dispositivo</p> : null}
         <div className="button-row">
           <button className="button button-secondary" type="button" onClick={actions.exportData}><Download size={16} /> Exportar JSON</button>
-          <button className="button button-danger" type="button" onClick={clearAll}><Trash2 size={16} /> Borrar datos</button>
+          <button className="button button-danger" type="button" onClick={clearAll}><Trash2 size={16} /> Borrar todos mis datos</button>
         </div>
       </aside>
 
@@ -75,7 +118,7 @@ export function JournalView() {
                       {new Intl.DateTimeFormat("es", { dateStyle: "long", timeStyle: "short" }).format(new Date(entry.createdAt))}
                     </time>
                   </div>
-                  <button className="icon-button" type="button" aria-label={`Borrar ${entry.title}`} onClick={() => actions.deleteJournalEntry(entry.id)}>
+                  <button className="icon-button" type="button" aria-label={`Borrar ${entry.title}`} onClick={() => deleteEntry(entry.id, entry.title)}>
                     <Trash2 size={18} />
                   </button>
                 </div>

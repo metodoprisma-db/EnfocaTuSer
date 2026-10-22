@@ -18,6 +18,7 @@ import { useAppState } from "@/context/app-state";
 import { ASSETS } from "@/lib/constants";
 import { MembershipTransition } from "@/components/membership-transition";
 import { ProfileSettings } from "@/components/profile-settings";
+import { PwaRegistration } from "@/components/pwa-registration";
 
 const primaryNav = [
   { href: "/", label: "Mi espacio", icon: Home },
@@ -63,6 +64,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="app-frame">
+      <PwaRegistration />
       <aside className="sidebar">
         <Link href="/" className="brand-link" aria-label="Enfoca Tu Ser, ir al inicio">
           <Image src={ASSETS.logo} width={420} height={130} alt="Enfoca Tu Ser" priority />
@@ -89,7 +91,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
           <div>
             <strong>Estamos cerquita</strong>
-            <span>Clarissa y Scarlett te acompañan.</span>
+            <span>Nuestro equipo te acompaña.</span>
           </div>
         </div>
       </aside>
