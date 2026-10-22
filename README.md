@@ -7,6 +7,8 @@ Esta carpeta es la raíz independiente para GitHub y Vercel. No necesita archivo
 ## Funcionalidad
 
 - 15 descubrimientos con desbloqueo secuencial.
+- Integración temporal centralizada: 1 minuto en desarrollo y Vercel Preview, 12 horas en producción.
+- Invitaciones **Llévalo contigo** disponibles durante cada integración.
 - Fotografía Inicial y Fotografía Final con comparativa privada.
 - Días de Presencia acumulados y Ritmo actual sin castigos.
 - Soltar ahora, diario exportable y 12 prácticas de profundidad.
@@ -15,6 +17,7 @@ Esta carpeta es la raíz independiente para GitHub y Vercel. No necesita archivo
 - Detección y selección manual de zona horaria.
 - Banner global de novedades.
 - PWA instalable mediante `src/app/manifest.ts`.
+- Avisos discretos dentro de la aplicación y permiso opcional para avisos del dispositivo.
 - Administración aislada en `/admin/login` y `/admin`.
 
 ## Requisitos
@@ -79,6 +82,21 @@ Las escrituras remotas son seriales, las respuestas obsoletas se descartan y las
 eliminaciones pendientes se conservan como tombstones hasta ser confirmadas.
 El diario pagina por el cursor de la última fila remota recibida y solicita una
 fila adicional para determinar si existe otra página sin falsos positivos.
+
+### Límite de validación temporal del piloto
+
+La interfaz, las URLs y las acciones de progreso consumen la misma política pura
+de desbloqueo. Para cuentas autenticadas, `completed_at` se sincroniza con
+Supabase y continúa siendo la fuente temporal. Sin embargo, el esquema actual
+permite que la propietaria escriba sus filas de `user_progress` desde el cliente.
+Por eso, este control evita adelantos mediante la aplicación normal, pero no es
+una barrera de seguridad inviolable frente a un cliente modificado.
+
+Garantizar la espera en servidor requerirá una RPC o función confiable que
+valide el paso previo y la hora del servidor, junto con la revocación de las
+escrituras directas equivalentes. Ese cambio de políticas debe revisarse y
+ejecutarse manualmente con autorización; este piloto no modifica infraestructura
+ni ejecuta SQL.
 
 Estrategia de conflictos:
 
@@ -151,3 +169,16 @@ El repositorio no contiene comandos de migración automática. Un despliegue
 Preview debe limitarse a `next build`, no debe ejecutar `supabase db push`,
 scripts SQL ni operaciones destructivas, y debe usar variables de un entorno no
 productivo antes de habilitar pruebas que escriban datos.
+
+## PWA y notificaciones del piloto
+
+El manifiesto usa exclusivamente iconos oficiales locales y `public/sw.js`
+registra el shell instalable. Cuando la aplicación permanece abierta, reevalúa
+el desbloqueo en el instante previsto y puede mostrar un aviso genérico del
+dispositivo si la usuaria activó voluntariamente esa preferencia. Los mensajes
+no incluyen notas, emociones ni otro contenido privado.
+
+El service worker deja preparado el evento `push`, pero el envío con la
+aplicación cerrada todavía no está operativo: faltan un emisor confiable, claves
+VAPID, alta y baja de suscripciones y un programador de entregas. No se simula
+esa capacidad durante el piloto.
