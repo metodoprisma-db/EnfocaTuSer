@@ -6,12 +6,12 @@ import {
   accountStorageKey,
   claimGuestRecord,
   completeGuestRecord,
-  guestStorageKey,
+  readGuestState,
   readScopedRecord,
   writeGuestRecord,
+  writeMigratedGuestRecord,
   writeMigratedRecord,
   writeScopedRecord,
-  type GuestRecord,
 } from "@/lib/storage-scope";
 import type { AppData, UserProfile } from "@/types/app";
 
@@ -143,22 +143,17 @@ function readLegacyData() {
 
 export function readGuestData(): AppData {
   if (typeof window === "undefined") return createEmptyData();
-  const record = readScopedRecord<GuestRecord<Partial<AppData>>>(
+  const state = readGuestState<Partial<AppData>>(
     window.localStorage,
-    guestStorageKey(),
   );
-  if (record && !record.claimedBy) return normalizeData(record.data);
-  if (record) return createEmptyData();
+  if (state?.active) return normalizeData(state.active);
+  if (state) return createEmptyData();
 
   const legacy = readLegacyData();
   if (legacy && legacy.syncedUserIds.length === 0) {
-    writeMigratedRecord(
+    writeMigratedGuestRecord(
       window.localStorage,
-      guestStorageKey(),
-      {
-        data: legacy,
-        claimedBy: null,
-      } satisfies GuestRecord<AppData>,
+      legacy,
       [LOCAL_STORAGE_KEY, LEGACY_LOCAL_STORAGE_KEY],
     );
     return legacy;

@@ -10,6 +10,7 @@ import {
   claimGuestRecord,
   completeGuestRecord,
   guestStorageKey,
+  readGuestState,
   readScopedRecord,
   writeGuestRecord,
   writeMigratedRecord,
@@ -145,7 +146,9 @@ test("la hidratación preserva una reclamación fallida hasta sincronizarla con 
     data: privateData,
     claimedBy: "account-a",
   });
-  assert.equal(claimGuestRecord(storage, "account-b"), null);
+  assert.deepEqual(claimGuestRecord(storage, "account-b")?.data, {
+    journal: [],
+  });
 
   // El reintento confirma los datos en la cuenta correcta antes de limpiar la copia.
   writeScopedRecord(storage, accountStorageKey("account-a"), privateData);
@@ -155,7 +158,62 @@ test("la hidratación preserva una reclamación fallida hasta sincronizarla con 
     privateData,
   );
   assert.equal(readScopedRecord(storage, accountStorageKey("account-b")), null);
-  assert.equal(claimGuestRecord(storage, "account-b"), null);
+  assert.deepEqual(claimGuestRecord(storage, "account-b")?.data, {
+    journal: [],
+  });
+});
+
+test("conserva por separado una reclamación pendiente y una nueva invitada", () => {
+  const storage = memoryStorage();
+  const firstGuest = { journal: ["reflexión de A"] };
+  const nextGuest = { journal: ["reflexión nueva"] };
+
+  assert.equal(writeGuestRecord(storage, firstGuest), true);
+  assert.deepEqual(claimGuestRecord(storage, "account-a"), {
+    data: firstGuest,
+    claimedBy: "account-a",
+  });
+
+  // La sincronización de A queda pendiente, A cierra sesión y llega otra invitada.
+  assert.equal(writeGuestRecord(storage, nextGuest), true);
+  assert.deepEqual(readGuestState(storage), {
+    version: 1,
+    active: nextGuest,
+    claims: [{ data: firstGuest, claimedBy: "account-a" }],
+  });
+
+  // Tras recargar, cada contenido continúa asociado a quien corresponde.
+  assert.deepEqual(claimGuestRecord(storage, "account-a"), {
+    data: firstGuest,
+    claimedBy: "account-a",
+  });
+  assert.deepEqual(claimGuestRecord(storage, "account-b"), {
+    data: nextGuest,
+    claimedBy: "account-b",
+  });
+  assert.equal(claimGuestRecord(storage, "account-c"), null);
+});
+
+test("no informa guardado cuando falla la escritura de una nueva invitada", () => {
+  const values = new Map<string, string>();
+  let rejectWrites = false;
+  const storage: StorageLike = {
+    getItem: (key) => values.get(key) ?? null,
+    setItem: (key, value) => {
+      if (rejectWrites) throw new Error("sin espacio");
+      values.set(key, value);
+    },
+    removeItem: (key) => void values.delete(key),
+  };
+
+  assert.equal(writeGuestRecord(storage, { journal: ["de A"] }), true);
+  assert.equal(claimGuestRecord(storage, "account-a")?.claimedBy, "account-a");
+  rejectWrites = true;
+
+  assert.equal(writeGuestRecord(storage, { journal: ["nueva"] }), false);
+  assert.deepEqual(claimGuestRecord(storage, "account-a")?.data, {
+    journal: ["de A"],
+  });
 });
 
 test("serializa escrituras consecutivas y no aplica respuestas antiguas", async () => {
