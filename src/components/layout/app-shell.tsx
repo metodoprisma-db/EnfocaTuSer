@@ -44,9 +44,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const percentage = Math.round((meta.stats.discoveriesCompleted / 15) * 100);
   const statusCopy = {
     local: "Guardado en este dispositivo",
+    pending: "Guardado aquí, falta sincronizar",
     connecting: "Sincronizando",
     synced: "Progreso sincronizado",
-    error: "Guardado local activo",
+    error: "No pudimos confirmar el guardado",
   }[state.syncStatus];
 
   if (!state.hydrated) {

@@ -634,7 +634,10 @@ create policy profiles_insert_own
   on public.profiles
   for insert
   to authenticated
-  with check ((select auth.uid()) = id);
+  with check (
+    (select auth.uid()) = id
+    and lower(trim(email)) = lower(trim(coalesce(auth.jwt() ->> 'email', '')))
+  );
 
 drop policy if exists profiles_update_own on public.profiles;
 create policy profiles_update_own
@@ -717,7 +720,18 @@ create policy journal_entries_insert_own
   on public.journal_entries
   for insert
   to authenticated
-  with check ((select auth.uid()) = user_id);
+  with check (
+    (select auth.uid()) = user_id
+    and (
+      practice_session_id is null
+      or exists (
+        select 1
+        from public.practice_sessions as practice
+        where practice.id = journal_entries.practice_session_id
+          and practice.user_id = (select auth.uid())
+      )
+    )
+  );
 
 drop policy if exists journal_entries_update_own on public.journal_entries;
 create policy journal_entries_update_own
@@ -725,7 +739,18 @@ create policy journal_entries_update_own
   for update
   to authenticated
   using ((select auth.uid()) = user_id)
-  with check ((select auth.uid()) = user_id);
+  with check (
+    (select auth.uid()) = user_id
+    and (
+      practice_session_id is null
+      or exists (
+        select 1
+        from public.practice_sessions as practice
+        where practice.id = journal_entries.practice_session_id
+          and practice.user_id = (select auth.uid())
+      )
+    )
+  );
 
 drop policy if exists journal_entries_delete_own on public.journal_entries;
 create policy journal_entries_delete_own

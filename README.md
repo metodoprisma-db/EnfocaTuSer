@@ -70,6 +70,84 @@ npx tsc --noEmit
 npm run build
 ```
 
+La sincronización usa espacios locales separados para invitada y para cada UUID
+autenticado. Al iniciar sesión, el espacio invitado se reclama para una sola
+cuenta antes de subirlo y solo se elimina después de una sincronización completa.
+Las claves heredadas se consumen únicamente después de copiarlas al espacio
+nuevo, y una reclamación interrumpida puede retomarse sin duplicar titulares.
+Las escrituras remotas son seriales, las respuestas obsoletas se descartan y las
+eliminaciones pendientes se conservan como tombstones hasta ser confirmadas.
+El diario pagina por el cursor de la última fila remota recibida y solicita una
+fila adicional para determinar si existe otra página sin falsos positivos.
+
+Estrategia de conflictos:
+
+- progreso: unión por tipo e índice, conservando la fecha de finalización más antigua;
+- diario y prácticas: registros inmutables por UUID, con servidor autoritativo ante una colisión;
+- evaluaciones: gana la versión con `createdAt` más reciente;
+- perfil: servidor autoritativo salvo campos locales marcados explícitamente como pendientes;
+- eliminaciones: el tombstone local vence a una fila remota hasta que Supabase confirma el borrado.
+
+### Comprobación de RLS en cada entorno
+
+`supabase/schema.sql` es la definición esperada, pero no demuestra el estado de
+producción. Después de aplicarlo manualmente, ejecuta estas consultas de solo
+lectura en el SQL Editor:
+
+Este PR solo modifica las políticas `profiles_insert_own`,
+`journal_entries_insert_own` y `journal_entries_update_own`. No se debe ejecutar
+el archivo completo directamente en producción: contiene DDL histórico ajeno a
+este cambio. Para aplicar el endurecimiento sin modificar datos, extrae únicamente
+los bloques `drop policy if exists` y `create policy` de esas tres políticas,
+revísalos y pruébalos primero en un proyecto no productivo. Su aplicación debe ser
+manual, en una transacción y con autorización explícita para ese entorno.
+
+```sql
+select
+  relname,
+  relrowsecurity as rls_enabled,
+  relforcerowsecurity as rls_forced
+from pg_catalog.pg_class
+where relnamespace = 'public'::regnamespace
+  and relname in (
+    'profiles',
+    'user_progress',
+    'practice_sessions',
+    'journal_entries',
+    'user_assessments',
+    'app_announcements'
+  )
+order by relname;
+
+select schemaname, tablename, policyname, roles, cmd, qual, with_check
+from pg_catalog.pg_policies
+where schemaname = 'public'
+order by tablename, cmd, policyname;
+
+select grantee, table_name, privilege_type
+from information_schema.role_table_grants
+where table_schema = 'public'
+  and grantee in ('anon', 'authenticated')
+order by table_name, grantee, privilege_type;
+```
+
+Luego valida con dos cuentas reales de prueba mediante el cliente público: cada
+cuenta debe poder crear, leer, modificar y borrar solo sus filas. El SQL Editor
+usa un rol privilegiado y por sí solo no prueba el aislamiento RLS.
+
+### Reversión
+
+El cambio de frontend se revierte desplegando el commit anterior. Las claves
+locales por cuenta no se borran al revertir. Los cambios SQL solo endurecen
+políticas existentes y pueden revertirse restaurando las definiciones anteriores
+de `profiles_insert_own`, `journal_entries_insert_own` y
+`journal_entries_update_own`; no hay migraciones destructivas ni cambios de datos.
+
 ## Despliegue
 
 Conecta la raíz de esta carpeta a un repositorio de GitHub y selecciona ese repositorio en Vercel. Configura las mismas variables públicas en el proyecto de Vercel y usa el comando de compilación predeterminado de Next.js.
+
+El repositorio no contiene comandos de migración automática. Un despliegue
+Preview debe limitarse a `next build`, no debe ejecutar `supabase db push`,
+scripts SQL ni operaciones destructivas, y debe usar variables de un entorno no
+productivo antes de habilitar pruebas que escriban datos.

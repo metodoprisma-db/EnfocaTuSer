@@ -106,6 +106,26 @@ export interface UserProfile {
   accessUntil: string | null;
 }
 
+export interface PendingProfilePatch {
+  lastCompassEmotion?: string;
+  timezone?: string;
+  timezoneManual?: boolean;
+  presenceDaysCount?: number;
+  currentRhythmCount?: number;
+  lastActiveDate?: string | null;
+  giftUnlockedAt?: string | null;
+}
+
+export interface LocalSyncState {
+  pendingJournalDeletes: string[];
+  pendingProgressDeletes: Array<{
+    kind: CatalogKind;
+    itemIndex: number;
+  }>;
+  clearAll: boolean;
+  profilePatch: PendingProfilePatch;
+}
+
 export interface AppAnnouncement {
   id: string;
   title: string;
@@ -127,6 +147,7 @@ export interface AppData {
   lastCompassEmotion: string;
   giftUnlockedAt: string | null;
   syncedUserIds: string[];
+  sync: LocalSyncState;
 }
 
 export interface AppStats {
