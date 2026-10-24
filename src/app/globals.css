@@ -324,6 +324,7 @@ h3 {
 
 .page-wrap {
   width: min(100%, 1220px);
+  min-width: 0;
   margin: 0 auto;
 }
 
@@ -1987,13 +1988,29 @@ h3 {
 
 .assessment-options {
   display: grid;
-  grid-template-columns: repeat(10, minmax(40px, 1fr));
+  grid-template-columns: repeat(10, minmax(0, 1fr));
   gap: 7px;
 }
 
-.assessment-options button {
+.assessment-option {
+  position: relative;
+  display: block;
+}
+
+.assessment-option input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+.assessment-option span {
+  display: grid;
   min-width: 40px;
   min-height: 44px;
+  place-items: center;
   border: 1px solid var(--etq-linea);
   border-radius: 11px;
   cursor: pointer;
@@ -2003,11 +2020,16 @@ h3 {
   font-weight: 700;
 }
 
-.assessment-options button[aria-pressed="true"] {
+.assessment-option input:checked + span {
   border-color: var(--etq-azul);
   color: var(--etq-blanco);
   background: var(--etq-azul);
   box-shadow: 0 4px 14px rgba(1, 109, 191, 0.2);
+}
+
+.assessment-option input:focus-visible + span {
+  outline: 3px solid color-mix(in srgb, var(--etq-naranja) 60%, white);
+  outline-offset: 3px;
 }
 
 .comparison-missing {
@@ -2065,7 +2087,7 @@ h3 {
   }
 
   .assessment-options {
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 }
 
@@ -2119,6 +2141,10 @@ h3 {
     border-radius: 22px;
   }
 
+  .assessment-card {
+    padding: 24px 20px;
+  }
+
   .availability-notice {
     grid-template-columns: auto 1fr;
   }
@@ -2137,7 +2163,7 @@ h3 {
     font-size: 8rem;
   }
 
-  .assessment-options button {
+  .assessment-option span {
     min-width: 0;
   }
 }
@@ -2266,6 +2292,8 @@ h3 {
 
 .assessment-card {
   display: grid;
+  width: 100%;
+  min-width: 0;
   grid-template-columns: minmax(240px, 0.72fr) minmax(0, 1.28fr);
   gap: clamp(28px, 5vw, 64px);
   padding: clamp(28px, 5vw, 52px);
@@ -2290,6 +2318,7 @@ h3 {
 
 .assessment-form {
   display: grid;
+  min-width: 0;
   gap: 24px;
 }
 
@@ -2336,6 +2365,16 @@ h3 {
   gap: 12px;
   color: var(--etq-chocolate-suave);
   font-size: 0.66rem;
+}
+
+.range-ends span {
+  min-width: 0;
+  flex: 1 1 0;
+  overflow-wrap: anywhere;
+}
+
+.range-ends span:last-child {
+  text-align: right;
 }
 
 .assessment-saved {

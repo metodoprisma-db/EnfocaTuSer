@@ -1,10 +1,7 @@
-const CACHE_NAME = "enfoca-tu-ser-shell-v1";
-const APP_SHELL = [
-  "/",
-  "/camino",
-  "/diario",
-  "/soltar",
-  "/brujula",
+const CACHE_NAME = "enfoca-tu-ser-static-v2";
+const CACHE_PREFIX = "enfoca-tu-ser-";
+const PUBLIC_ASSETS = [
+  "/manifest.webmanifest",
   "/logo-enfoca-tu-ser.png",
   "/isotipo-enfoca-tu-ser.png",
   "/icon-250.png",
@@ -12,33 +9,45 @@ const APP_SHELL = [
   "/icon-512.png",
   "/icon-butterfly.png",
 ];
+const PUBLIC_ASSET_PATHS = new Set(PUBLIC_ASSETS);
+
+function isSafeStaticRequest(request) {
+  if (request.method !== "GET") return false;
+  const url = new URL(request.url);
+  if (url.origin !== self.location.origin) return false;
+  return PUBLIC_ASSET_PATHS.has(url.pathname) || url.pathname.startsWith("/_next/static/");
+}
 
 self.addEventListener("install", (event) => {
-  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)));
+  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(PUBLIC_ASSETS)));
   self.skipWaiting();
 });
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
-      Promise.all(keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))),
+      Promise.all(
+        keys
+          .filter((key) => key.startsWith(CACHE_PREFIX) && key !== CACHE_NAME)
+          .map((key) => caches.delete(key)),
+      ),
     ),
   );
   self.clients.claim();
 });
 
 self.addEventListener("fetch", (event) => {
-  if (event.request.method !== "GET" || new URL(event.request.url).origin !== self.location.origin) return;
+  if (!isSafeStaticRequest(event.request)) return;
+
   event.respondWith(
-    fetch(event.request)
-      .then((response) => {
-        if (response.ok && event.request.mode === "navigate") {
-          const copy = response.clone();
-          event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy)));
-        }
-        return response;
-      })
-      .catch(() => caches.match(event.request).then((cached) => cached || caches.match("/"))),
+    caches.open(CACHE_NAME).then(async (cache) => {
+      const cached = await cache.match(event.request);
+      if (cached) return cached;
+
+      const response = await fetch(event.request);
+      if (response.ok) await cache.put(event.request, response.clone());
+      return response;
+    }),
   );
 });
 

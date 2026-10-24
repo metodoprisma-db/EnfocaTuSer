@@ -68,27 +68,34 @@ export function JourneyAssessment({ stage }: { stage: AssessmentStage }) {
         </p>
       </div>
       <form className="assessment-form" onSubmit={submit}>
-        {indicators.map((indicator) => (
-          <fieldset className="assessment-scale" key={indicator.key}>
-            <legend>{indicator.label}</legend>
-            <div className="assessment-options">
-              {Array.from({ length: 10 }, (_, index) => index + 1).map((value) => (
-                <button
-                  key={value}
-                  type="button"
-                  aria-pressed={scores[indicator.key] === value}
-                  onClick={() => setScores((current) => ({ ...current, [indicator.key]: value }))}
-                >
-                  {value}
-                </button>
-              ))}
-            </div>
-            <div className="range-ends" aria-hidden="true">
-              <span>Necesita cuidado</span>
-              <span>Se siente presente</span>
-            </div>
-          </fieldset>
-        ))}
+        {indicators.map((indicator) => {
+          const endpointsId = `${stage}-${indicator.key}-ends`;
+          return (
+            <fieldset className="assessment-scale" key={indicator.key}>
+              <legend>{indicator.label}</legend>
+              <div className="assessment-options">
+                {Array.from({ length: 10 }, (_, index) => index + 1).map((value) => (
+                  <label className="assessment-option" key={value}>
+                    <input
+                      type="radio"
+                      name={`${stage}-${indicator.key}`}
+                      value={value}
+                      checked={scores[indicator.key] === value}
+                      aria-label={`${value} de 10`}
+                      aria-describedby={endpointsId}
+                      onChange={() => setScores((current) => ({ ...current, [indicator.key]: value }))}
+                    />
+                    <span aria-hidden="true">{value}</span>
+                  </label>
+                ))}
+              </div>
+              <div className="range-ends" id={endpointsId}>
+                <span>1: {indicator.startLabel}</span>
+                <span>10: {indicator.endLabel}</span>
+              </div>
+            </fieldset>
+          );
+        })}
         <div className="field">
           <label htmlFor={`${stage}-reflection`}>Una frase para recordar este momento (opcional)</label>
           <textarea

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { compareAssessments } from "../src/lib/assessment.ts";
+import { ASSESSMENT_INDICATORS, compareAssessments } from "../src/lib/assessment.ts";
 import { journalDraftKey, lessonDraftKey, parseJournalDraft } from "../src/lib/draft-storage.ts";
 import { discoveries } from "../src/data/catalog.ts";
 
@@ -45,6 +45,18 @@ test("la comparación usa exactamente los mismos cuatro indicadores", () => {
     "Claridad sobre lo que siento",
     "Paz y presencia",
   ]);
+});
+
+test("cada indicador conserva extremos propios y compasivos", () => {
+  assert.deepEqual(
+    ASSESSMENT_INDICATORS.map(({ startLabel, endLabel }) => [startLabel, endLabel]),
+    [
+      ["La prisa ocupa casi todo", "La calma tiene espacio"],
+      ["Me trato con mucha exigencia", "Me trato con mucha amabilidad"],
+      ["Me cuesta reconocer lo que siento", "Reconozco con claridad lo que siento"],
+      ["Me siento lejos de la paz y el presente", "Siento paz y presencia"],
+    ],
+  );
 });
 
 test("si falta una evaluación no inventa filas comparativas", () => {
