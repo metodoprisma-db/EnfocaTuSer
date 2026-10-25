@@ -1,5 +1,11 @@
 export type CatalogKind = "discovery" | "extra";
 
+export interface IntegrationInvitation {
+  title: string;
+  text: string;
+  reminder: string;
+}
+
 export interface CatalogItem {
   id: string;
   slug: string;
@@ -8,11 +14,17 @@ export interface CatalogItem {
   kind: CatalogKind;
   title: string;
   description: string;
+  focus?: string;
+  whyItMatters?: string;
+  presence?: string;
   insight: string;
-  prompts: [string, string];
+  perspectives?: string[];
+  prompts: string[];
   action: string;
   seed: string;
   mentorNote: string;
+  closing?: string;
+  integrationInvitation?: IntegrationInvitation;
   audioUrl?: string;
   hasGift?: boolean;
 }
@@ -104,6 +116,7 @@ export interface UserProfile {
   planType: PlanType;
   subscriptionStatus: SubscriptionStatus;
   accessUntil: string | null;
+  reminderEnabled: boolean;
 }
 
 export interface PendingProfilePatch {
@@ -114,6 +127,7 @@ export interface PendingProfilePatch {
   currentRhythmCount?: number;
   lastActiveDate?: string | null;
   giftUnlockedAt?: string | null;
+  reminderEnabled?: boolean;
 }
 
 export interface LocalSyncState {

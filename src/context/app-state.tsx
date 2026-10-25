@@ -27,6 +27,11 @@ import {
   writeScopedData,
 } from "@/lib/storage";
 import type { JournalCursor } from "@/lib/journal-pagination";
+import {
+  evaluateProgression,
+  type ProgressionState,
+} from "@/lib/progression";
+import { isValidAssessment } from "@/lib/assessment";
 import { SerialSyncQueue } from "@/lib/sync-queue";
 import { getBrowserSupabaseClient } from "@/lib/supabase/client";
 import { mergeAccountData } from "@/lib/supabase/merge";
@@ -89,14 +94,15 @@ interface AppStateValue {
     updateTimezone: (timezone: string, manual: boolean) => Promise<void>;
     claimBillingEmail: (email: string) => Promise<string>;
     dismissRhythmMessage: () => void;
+    setReminderEnabled: (enabled: boolean) => void;
     exportData: () => void;
     clearData: () => Promise<void>;
     loadOlder: () => Promise<void>;
   };
   meta: {
     stats: AppStats;
-    completedDiscoveries: Set<number>;
-    completedExtras: Set<number>;
+    completedDiscoveries: ReadonlySet<number>;
+    completedExtras: ReadonlySet<number>;
     nextDiscoveryIndex: number;
     isDiscoveryUnlocked: (itemIndex: number) => boolean;
     giftUnlocked: boolean;
@@ -107,6 +113,8 @@ interface AppStateValue {
     accessExpired: boolean;
     visibleJournalEntries: JournalEntry[];
     hasMoreJournalEntries: boolean;
+    progression: ProgressionState;
+    unlockIntervalMs: number;
   };
 }
 
@@ -193,17 +201,6 @@ function applyPresence(data: AppData, timezone: string) {
   };
 }
 
-function sequentialDiscoveryCount(progress: AppData["progress"]) {
-  const completed = new Set(
-    progress
-      .filter((entry) => entry.kind === "discovery")
-      .map((entry) => entry.itemIndex),
-  );
-  let next = 0;
-  while (next < 15 && completed.has(next)) next += 1;
-  return next;
-}
-
 function inclusiveJourneyDays(data: AppData) {
   const startDates = [
     data.assessments.find((item) => item.stage === "initial")?.createdAt,
@@ -276,7 +273,13 @@ function mergeLocalMigration(account: AppData, guest: AppData | null): AppData {
   };
 }
 
-export function AppStateProvider({ children }: { children: ReactNode }) {
+export function AppStateProvider({
+  children,
+  unlockIntervalMs,
+}: {
+  children: ReactNode;
+  unlockIntervalMs: number;
+}) {
   const [data, setData] = useState<AppData>(createEmptyData);
   const [hydrated, setHydrated] = useState(false);
   const [syncStatus, setSyncStatus] = useState<SyncStatus>("local");
@@ -295,6 +298,18 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const identityRef = useRef("guest");
   const remoteJournalCursorRef = useRef<JournalCursor | null>(null);
   const syncQueueRef = useRef<SerialSyncQueue<AppData, SyncResult> | null>(null);
+  const initialAssessment = data.assessments.find(
+    (item) => item.stage === "initial" && isValidAssessment(item, "initial"),
+  ) ?? null;
+  const progression = useMemo(
+    () => evaluateProgression(
+      data.progress,
+      currentTimestamp ?? 0,
+      unlockIntervalMs,
+      Boolean(initialAssessment),
+    ),
+    [currentTimestamp, data.progress, initialAssessment, unlockIntervalMs],
+  );
 
   useEffect(() => {
     let active = true;
@@ -302,12 +317,27 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       if (active) setCurrentTimestamp(Date.now());
     };
     queueMicrotask(refreshTimestamp);
-    const intervalId = window.setInterval(refreshTimestamp, 60_000);
+    const refreshWhenVisible = () => {
+      if (document.visibilityState === "visible") refreshTimestamp();
+    };
+    window.addEventListener("focus", refreshTimestamp);
+    document.addEventListener("visibilitychange", refreshWhenVisible);
     return () => {
       active = false;
-      window.clearInterval(intervalId);
+      window.removeEventListener("focus", refreshTimestamp);
+      document.removeEventListener("visibilitychange", refreshWhenVisible);
     };
   }, []);
+
+  useEffect(() => {
+    if (currentTimestamp === null || !progression.nextUnlockAt) return;
+    const remaining = Date.parse(progression.nextUnlockAt) - Date.now();
+    const timeoutId = window.setTimeout(
+      () => setCurrentTimestamp(Date.now()),
+      Math.max(0, remaining) + 25,
+    );
+    return () => window.clearTimeout(timeoutId);
+  }, [currentTimestamp, progression.nextUnlockAt]);
   useEffect(() => {
     let active = true;
     queueMicrotask(() => {
@@ -549,9 +579,20 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       );
 
       if (kind === "discovery") {
-        const nextDiscovery = sequentialDiscoveryCount(current.progress);
-        if (existing || itemIndex !== nextDiscovery || itemIndex > 14) return;
+        if (existing) return;
       }
+
+      const now = Date.now();
+      const hasInitialAssessment = current.assessments.some(
+        (item) => item.stage === "initial" && isValidAssessment(item, "initial"),
+      );
+      const currentProgression = evaluateProgression(
+        current.progress,
+        now,
+        unlockIntervalMs,
+        hasInitialAssessment,
+      );
+      if (!currentProgression.canComplete(kind, itemIndex)) return;
 
       let progress = current.progress;
       let pendingProgressDeletes = current.sync.pendingProgressDeletes;
@@ -579,14 +620,19 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
         ];
       }
 
-      const completedInOrder = sequentialDiscoveryCount(progress);
+      const completedInOrder = evaluateProgression(
+        progress,
+        now,
+        unlockIntervalMs,
+        hasInitialAssessment,
+      ).discoveriesCompleted;
       persist(
         {
           ...current,
           progress,
           giftUnlockedAt:
             completedInOrder >= 5
-              ? current.giftUnlockedAt ?? new Date().toISOString()
+              ? current.giftUnlockedAt ?? new Date(now).toISOString()
               : current.giftUnlockedAt,
           sync: {
             ...current.sync,
@@ -594,6 +640,24 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
           },
         },
       );
+    },
+    [persist, unlockIntervalMs],
+  );
+
+  const setReminderEnabled = useCallback(
+    (enabled: boolean) => {
+      const current = dataRef.current;
+      persist({
+        ...current,
+        profile: { ...current.profile, reminderEnabled: enabled },
+        sync: {
+          ...current.sync,
+          profilePatch: {
+            ...current.sync.profilePatch,
+            reminderEnabled: enabled,
+          },
+        },
+      });
     },
     [persist],
   );
@@ -826,41 +890,25 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     setVisibleJournalCount((count) => count + JOURNAL_PAGE_SIZE);
   }, [remoteHasMore]);
 
-  const completedDiscoveries = useMemo(
-    () =>
-      new Set(
-        data.progress
-          .filter((entry) => entry.kind === "discovery")
-          .map((entry) => entry.itemIndex),
-      ),
-    [data.progress],
-  );
-  const completedExtras = useMemo(
-    () =>
-      new Set(
-        data.progress
-          .filter((entry) => entry.kind === "extra")
-          .map((entry) => entry.itemIndex),
-      ),
-    [data.progress],
-  );
-  const nextDiscoveryIndex = useMemo(
-    () => sequentialDiscoveryCount(data.progress),
-    [data.progress],
-  );
+  const completedDiscoveries = progression.completedDiscoveryIndexes;
+  const completedExtras = progression.completedExtraIndexes;
+  const nextDiscoveryIndex = progression.nextDiscoveryIndex ?? 15;
   const isDiscoveryUnlocked = useCallback(
-    (itemIndex: number) => itemIndex <= nextDiscoveryIndex && itemIndex < 15,
-    [nextDiscoveryIndex],
+    (itemIndex: number) => {
+      const status = progression.discoveryStatus(itemIndex);
+      return status === "available" || status === "completed";
+    },
+    [progression],
   );
   const sortedEntries = useMemo(
     () => sortJournal(data.journalEntries),
     [data.journalEntries],
   );
   const visibleJournalEntries = sortedEntries.slice(0, visibleJournalCount);
-  const initialAssessment =
-    data.assessments.find((item) => item.stage === "initial") ?? null;
   const finalAssessment =
-    data.assessments.find((item) => item.stage === "final") ?? null;
+    data.assessments.find(
+      (item) => item.stage === "final" && isValidAssessment(item, "final"),
+    ) ?? null;
   const stats: AppStats = {
     discoveriesCompleted: nextDiscoveryIndex,
     pausesCompleted: data.practiceSessions.length,
@@ -899,6 +947,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       updateTimezone,
       claimBillingEmail,
       dismissRhythmMessage: () => setRhythmResumed(false),
+      setReminderEnabled,
       exportData: () => exportLocalData(dataRef.current),
       clearData,
       loadOlder,
@@ -909,8 +958,8 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       completedExtras,
       nextDiscoveryIndex,
       isDiscoveryUnlocked,
-      giftUnlocked: nextDiscoveryIndex >= 5,
-      pathComplete: nextDiscoveryIndex >= 15,
+      giftUnlocked: progression.giftUnlocked,
+      pathComplete: progression.pathComplete,
       initialAssessment,
       finalAssessment,
       journeyDays: inclusiveJourneyDays(data),
@@ -919,6 +968,8 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       hasMoreJournalEntries:
         visibleJournalEntries.length < data.journalEntries.length ||
         (Boolean(user) && remoteHasMore),
+      progression,
+      unlockIntervalMs,
     },
   };
 

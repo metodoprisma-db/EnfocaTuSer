@@ -170,6 +170,9 @@ async function applyPendingProfilePatch(
   if (patch.giftUnlockedAt !== undefined) {
     payload.gift_unlocked_at = patch.giftUnlockedAt;
   }
+  if (patch.reminderEnabled !== undefined) {
+    payload.reminder_enabled = patch.reminderEnabled;
+  }
 
   if (Object.keys(payload).length > 0) {
     const { error } = await client
@@ -224,7 +227,7 @@ export async function syncDataWithSupabase(
     client
       .from("profiles")
       .select(
-        "email,billing_email,display_name,role,last_compass_emotion,timezone,timezone_manual,presence_days_count,current_rhythm_count,last_active_date,gift_unlocked_at,plan_type,subscription_status,access_until",
+        "email,billing_email,display_name,role,last_compass_emotion,timezone,timezone_manual,presence_days_count,current_rhythm_count,last_active_date,gift_unlocked_at,plan_type,subscription_status,access_until,reminder_enabled",
       )
       .eq("id", userId)
       .single(),
@@ -366,6 +369,8 @@ export async function syncDataWithSupabase(
         subscriptionStatus:
           profile?.subscription_status ?? local.profile.subscriptionStatus,
         accessUntil: profile?.access_until ?? local.profile.accessUntil,
+        reminderEnabled:
+          profile?.reminder_enabled ?? local.profile.reminderEnabled,
       },
       lastCompassEmotion:
         profile?.last_compass_emotion ?? local.lastCompassEmotion,

@@ -4,7 +4,15 @@ import Link from "next/link";
 import { AuthForm } from "@/components/auth/auth-form";
 import { ASSETS } from "@/lib/constants";
 
-export function AuthPage({ mode, initialError }: { mode: "login" | "register"; initialError?: string }) {
+export function AuthPage({
+  mode,
+  initialError,
+  restrictedAccess = false,
+}: {
+  mode: "login" | "register";
+  initialError?: string;
+  restrictedAccess?: boolean;
+}) {
   return (
     <main className="auth-page">
       <section className="auth-story">
@@ -14,11 +22,13 @@ export function AuthPage({ mode, initialError }: { mode: "login" | "register"; i
         <div className="auth-story-copy">
           <span className="eyebrow eyebrow-light">Tu recorrido puede acompañarte</span>
           <h1>Vuelve a ti, estés donde estés.</h1>
-          <p>Clarissa Acevedo y Scarlett Vargas sostienen este espacio para que tus notas y descubrimientos tengan un lugar cuidado.</p>
+          <p>{restrictedAccess
+            ? "Este piloto está reservado para el equipo autorizado. Tu cuenta permite guardar y recuperar el recorrido de forma sincronizada."
+            : "Este espacio está sostenido para que tus notas y descubrimientos tengan un lugar cuidado, tanto si pruebas el recorrido como invitada como si decides sincronizarlo."}</p>
         </div>
       </section>
       <section className="auth-form-wrap">
-        <AuthForm mode={mode} initialError={initialError} />
+        <AuthForm mode={mode} initialError={initialError} restrictedAccess={restrictedAccess} />
       </section>
     </main>
   );

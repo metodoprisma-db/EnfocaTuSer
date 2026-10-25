@@ -10,7 +10,7 @@ export default function DiarioPage() {
       <header className="page-header">
         <span className="eyebrow">Palabras que te devuelven a ti</span>
         <h1>Mi diario</h1>
-        <p>Un lugar privado para guardar comprensiones, emociones y pequeños movimientos interiores.</p>
+        <p>Un lugar privado y opcional para guardar lo que quieras recordar. No necesitas escribir para avanzar en el camino.</p>
       </header>
       <JournalView />
     </div>

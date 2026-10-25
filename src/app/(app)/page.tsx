@@ -1,22 +1,27 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, BookHeart, CalendarHeart, Footprints, Sparkles } from "lucide-react";
 
 import { AnnouncementBanner } from "@/components/announcement-banner";
 import { GiftCard } from "@/components/gift-card";
+import { IntegrationInvitation } from "@/components/integration-invitation";
+import { JourneyAssessment } from "@/components/journey-assessment";
+import { AvailabilityNotice, NotificationPreferences } from "@/components/notification-preferences";
 import { useAppState } from "@/context/app-state";
 import { discoveries } from "@/data/catalog";
-import { ASSETS } from "@/lib/constants";
 
 export default function HomePage() {
   const { state, actions, meta } = useAppState();
-  const nextDiscovery = discoveries[Math.min(meta.nextDiscoveryIndex, 14)];
+  const nextIndex = meta.progression.nextDiscoveryIndex;
+  const nextDiscovery = nextIndex === null ? null : discoveries[nextIndex];
+  const invitationIndex = meta.progression.activeInvitationIndex;
+  const activeInvitation = invitationIndex === null ? null : discoveries[invitationIndex];
 
   return (
-    <div className="page-wrap">
+    <div className="page-wrap home-page">
       <AnnouncementBanner />
+      <AvailabilityNotice />
 
       {state.rhythmResumed ? (
         <aside className="rhythm-return" aria-live="polite">
@@ -29,81 +34,64 @@ export default function HomePage() {
         </aside>
       ) : null}
 
-      <section className="hero">
-        <div className="hero-copy">
-          <span className="eyebrow">Tu espacio para volver a ti</span>
-          <h1>Afloja el peso.<br />Escucha tu ser.</h1>
-          <p>
-            Clarissa Acevedo y Scarlett Vargas te acompañan a quitar capas de autoexigencia,
-            reconocer lo que sientes y avanzar con más paz.
-          </p>
-          <div className="hero-actions">
-            <Link className="button button-primary" href={meta.pathComplete ? "/camino" : `/camino/discovery/${nextDiscovery.slug}`}>
-              {meta.pathComplete ? "Ver lo que he caminado" : "Continuar mi camino"} <ArrowRight size={18} />
-            </Link>
-            <Link className="button button-secondary" href="/soltar">
-              <Sparkles size={18} /> Necesito soltar algo
-            </Link>
+      <header className="welcome-header">
+        <span className="eyebrow">{meta.initialAssessment ? "Mi espacio" : "Tu camino empieza aquí"}</span>
+        <h1>{meta.initialAssessment
+          ? state.data.profile.displayName ? `Qué bueno verte, ${state.data.profile.displayName}` : "Qué bueno que volviste"
+          : "Antes de avanzar, detente a mirar cómo estás"}</h1>
+        <p>{meta.initialAssessment
+          ? "Este momento no pide prisa. Mira lo que está disponible y elige cómo quieres acompañarte hoy."
+          : "La fotografía inicial te ayudará a reconocer tu punto de partida y, al final, a hacer visible el recorrido. Cuando la guardes, el Descubrimiento 01 se abrirá de inmediato."}</p>
+      </header>
+
+      {!meta.initialAssessment ? (
+        <JourneyAssessment stage="initial" />
+      ) : activeInvitation ? (
+        <section className="home-focus" aria-labelledby="home-focus-title">
+          <div className="focus-intro">
+            <span className="eyebrow">Tu momento presente</span>
+            <h2 id="home-focus-title">Deja que lo recorrido encuentre su lugar</h2>
+            <p>El trabajo de hoy continúa en la vida cotidiana. No hace falta volver a la pantalla ni registrar nada durante este tiempo.</p>
           </div>
-        </div>
-        <div className="hero-art">
-          <Image src={ASSETS.butterfly} fill sizes="(max-width: 820px) 80vw, 38vw" priority alt="Mariposa de Enfoca Tu Ser" />
-        </div>
+          <IntegrationInvitation item={activeInvitation} nextUnlockAt={meta.progression.nextUnlockAt} />
+        </section>
+      ) : (
+        <section className="home-focus focus-ready" aria-labelledby="home-focus-title">
+          <div className="focus-intro">
+            <span className="eyebrow">{meta.pathComplete ? "Tu camino completo" : "Cuando quieras continuar"}</span>
+            <h2 id="home-focus-title">{meta.pathComplete ? "Todo lo que caminaste ya puede mirarse" : nextDiscovery?.title}</h2>
+            <p>{meta.pathComplete ? "Tus dos miradas, tus pausas y tus reflexiones cuentan una historia propia." : nextDiscovery?.description}</p>
+            <div className="hero-actions">
+              <Link className="button button-primary" href={meta.pathComplete ? "/camino" : `/camino/discovery/${nextDiscovery?.slug}`}>
+                {meta.pathComplete ? "Mirar mi recorrido" : "Abrir mi descubrimiento"} <ArrowRight size={18} />
+              </Link>
+              <Link className="button button-secondary" href="/soltar"><Sparkles size={18} /> Necesito soltar algo</Link>
+            </div>
+          </div>
+          <div className="focus-number" aria-hidden="true">{meta.pathComplete ? "15" : String((nextIndex ?? 0) + 1).padStart(2, "0")}</div>
+        </section>
+      )}
+
+      <section className="quiet-actions" aria-label="Otros espacios disponibles">
+        <Link href="/camino"><Footprints size={20} /><span><strong>Mi camino</strong><small>Revisita lo que ya recorriste</small></span></Link>
+        <Link href="/diario"><BookHeart size={20} /><span><strong>Mi diario</strong><small>Escribe o vuelve a tus notas</small></span></Link>
+        <Link href="/soltar"><Sparkles size={20} /><span><strong>Soltar ahora</strong><small>Regálate una pausa breve</small></span></Link>
       </section>
 
-      <section className="section" aria-labelledby="huellas-title">
-        <div className="section-heading">
-          <div>
-            <span className="eyebrow">Huellas de presencia</span>
-            <h2 id="huellas-title">Tu recorrido, sin presión</h2>
-          </div>
-          <p>Cada número guarda un momento en que elegiste mirarte con honestidad y cuidado.</p>
+      <details className="home-details">
+        <summary>Tus huellas y preferencias</summary>
+        <div className="home-secondary-grid">
+          <section className="compact-stats" aria-label="Huellas de presencia">
+            <div><strong>{meta.stats.discoveriesCompleted}</strong><span>descubrimientos</span></div>
+            <div><strong>{state.data.profile.presenceDaysCount}</strong><span>días de presencia</span></div>
+            <div><strong>{meta.stats.pausesCompleted}</strong><span>pausas</span></div>
+            <div><strong>{meta.stats.journalEntries}</strong><span>notas</span></div>
+          </section>
+          <NotificationPreferences />
         </div>
-        <div className="stats-grid stats-grid-four">
-          <div className="stat-card">
-            <div className="stat-icon"><Footprints size={20} /></div>
-            <strong>{meta.stats.discoveriesCompleted}</strong>
-            <span>descubrimientos recorridos</span>
-          </div>
-          <div className="stat-card">
-            <div className="stat-icon"><CalendarHeart size={20} /></div>
-            <strong>{state.data.profile.presenceDaysCount}</strong>
-            <span>días de presencia acumulados</span>
-            <small>Ritmo actual: {state.data.profile.currentRhythmCount}</small>
-          </div>
-          <div className="stat-card">
-            <div className="stat-icon"><Sparkles size={20} /></div>
-            <strong>{meta.stats.pausesCompleted}</strong>
-            <span>pausas para soltar</span>
-          </div>
-          <div className="stat-card">
-            <div className="stat-icon"><BookHeart size={20} /></div>
-            <strong>{meta.stats.journalEntries}</strong>
-            <span>huellas en tu diario</span>
-          </div>
-        </div>
-      </section>
+      </details>
 
-      <section className="section" aria-label="Regalo de acompañamiento">
-        <GiftCard />
-      </section>
-
-      <section className="section" aria-labelledby="next-title">
-        <div className="section-heading">
-          <div>
-            <span className="eyebrow">Una capa a la vez</span>
-            <h2 id="next-title">{meta.pathComplete ? "Tu recorrido completo" : "Tu próximo descubrimiento"}</h2>
-          </div>
-        </div>
-        <article className="surface-card" style={{ padding: "clamp(25px, 4vw, 42px)" }}>
-          <span className="info-badge">{meta.pathComplete ? "Camino completo" : `Descubrimiento ${String(nextDiscovery.number).padStart(2, "0")}`}</span>
-          <h3 style={{ color: "var(--etq-azul)", marginTop: 16 }}>{meta.pathComplete ? "Lo que has caminado" : nextDiscovery.title}</h3>
-          <p style={{ maxWidth: 700, color: "var(--etq-chocolate-suave)" }}>{meta.pathComplete ? "Tus fotografías, pausas y reflexiones ya cuentan una historia que merece ser mirada con ternura." : nextDiscovery.description}</p>
-          <Link className="button button-primary" href={meta.pathComplete ? "/camino" : `/camino/discovery/${nextDiscovery.slug}`}>
-            {meta.pathComplete ? "Abrir mi comparativa" : "Abrir este descubrimiento"} <ArrowRight size={18} />
-          </Link>
-        </article>
-      </section>
+      {meta.giftUnlocked ? <section className="section gift-secondary"><GiftCard /></section> : null}
     </div>
   );
 }

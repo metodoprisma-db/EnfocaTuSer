@@ -1,14 +1,14 @@
 export const ASSETS = {
   logo:
-    "https://d1yei2z3i6k35z.cloudfront.net/16481184/6a5a04ba3b6369.92594905_Logo_Enfoca-tu-Ser_web.png",
+    "/logo-enfoca-tu-ser.png",
   mark:
-    "https://d1yei2z3i6k35z.cloudfront.net/16481184/6a5a04dde1fa75.72176931_isotipo_Enfoca-tu-Ser_web.png",
+    "/isotipo-enfoca-tu-ser.png",
   butterfly:
-    "https://d1yei2z3i6k35z.cloudfront.net/16481184/6a5a0517b32a53.66254743_Mariposa_Enfoca-tu-ser_2k_web.png",
+    "/icon-butterfly.png",
   favicon:
-    "https://d1yei2z3i6k35z.cloudfront.net/16481184/6a5a04fd3c8749.82601406_Mariposa_Enfoca-tu-Ser_favicom.png",
+    "/icon-250.png",
   mentors:
-    "https://d1yei2z3i6k35z.cloudfront.net/16481184/6a9f3158bd1864.30020764_EnfocaTuSe_Perfil.png",
+    "/clarissa-scarlett-mentoras.png",
   clarissa:
     "https://d1yei2z3i6k35z.cloudfront.net/16481184/6a511e9b48cc47.40674928_WhatsAppImage2026-05-27at10.33.37PM3.jpeg",
 } as const;
