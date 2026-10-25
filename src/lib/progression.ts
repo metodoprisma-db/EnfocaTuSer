@@ -37,12 +37,12 @@ export interface ProgressionState {
 }
 
 export function unlockIntervalForEnvironment(
+  configuredMode: string | undefined,
   nodeEnvironment: string | undefined,
-  vercelEnvironment: string | undefined,
 ) {
-  if (vercelEnvironment === "preview" || nodeEnvironment !== "production") {
-    return PILOT_UNLOCK_INTERVAL_MS;
-  }
+  if (configuredMode === "pilot") return PILOT_UNLOCK_INTERVAL_MS;
+  if (configuredMode === "definitive") return DEFINITIVE_UNLOCK_INTERVAL_MS;
+  if (nodeEnvironment === "development" || nodeEnvironment === "test") return PILOT_UNLOCK_INTERVAL_MS;
   return DEFINITIVE_UNLOCK_INTERVAL_MS;
 }
 

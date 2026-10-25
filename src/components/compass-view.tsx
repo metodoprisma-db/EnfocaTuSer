@@ -57,7 +57,13 @@ export function CompassView() {
             >
               <span className="metamorphosis-order" aria-hidden="true">0{zoneIndex + 1}</span>
               <span className="metamorphosis-mark" aria-hidden="true">
-                <Image src={stageImages[zone.id as keyof typeof stageImages]} width={400} height={400} alt="" />
+                <Image
+                  src={stageImages[zone.id as keyof typeof stageImages]}
+                  width={400}
+                  height={400}
+                  sizes="(max-width: 820px) calc(100vw - 88px), 30vw"
+                  alt=""
+                />
               </span>
               <span className="metamorphosis-stage">{stageVerbs[zone.id as keyof typeof stageVerbs]} · Etapa {zone.stage}</span>
               <strong>{zone.leadership}</strong>
@@ -81,6 +87,7 @@ export function CompassView() {
             src={stageImages[selectedZone.id as keyof typeof stageImages]}
             width={400}
             height={400}
+            sizes="(max-width: 570px) 180px, 160px"
             alt={`Representación de la etapa ${selectedZone.stage}`}
           />
         </div>

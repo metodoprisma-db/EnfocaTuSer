@@ -4,36 +4,77 @@ import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Turnstile } from "@marsidev/react-turnstile";
-import { ArrowRight, Globe2, LockKeyhole } from "lucide-react";
+import { ArrowRight, LockKeyhole } from "lucide-react";
 
+import {
+  authErrorFeedback,
+  authRouteFeedback,
+  safeAuthDiagnostic,
+  type AuthOperation,
+} from "@/lib/auth-feedback";
 import { hasSupabaseEnvironment } from "@/lib/constants";
 import { getBrowserSupabaseClient } from "@/lib/supabase/client";
 
-export function AuthForm({ mode, initialError = "" }: { mode: "login" | "register"; initialError?: string }) {
+export function AuthForm({
+  mode,
+  initialError = "",
+  restrictedAccess = false,
+}: {
+  mode: "login" | "register";
+  initialError?: string;
+  restrictedAccess?: boolean;
+}) {
   const router = useRouter();
+  const initialFeedback = authRouteFeedback(initialError);
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [website, setWebsite] = useState("");
   const [captchaToken, setCaptchaToken] = useState("");
   const [captchaUnavailable, setCaptchaUnavailable] = useState(false);
+  const [captchaCycle, setCaptchaCycle] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState(initialError ? "No pudimos completar el acceso. Inténtalo otra vez." : "");
+  const [message, setMessage] = useState(initialFeedback?.message ?? "");
+  const [diagnosticCode, setDiagnosticCode] = useState(initialFeedback?.diagnosticCode ?? "");
   const [success, setSuccess] = useState(false);
   const turnstileKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY?.trim() ?? "";
-  const canSubmitEmail = hasSupabaseEnvironment && (!turnstileKey || Boolean(captchaToken));
+  const captchaRequired = restrictedAccess || Boolean(turnstileKey);
+  const canSubmitEmail = hasSupabaseEnvironment &&
+    (!captchaRequired || Boolean(captchaToken));
+
+  const resetCaptcha = () => {
+    setCaptchaToken("");
+    setCaptchaCycle((cycle) => cycle + 1);
+  };
+
+  const showAuthError = (error: unknown, operation: AuthOperation) => {
+    const safeError = typeof error === "object" && error !== null ? error : {};
+    const feedback = authErrorFeedback(safeError, operation);
+    console.error("[Enfoca Tu Ser Auth]", safeAuthDiagnostic(safeError, operation));
+    setMessage(feedback.message);
+    setDiagnosticCode(feedback.diagnosticCode);
+    resetCaptcha();
+  };
 
   const validate = () => {
     if (website) {
       setMessage("No pudimos validar el formulario.");
+      setDiagnosticCode("AUTH-HONEYPOT-REJECTED");
       return false;
     }
     if (!hasSupabaseEnvironment) {
       setMessage("El acceso en la nube estará disponible cuando se conecte Supabase. Puedes entrar en modo local ahora.");
+      setDiagnosticCode("AUTH-SUPABASE-NOT-CONFIGURED");
       return false;
     }
-    if (turnstileKey && !captchaToken) {
+    if (restrictedAccess && !turnstileKey) {
+      setMessage("El acceso interno necesita que el equipo complete la configuración de seguridad antes de crear cuentas.");
+      setDiagnosticCode("AUTH-TURNSTILE-NOT-CONFIGURED");
+      return false;
+    }
+    if (captchaRequired && !captchaToken) {
       setMessage("Completa la verificación de seguridad para continuar.");
+      setDiagnosticCode("AUTH-CAPTCHA-REQUIRED");
       return false;
     }
     return true;
@@ -42,64 +83,56 @@ export function AuthForm({ mode, initialError = "" }: { mode: "login" | "registe
   const submitEmail = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setMessage("");
+    setDiagnosticCode("");
     setSuccess(false);
     if (!validate()) return;
     const client = getBrowserSupabaseClient();
     if (!client) return;
 
     setLoading(true);
-    if (mode === "login") {
-      const { error } = await client.auth.signInWithPassword({
-        email,
-        password,
-        options: { captchaToken },
-      });
-      setLoading(false);
-      if (error) {
-        setMessage("Revisa el correo, la contraseña y la verificación de seguridad.");
+    try {
+      if (mode === "login") {
+        const { error } = await client.auth.signInWithPassword({
+          email,
+          password,
+          options: { captchaToken },
+        });
+        if (error) {
+          showAuthError(error, "sign_in");
+          return;
+        }
+        router.push("/");
+        router.refresh();
         return;
       }
-      router.push("/");
-      router.refresh();
-      return;
-    }
 
-    const { error } = await client.auth.signUp({
-      email,
-      password,
-      options: {
-        captchaToken,
-        data: { display_name: displayName.trim() },
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
-    setLoading(false);
-    if (error) {
-      setMessage("El registro sincronizado no está disponible en este momento. Puedes continuar como invitada y conservar el recorrido en este dispositivo.");
-      return;
-    }
-    setSuccess(true);
-    setMessage("Revisa tu correo para confirmar la cuenta y abrir tu espacio sincronizado.");
-  };
+      const { data, error } = await client.auth.signUp({
+        email,
+        password,
+        options: {
+          captchaToken,
+          data: { display_name: displayName.trim() },
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+      if (error) {
+        showAuthError(error, "sign_up");
+        return;
+      }
 
-  const signInWithGoogle = async () => {
-    setMessage("");
-    if (!hasSupabaseEnvironment) {
-      setMessage("La sincronización todavía no está disponible. Puedes continuar como invitada.");
-      return;
-    }
-    const client = getBrowserSupabaseClient();
-    if (!client) return;
-    setLoading(true);
-    const { error } = await client.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
-    if (error) {
+      setSuccess(true);
+      setDiagnosticCode("");
+      resetCaptcha();
+      if (data.session) {
+        router.push("/");
+        router.refresh();
+        return;
+      }
+      setMessage("Revisa tu correo para confirmar la cuenta y abrir tu espacio sincronizado.");
+    } catch (error) {
+      showAuthError(error, mode === "login" ? "sign_in" : "sign_up");
+    } finally {
       setLoading(false);
-      setMessage("No pudimos iniciar el acceso con Google.");
     }
   };
 
@@ -109,15 +142,13 @@ export function AuthForm({ mode, initialError = "" }: { mode: "login" | "registe
       <h2>{mode === "login" ? "Qué bueno verte" : "Crea tu acceso"}</h2>
       <p>
         {mode === "login"
-          ? "Sincroniza tus notas y avances entre dispositivos."
-          : "Tu progreso local se unirá a tu cuenta después del primer acceso."}
+          ? restrictedAccess
+            ? "Entra con el correo habilitado para el piloto y recupera tu recorrido en cualquier dispositivo."
+            : "Sincroniza tus notas y avances entre dispositivos."
+          : restrictedAccess
+            ? "Usa el mismo correo al que el equipo envió la invitación."
+            : "Tu progreso local se unirá a tu cuenta después del primer acceso."}
       </p>
-
-      <button className="button button-secondary" style={{ width: "100%" }} type="button" onClick={signInWithGoogle} disabled={loading || !hasSupabaseEnvironment}>
-        <Globe2 size={18} /> Continuar con Google
-      </button>
-
-      <div className="divider">o con correo</div>
 
       <form onSubmit={submitEmail}>
         <div className="honeypot" aria-hidden="true">
@@ -144,6 +175,7 @@ export function AuthForm({ mode, initialError = "" }: { mode: "login" | "registe
         {turnstileKey ? (
           <div style={{ marginTop: 20, overflow: "hidden" }}>
             <Turnstile
+              key={captchaCycle}
               siteKey={turnstileKey}
               onSuccess={(token) => {
                 setCaptchaToken(token);
@@ -159,9 +191,11 @@ export function AuthForm({ mode, initialError = "" }: { mode: "login" | "registe
             />
           </div>
         ) : (
-          <p className="pilot-access-note">
+          <p className={`pilot-access-note${restrictedAccess ? " configuration-error" : ""}`}>
             <LockKeyhole size={14} style={{ verticalAlign: "-2px", marginRight: 5 }} />
-            Piloto interno: la cuenta se intentará crear sin verificación visual. Si la protección remota la rechaza, podrás recorrer la experiencia como invitada.
+            {restrictedAccess
+              ? "Configuración pendiente: falta conectar la verificación de seguridad de este despliegue."
+              : "La verificación visual no está configurada en este entorno."}
           </p>
         )}
 
@@ -170,15 +204,22 @@ export function AuthForm({ mode, initialError = "" }: { mode: "login" | "registe
         </button>
       </form>
 
-      {message ? <div className={`form-message${success ? " success" : ""}`} role="status">{message}</div> : null}
+      {message ? (
+        <div className={`form-message${success ? " success" : ""}`} role="status">
+          {message}
+          {diagnosticCode ? <small>Referencia segura: {diagnosticCode}</small> : null}
+        </div>
+      ) : null}
 
-      <div className={`guest-access${captchaUnavailable ? " highlighted" : ""}`}>
-        <span className="eyebrow">Camino de prueba</span>
-        <p>Puedes explorar el piloto sin crear una cuenta. El avance quedará guardado solo en este dispositivo y podrás vincularlo más adelante.</p>
-        <Link className="button button-secondary" href="/">
-          Continuar como invitada <ArrowRight size={18} />
-        </Link>
-      </div>
+      {!restrictedAccess ? (
+        <div className={`guest-access${captchaUnavailable ? " highlighted" : ""}`}>
+          <span className="eyebrow">Camino de prueba</span>
+          <p>Puedes explorar el piloto sin crear una cuenta. El avance quedará guardado solo en este dispositivo y podrás vincularlo más adelante.</p>
+          <Link className="button button-secondary" href="/">
+            Continuar como invitada <ArrowRight size={18} />
+          </Link>
+        </div>
+      ) : null}
 
       <p className="helper-text" style={{ marginTop: 22, textAlign: "center" }}>
         {mode === "login" ? "¿Es tu primera vez?" : "¿Ya tienes un acceso?"}{" "}

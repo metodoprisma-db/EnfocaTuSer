@@ -18,19 +18,21 @@ function discovery(itemIndex: number, completedAt = start) {
   };
 }
 
-test("usa un minuto en desarrollo y previews, y doce horas en producción", () => {
+test("la configuración explícita elige piloto o versión definitiva", () => {
   assert.equal(
-    unlockIntervalForEnvironment("development", undefined),
+    unlockIntervalForEnvironment("pilot", "production"),
     PILOT_UNLOCK_INTERVAL_MS,
   );
   assert.equal(
-    unlockIntervalForEnvironment("production", "preview"),
-    PILOT_UNLOCK_INTERVAL_MS,
-  );
-  assert.equal(
-    unlockIntervalForEnvironment("production", "production"),
+    unlockIntervalForEnvironment("definitive", "development"),
     DEFINITIVE_UNLOCK_INTERVAL_MS,
   );
+});
+
+test("sin configuración explícita solo el desarrollo usa un minuto", () => {
+  assert.equal(unlockIntervalForEnvironment(undefined, "development"), PILOT_UNLOCK_INTERVAL_MS);
+  assert.equal(unlockIntervalForEnvironment(undefined, "production"), DEFINITIVE_UNLOCK_INTERVAL_MS);
+  assert.equal(unlockIntervalForEnvironment("valor-inválido", "production"), DEFINITIVE_UNLOCK_INTERVAL_MS);
 });
 
 test("abre el primer descubrimiento inmediatamente", () => {

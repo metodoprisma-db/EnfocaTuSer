@@ -7,7 +7,7 @@ Esta carpeta es la raíz independiente para GitHub y Vercel. No necesita archivo
 ## Funcionalidad
 
 - 15 descubrimientos con desbloqueo secuencial.
-- Integración temporal centralizada: 1 minuto en desarrollo y Vercel Preview, 12 horas en producción.
+- Integración temporal centralizada: 1 minuto en modo `pilot` y 12 horas en modo `definitive`.
 - Invitaciones **Llévalo contigo** disponibles durante cada integración.
 - Fotografía Inicial y Fotografía Final con comparativa privada.
 - Días de Presencia acumulados y Ritmo actual sin castigos.
@@ -46,9 +46,45 @@ NEXT_PUBLIC_SUPPORT_URL=
 NEXT_PUBLIC_MEMBERSHIP_CHECKOUT_URL=
 NEXT_PUBLIC_ENFORCE_SUBSCRIPTION=false
 NEXT_PUBLIC_TURNSTILE_SITE_KEY=
+ENFOCA_INTERNAL_ACCESS_MODE=open
+ENFOCA_INTERNAL_ALLOWED_EMAILS=
+ENFOCA_UNLOCK_INTERVAL_MODE=definitive
 ```
 
-`NEXT_PUBLIC_ENFORCE_SUBSCRIPTION` permanece en `false` durante el lanzamiento inicial. No incluyas claves privadas ni `service_role` en variables públicas.
+`NEXT_PUBLIC_ENFORCE_SUBSCRIPTION` permanece en `false` durante el lanzamiento inicial. No incluyas claves privadas ni `service_role` en variables públicas. `ENFOCA_INTERNAL_ALLOWED_EMAILS` es privada y nunca debe usar el prefijo `NEXT_PUBLIC_`.
+
+### Acceso del piloto interno
+
+Para exigir una cuenta autorizada en todas las rutas de la experiencia:
+
+```env
+ENFOCA_INTERNAL_ACCESS_MODE=restricted
+ENFOCA_INTERNAL_ALLOWED_EMAILS=clarissa@ejemplo.com,scarlett@ejemplo.com
+NEXT_PUBLIC_TURNSTILE_SITE_KEY=clave-publica-del-widget
+```
+
+La lista admite comas, punto y coma o saltos de línea. El Proxy valida en el
+servidor la sesión obtenida desde Supabase y el correo normalizado. Sin lista o
+sin credenciales de Supabase, el modo `restricted` falla cerrado. `/login`,
+`/registro`, `/auth/callback` y `/admin/login` siguen disponibles para completar
+el acceso, pero la experiencia, incluidas las rutas que antes admitían invitadas,
+queda protegida.
+
+No retires Deployment Protection hasta comprobar en el Preview que una cuenta
+permitida entra y una cuenta ajena queda fuera. El acceso con Google permanece
+oculto hasta habilitar y validar ese proveedor en Supabase.
+
+### Intervalo por despliegue
+
+La selección es privada y se resuelve en el servidor:
+
+- `ENFOCA_UNLOCK_INTERVAL_MODE=pilot`: 1 minuto.
+- `ENFOCA_UNLOCK_INTERVAL_MODE=definitive`: 12 horas.
+
+Si falta la variable, desarrollo y tests usan 1 minuto; cualquier build de
+producción usa 12 horas. Para probar el piloto desde `main`, configura
+explícitamente `pilot` en ese despliegue. No existe un control en el navegador
+para cambiar el intervalo.
 
 ## Supabase
 
@@ -64,6 +100,23 @@ where lower(email) = lower('tu-correo@ejemplo.com');
 ```
 
 Después podrás entrar por `/admin/login`. El formulario administrativo solo admite correo y contraseña. El panel nunca consulta el contenido del diario.
+
+### Lista de comprobación de Auth
+
+Antes de invitar al equipo, revisa manualmente en el proyecto conectado:
+
+1. **Authentication > Providers > Email**: proveedor habilitado y nuevos registros permitidos.
+2. **Authentication > Emails**: confirmación de correo habilitada para el piloto.
+3. **Authentication > SMTP Settings**: SMTP propio configurado. El proveedor predeterminado de Supabase puede limitar los envíos a integrantes de la organización.
+4. **Authentication > Bot and Abuse Protection**: Turnstile habilitado con su clave secreta; el widget de Cloudflare debe admitir el dominio principal y los dominios Preview usados.
+5. **Authentication > URL Configuration**: Site URL principal y Redirect URLs para `https://dominio/auth/callback` y cada Preview autorizado.
+6. **Logs > Auth y Logs > Postgres**: ante `unexpected_failure` o `Database error saving new user`, revisar el error del trigger `handle_new_user()` antes de modificarlo.
+7. Confirmar que `on_auth_user_created` existe y que crea exactamente una fila en `public.profiles` por identidad.
+
+La interfaz muestra mensajes distintos para CAPTCHA, registro deshabilitado,
+correo no autorizado, límites de envío, credenciales, confirmación pendiente y
+errores internos. Solo registra tipo, código y estado HTTP; nunca correo,
+contraseña, token ni mensaje remoto completo.
 
 ## Verificación
 

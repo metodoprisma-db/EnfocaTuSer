@@ -53,7 +53,8 @@ test("el acceso invitado permanece visible aunque la nube esté configurada", ()
     "utf8",
   );
   assert.match(authForm, /Continuar como invitada/);
-  assert.doesNotMatch(authForm, /!hasSupabaseEnvironment \? \(/);
+  assert.match(authForm, /!restrictedAccess \? \(/);
+  assert.doesNotMatch(authForm, /signInWithOAuth/);
 });
 
 test("la comparación usa exactamente los mismos cuatro indicadores", () => {
