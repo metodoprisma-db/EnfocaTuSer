@@ -14,11 +14,16 @@ export interface CatalogItem {
   kind: CatalogKind;
   title: string;
   description: string;
+  focus?: string;
+  whyItMatters?: string;
+  presence?: string;
   insight: string;
-  prompts: [string, string];
+  perspectives?: string[];
+  prompts: string[];
   action: string;
   seed: string;
   mentorNote: string;
+  closing?: string;
   integrationInvitation?: IntegrationInvitation;
   audioUrl?: string;
   hasGift?: boolean;

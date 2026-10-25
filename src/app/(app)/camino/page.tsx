@@ -20,7 +20,7 @@ export default function CaminoPage() {
       <header className="page-header journey-header">
         <span className="eyebrow">De hacer y tener, hacia ser</span>
         <h1>Mi camino</h1>
-        <p>Un recorrido de quince descubrimientos, con espacio real entre uno y otro. Puedes volver a cada paso completado cuando lo necesites.</p>
+        <p>Quince descubrimientos guiados para mirar una capa a la vez, con un tiempo real de integración entre cada paso. Lo completado queda disponible para volver cuando lo necesites.</p>
       </header>
 
       <section className="path-map" aria-labelledby="path-map-title">
@@ -32,7 +32,7 @@ export default function CaminoPage() {
           {discoveries.map((item) => {
             const status = meta.progression.discoveryStatus(item.index);
             const open = status === "completed" || status === "available";
-            const content = <><span>{String(item.number).padStart(2, "0")}</span><small>{status === "completed" ? "Recorrido" : status === "available" ? "Disponible" : status === "integrating" ? "Integrando" : "Más adelante"}</small></>;
+            const content = <><span>{String(item.number).padStart(2, "0")}</span><small>{status === "completed" ? "Recorrido" : status === "available" ? "Disponible" : status === "integrating" ? "Integrando" : status === "locked_assessment" ? "Primero tu mirada" : "Más adelante"}</small></>;
             return (
               <li key={item.id} className={`path-step ${status}`}>
                 {open ? <Link href={`/camino/discovery/${item.slug}`} aria-label={`${item.title}: ${status}`}>{content}</Link> : <div aria-label={`${item.title}: ${status}`}>{content}</div>}
@@ -45,7 +45,7 @@ export default function CaminoPage() {
       {!meta.initialAssessment ? (
         <section className="journey-callout">
           <LockKeyhole size={22} />
-          <div><span className="eyebrow">Antes de comenzar</span><h2>Tu punto de partida te espera en Mi espacio</h2><p>Elegir esa primera mirada abre el Descubrimiento 01 sin guardar valores por ti.</p></div>
+          <div><span className="eyebrow">Antes de comenzar</span><h2>Primero, toma tu fotografía inicial</h2><p>Es un paso breve y necesario para hacer visible tu punto de partida. Cuando la guardes, el Descubrimiento 01 se abrirá de inmediato.</p></div>
           <Link className="button button-primary" href="/">Ir a Mi espacio <ArrowRight size={18} /></Link>
         </section>
       ) : current ? (
@@ -56,7 +56,7 @@ export default function CaminoPage() {
             <h2>{current.title}</h2>
             <p>{current.description}</p>
             {currentStatus === "integrating" && meta.progression.nextUnlockAt ? (
-              <p className="unlock-moment"><Clock3 size={18} /> Se abrirá el {formatLocalMoment(meta.progression.nextUnlockAt)}.</p>
+              <p className="unlock-moment"><Clock3 size={18} /> Tu próximo descubrimiento estará disponible el {formatLocalMoment(meta.progression.nextUnlockAt)}. No necesitas esperar aquí.</p>
             ) : (
               <Link className="button button-primary" href={`/camino/discovery/${current.slug}`}>Abrir este descubrimiento <ArrowRight size={18} /></Link>
             )}

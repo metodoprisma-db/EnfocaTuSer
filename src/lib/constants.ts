@@ -8,7 +8,7 @@ export const ASSETS = {
   favicon:
     "/icon-250.png",
   mentors:
-    "https://d1yei2z3i6k35z.cloudfront.net/16481184/6a9f3158bd1864.30020764_EnfocaTuSe_Perfil.png",
+    "/clarissa-scarlett-mentoras.png",
   clarissa:
     "https://d1yei2z3i6k35z.cloudfront.net/16481184/6a511e9b48cc47.40674928_WhatsAppImage2026-05-27at10.33.37PM3.jpeg",
 } as const;

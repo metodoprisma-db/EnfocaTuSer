@@ -11,8 +11,7 @@ export default function SoltarPage() {
         <span className="eyebrow">Una pausa de presencia</span>
         <h1>Soltar ahora</h1>
         <p>
-          Cinco pasos breves para reconocer una emoción, escuchar el cuerpo y aflojar una parte del peso.
-          Clarissa y Scarlett te acompañan desde este lado de la pantalla.
+          Cinco pasos breves para reconocer una emoción, escuchar el cuerpo y aflojar una parte del peso. Puedes detenerte cuando lo necesites.
         </p>
       </header>
       <ReleasePractice />

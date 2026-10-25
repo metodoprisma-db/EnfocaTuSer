@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { BookHeart, CalendarDays, Check, Footprints, Info, Sparkles } from "lucide-react";
+import { BookHeart, CalendarDays, Check, Footprints, Info, Repeat2, Sparkles } from "lucide-react";
 
 import { useAppState } from "@/context/app-state";
 import { ASSESSMENT_INDICATORS, compareAssessments, type AssessmentScoreKey } from "@/lib/assessment";
@@ -59,13 +59,20 @@ export function JourneyAssessment({ stage }: { stage: AssessmentStage }) {
   return (
     <section className="assessment-card" aria-labelledby={`${stage}-assessment-title`}>
       <div className="assessment-intro">
-        <span className="eyebrow">{isInitial ? "Tu punto de partida" : "Tu mirada de hoy"}</span>
+        <span className="eyebrow">{isInitial ? "Fotografía inicial · paso imprescindible" : "Fotografía final"}</span>
         <h2 id={`${stage}-assessment-title`}>
-          {isInitial ? "Antes de comenzar, ¿cómo te sientes?" : "Al cerrar este camino, ¿cómo te sientes?"}
+          {isInitial ? "Antes de dar el primer paso, haz visible cómo estás hoy" : "Al cerrar este camino, ¿cómo te sientes hoy?"}
         </h2>
         <p>
-          Elige del 1 al 10 desde tu percepción de hoy. No hay respuestas correctas, no es una evaluación clínica y nada se guarda hasta que elijas los cuatro valores.
+          {isInitial
+            ? "Esta mirada será tu punto de partida. Al terminar los 15 descubrimientos volverás a responder lo mismo para acercar el antes y el después de tu propio recorrido."
+            : "Responde desde este momento. Después podrás mirar ambas fotografías juntas, sin convertirlas en una competencia."}
         </p>
+        <div className="assessment-purpose" aria-label="Para qué sirve esta fotografía">
+          <p><Info size={17} /> No es un examen ni una medición clínica.</p>
+          <p><Repeat2 size={17} /> No hay respuestas correctas: elige lo que se acerque a tu percepción de hoy.</p>
+          <p><Footprints size={17} /> Nos ayuda a hacer visible el recorrido interno, no a medir tu valor.</p>
+        </div>
       </div>
       <form className="assessment-form" onSubmit={submit}>
         {indicators.map((indicator) => {
@@ -107,7 +114,7 @@ export function JourneyAssessment({ stage }: { stage: AssessmentStage }) {
         </div>
         {!complete ? <p className="form-guidance"><Info size={16} /> Elige un valor para cada indicador antes de guardar.</p> : null}
         <button className="button button-primary" type="submit" disabled={!complete}>
-          <Footprints size={18} /> Guardar esta mirada
+          <Footprints size={18} /> {isInitial ? "Guardar y abrir el Descubrimiento 01" : "Guardar mi fotografía final"}
         </button>
       </form>
     </section>

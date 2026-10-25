@@ -30,6 +30,9 @@ export function IntegrationInvitation({
           <h2>{invitation.title}</h2>
         </div>
       </div>
+      <p className="integration-context">
+        El descubrimiento ya está completo. Ahora puedes dejar que se vuelva experiencia mientras sigues con tu vida.
+      </p>
       <p>{invitation.text}</p>
       <blockquote>{invitation.reminder}</blockquote>
       {nextUnlockAt ? (
@@ -38,7 +41,10 @@ export function IntegrationInvitation({
           Tu próximo descubrimiento estará disponible el {formatLocalMoment(nextUnlockAt)}.
         </p>
       ) : null}
-      <small>Es una invitación opcional para recordar sin el celular. No necesitas registrarla.</small>
+      <div className="integration-note">
+        <strong>No es una tarea pendiente.</strong>
+        <span>Es opcional, sucede fuera de la pantalla y no necesitas registrarla ni volver para confirmar nada.</span>
+      </div>
     </article>
   );
 }

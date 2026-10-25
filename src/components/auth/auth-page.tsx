@@ -14,7 +14,7 @@ export function AuthPage({ mode, initialError }: { mode: "login" | "register"; i
         <div className="auth-story-copy">
           <span className="eyebrow eyebrow-light">Tu recorrido puede acompañarte</span>
           <h1>Vuelve a ti, estés donde estés.</h1>
-          <p>Clarissa Acevedo y Scarlett Vargas sostienen este espacio para que tus notas y descubrimientos tengan un lugar cuidado.</p>
+          <p>Este espacio está sostenido para que tus notas y descubrimientos tengan un lugar cuidado, tanto si pruebas el recorrido como invitada como si decides sincronizarlo.</p>
         </div>
       </section>
       <section className="auth-form-wrap">

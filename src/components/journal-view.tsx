@@ -80,14 +80,14 @@ export function JournalView() {
     <div className="journal-layout">
       <aside className="surface-card journal-compose">
         <span className="eyebrow"><FileHeart size={15} /> Nota libre</span>
-        <h2 style={{ fontSize: "2rem", color: "var(--etq-azul)" }}>Deja una huella</h2>
+        <h2 style={{ fontSize: "2rem", color: "var(--etq-azul)" }}>Escribe solo si te ayuda</h2>
         <div className="field">
           <label htmlFor="journal-title">Título</label>
           <input id="journal-title" value={title} onChange={(event) => setTitle(event.target.value)} placeholder="Algo que deseo recordar" />
         </div>
         <div className="field">
           <label htmlFor="journal-content">Tu nota</label>
-          <textarea id="journal-content" value={content} onChange={(event) => setContent(event.target.value)} placeholder="Escribe con libertad..." />
+          <textarea id="journal-content" value={content} onChange={(event) => setContent(event.target.value)} placeholder="Una sensación, una pregunta o algo que deseas recordar..." />
         </div>
         <button className="button button-primary" style={{ width: "100%", marginTop: 18 }} type="button" onClick={save} disabled={!content.trim()}>
           <Save size={17} /> Guardar en mi diario
@@ -103,8 +103,8 @@ export function JournalView() {
         {meta.visibleJournalEntries.length === 0 ? (
           <div className="empty-state">
             <FileHeart size={32} style={{ marginBottom: 14 }} />
-            <h3>Tu diario está listo para recibirte</h3>
-            <p>Las notas libres, descubrimientos y pausas que guardes aparecerán aquí.</p>
+            <h3>Este espacio está disponible cuando lo necesites</h3>
+            <p>Si decides guardar una nota libre, una reflexión o una pausa, aparecerá aquí. No hay nada pendiente por completar.</p>
           </div>
         ) : (
           <div className="journal-list">

@@ -40,6 +40,29 @@ test("abre el primer descubrimiento inmediatamente", () => {
   assert.equal(state.canComplete("discovery", 0), true);
 });
 
+test("bloquea todo el recorrido hasta completar la fotografía inicial", () => {
+  const state = evaluateProgression(
+    [],
+    start,
+    PILOT_UNLOCK_INTERVAL_MS,
+    false,
+  );
+  assert.equal(state.discoveryStatus(0), "locked_assessment");
+  assert.equal(state.canComplete("discovery", 0), false);
+});
+
+test("un progreso heredado no oculta el requisito de la fotografía inicial", () => {
+  const state = evaluateProgression(
+    [discovery(0)],
+    start + PILOT_UNLOCK_INTERVAL_MS,
+    PILOT_UNLOCK_INTERVAL_MS,
+    false,
+  );
+  assert.equal(state.discoveriesCompleted, 1);
+  assert.equal(state.discoveryStatus(0), "locked_assessment");
+  assert.equal(state.discoveryStatus(1), "locked_assessment");
+});
+
 test("mantiene el siguiente paso integrando hasta el minuto exacto", () => {
   const before = evaluateProgression(
     [discovery(0)],

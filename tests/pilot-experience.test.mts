@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 
-import { ASSESSMENT_INDICATORS, compareAssessments } from "../src/lib/assessment.ts";
+import { ASSESSMENT_INDICATORS, compareAssessments, isValidAssessment } from "../src/lib/assessment.ts";
 import { journalDraftKey, lessonDraftKey, parseJournalDraft } from "../src/lib/draft-storage.ts";
 import { discoveries } from "../src/data/catalog.ts";
 
@@ -30,6 +31,29 @@ test("el catálogo conserva las quince invitaciones aprobadas", () => {
     discoveries[14].integrationInvitation?.reminder,
     "El miedo puede venir conmigo; el paso lo elijo yo.",
   );
+});
+
+test("cada descubrimiento ofrece una guía editorial completa", () => {
+  for (const item of discoveries) {
+    assert.ok(item.description.length > 90, `${item.id}: apertura`);
+    assert.ok((item.focus?.length ?? 0) > 70, `${item.id}: foco`);
+    assert.ok((item.whyItMatters?.length ?? 0) > 70, `${item.id}: sentido`);
+    assert.ok((item.presence?.length ?? 0) > 70, `${item.id}: presencia`);
+    assert.ok(item.insight.length > 120, `${item.id}: desarrollo`);
+    assert.ok((item.perspectives?.length ?? 0) >= 2, `${item.id}: perspectivas`);
+    assert.ok(item.prompts.length >= 3, `${item.id}: preguntas`);
+    assert.ok(item.action.length > 90, `${item.id}: experiencia`);
+    assert.ok((item.closing?.length ?? 0) > 45, `${item.id}: cierre`);
+  }
+});
+
+test("el acceso invitado permanece visible aunque la nube esté configurada", () => {
+  const authForm = readFileSync(
+    new URL("../src/components/auth/auth-form.tsx", import.meta.url),
+    "utf8",
+  );
+  assert.match(authForm, /Continuar como invitada/);
+  assert.doesNotMatch(authForm, /!hasSupabaseEnvironment \? \(/);
 });
 
 test("la comparación usa exactamente los mismos cuatro indicadores", () => {
@@ -64,6 +88,13 @@ test("si falta una evaluación no inventa filas comparativas", () => {
   assert.equal(result.status, "incomplete");
   assert.deepEqual(result.missing, ["final"]);
   assert.deepEqual(result.rows, []);
+});
+
+test("solo considera completa una fotografía con sus cuatro valores válidos", () => {
+  assert.equal(isValidAssessment(assessment("initial", [5, 5, 5, 5]), "initial"), true);
+  assert.equal(isValidAssessment({ ...assessment("initial", [5, 5, 5, 5]), calmScore: 0 }, "initial"), false);
+  assert.equal(isValidAssessment({ ...assessment("initial", [5, 5, 5, 5]), peaceScore: 11 }, "initial"), false);
+  assert.equal(isValidAssessment(assessment("final", [5, 5, 5, 5]), "initial"), false);
 });
 
 test("los borradores quedan aislados al cambiar de cuenta", () => {

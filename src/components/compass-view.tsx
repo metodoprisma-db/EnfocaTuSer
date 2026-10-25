@@ -6,7 +6,18 @@ import { ArrowRight, Sparkles } from "lucide-react";
 
 import { useAppState } from "@/context/app-state";
 import { compassZones } from "@/data/catalog";
-import { ASSETS } from "@/lib/constants";
+
+const stageImages = {
+  oruga: "/ETS-niveles-conciencia-oruga.png",
+  crisalida: "/ETS-niveles-conciencia-crisalida.png",
+  mariposa: "/ETS-niveles-conciencia-mariposa.png",
+} as const;
+
+const stageVerbs = {
+  oruga: "Reconocer",
+  crisalida: "Transformar",
+  mariposa: "Expandir",
+} as const;
 
 export function CompassView() {
   const { state, actions } = useAppState();
@@ -23,8 +34,18 @@ export function CompassView() {
 
   return (
     <div className="frequency-compass">
+      <section className="compass-guide" aria-labelledby="compass-guide-title">
+        <div>
+          <span className="eyebrow">Cómo leer este mapa</span>
+          <h2 id="compass-guide-title">Tres etapas para orientarte, no para clasificarte</h2>
+        </div>
+        <p>
+          Las frecuencias se agrupan en un recorrido visual: reconocer estados de reacción, atravesar el puente de la conciencia y abrir espacio a una presencia más amplia. No tienes que subir ni permanecer en una etapa. Elige la palabra que más se acerque a hoy.
+        </p>
+      </section>
+
       <div className="metamorphosis-grid" aria-label="Etapas de la brújula interior">
-        {compassZones.map((zone) => {
+        {compassZones.map((zone, zoneIndex) => {
           const active = selectedZone.id === zone.id;
           return (
             <button
@@ -34,13 +55,15 @@ export function CompassView() {
               onClick={() => actions.setCompassEmotion(zone.frequencies[0].emotion)}
               aria-pressed={active}
             >
+              <span className="metamorphosis-order" aria-hidden="true">0{zoneIndex + 1}</span>
               <span className="metamorphosis-mark" aria-hidden="true">
-                <Image src={ASSETS.mark} width={72} height={72} alt="" />
+                <Image src={stageImages[zone.id as keyof typeof stageImages]} width={400} height={400} alt="" />
               </span>
-              <span className="metamorphosis-stage">Etapa {zone.stage}</span>
+              <span className="metamorphosis-stage">{stageVerbs[zone.id as keyof typeof stageVerbs]} · Etapa {zone.stage}</span>
               <strong>{zone.leadership}</strong>
               <span className="metamorphosis-calibration">{zone.calibration}</span>
               <span className="metamorphosis-detail">{zone.title}</span>
+              <span className="metamorphosis-count">{zone.frequencies.length} frecuencias para explorar</span>
             </button>
           );
         })}
@@ -55,10 +78,10 @@ export function CompassView() {
           </div>
           <Image
             className="frequency-brand-mark"
-            src={ASSETS.mark}
-            width={116}
-            height={116}
-            alt="Isotipo oficial de Enfoca Tu Ser"
+            src={stageImages[selectedZone.id as keyof typeof stageImages]}
+            width={400}
+            height={400}
+            alt={`Representación de la etapa ${selectedZone.stage}`}
           />
         </div>
 
@@ -87,7 +110,7 @@ export function CompassView() {
           <strong>{selectedFrequency.value}</strong>
         </div>
         <div className="selected-frequency-copy">
-          <span className="eyebrow">Clarissa y Scarlett te acompañan</span>
+          <span className="eyebrow">Una guía para este momento</span>
           <h2>{selectedFrequency.emotion}</h2>
           <p>{selectedFrequency.guidance}</p>
           <div className="button-row">

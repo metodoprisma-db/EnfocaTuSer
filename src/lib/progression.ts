@@ -7,6 +7,7 @@ export type DiscoveryAccessStatus =
   | "completed"
   | "available"
   | "integrating"
+  | "locked_assessment"
   | "locked_sequence";
 
 export type ExtraAccessStatus =
@@ -54,6 +55,7 @@ export function evaluateProgression(
   progress: readonly ProgressRecord[],
   now: number,
   intervalMs: number,
+  initialAssessmentCompleted = true,
 ): ProgressionState {
   const duration = Number.isFinite(intervalMs) && intervalMs >= 0
     ? intervalMs
@@ -108,6 +110,7 @@ export function evaluateProgression(
     : null;
 
   const discoveryStatus = (itemIndex: number): DiscoveryAccessStatus => {
+    if (!initialAssessmentCompleted) return "locked_assessment";
     if (completedDiscoveryIndexes.has(itemIndex)) return "completed";
     if (itemIndex === nextDiscoveryIndex) {
       return integrationActive ? "integrating" : "available";

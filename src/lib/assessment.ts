@@ -29,6 +29,17 @@ export const ASSESSMENT_INDICATORS = [
 
 export type AssessmentScoreKey = (typeof ASSESSMENT_INDICATORS)[number]["key"];
 
+export function isValidAssessment(
+  assessment: UserAssessment | null | undefined,
+  stage?: UserAssessment["stage"],
+) {
+  if (!assessment || (stage && assessment.stage !== stage)) return false;
+  return ASSESSMENT_INDICATORS.every(({ key }) => {
+    const value = assessment[key];
+    return Number.isInteger(value) && value >= 1 && value <= 10;
+  });
+}
+
 export function compareAssessments(
   initial: UserAssessment | null,
   final: UserAssessment | null,

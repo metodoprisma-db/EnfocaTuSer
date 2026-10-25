@@ -35,9 +35,13 @@ export default function HomePage() {
       ) : null}
 
       <header className="welcome-header">
-        <span className="eyebrow">Mi espacio</span>
-        <h1>{state.data.profile.displayName ? `Qué bueno verte, ${state.data.profile.displayName}` : "Qué bueno que volviste"}</h1>
-        <p>Este momento no pide prisa. Mira lo que está disponible y elige cómo quieres acompañarte hoy.</p>
+        <span className="eyebrow">{meta.initialAssessment ? "Mi espacio" : "Tu camino empieza aquí"}</span>
+        <h1>{meta.initialAssessment
+          ? state.data.profile.displayName ? `Qué bueno verte, ${state.data.profile.displayName}` : "Qué bueno que volviste"
+          : "Antes de avanzar, detente a mirar cómo estás"}</h1>
+        <p>{meta.initialAssessment
+          ? "Este momento no pide prisa. Mira lo que está disponible y elige cómo quieres acompañarte hoy."
+          : "La fotografía inicial te ayudará a reconocer tu punto de partida y, al final, a hacer visible el recorrido. Cuando la guardes, el Descubrimiento 01 se abrirá de inmediato."}</p>
       </header>
 
       {!meta.initialAssessment ? (
@@ -47,7 +51,7 @@ export default function HomePage() {
           <div className="focus-intro">
             <span className="eyebrow">Tu momento presente</span>
             <h2 id="home-focus-title">Deja que lo recorrido encuentre su lugar</h2>
-            <p>No hace falta volver a la pantalla. Esta invitación puede acompañarte suavemente mientras sigues con tu día.</p>
+            <p>El trabajo de hoy continúa en la vida cotidiana. No hace falta volver a la pantalla ni registrar nada durante este tiempo.</p>
           </div>
           <IntegrationInvitation item={activeInvitation} nextUnlockAt={meta.progression.nextUnlockAt} />
         </section>

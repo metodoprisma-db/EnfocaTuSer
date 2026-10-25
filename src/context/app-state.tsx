@@ -31,6 +31,7 @@ import {
   evaluateProgression,
   type ProgressionState,
 } from "@/lib/progression";
+import { isValidAssessment } from "@/lib/assessment";
 import { SerialSyncQueue } from "@/lib/sync-queue";
 import { getBrowserSupabaseClient } from "@/lib/supabase/client";
 import { mergeAccountData } from "@/lib/supabase/merge";
@@ -297,9 +298,17 @@ export function AppStateProvider({
   const identityRef = useRef("guest");
   const remoteJournalCursorRef = useRef<JournalCursor | null>(null);
   const syncQueueRef = useRef<SerialSyncQueue<AppData, SyncResult> | null>(null);
+  const initialAssessment = data.assessments.find(
+    (item) => item.stage === "initial" && isValidAssessment(item, "initial"),
+  ) ?? null;
   const progression = useMemo(
-    () => evaluateProgression(data.progress, currentTimestamp ?? 0, unlockIntervalMs),
-    [currentTimestamp, data.progress, unlockIntervalMs],
+    () => evaluateProgression(
+      data.progress,
+      currentTimestamp ?? 0,
+      unlockIntervalMs,
+      Boolean(initialAssessment),
+    ),
+    [currentTimestamp, data.progress, initialAssessment, unlockIntervalMs],
   );
 
   useEffect(() => {
@@ -574,10 +583,14 @@ export function AppStateProvider({
       }
 
       const now = Date.now();
+      const hasInitialAssessment = current.assessments.some(
+        (item) => item.stage === "initial" && isValidAssessment(item, "initial"),
+      );
       const currentProgression = evaluateProgression(
         current.progress,
         now,
         unlockIntervalMs,
+        hasInitialAssessment,
       );
       if (!currentProgression.canComplete(kind, itemIndex)) return;
 
@@ -611,6 +624,7 @@ export function AppStateProvider({
         progress,
         now,
         unlockIntervalMs,
+        hasInitialAssessment,
       ).discoveriesCompleted;
       persist(
         {
@@ -891,10 +905,10 @@ export function AppStateProvider({
     [data.journalEntries],
   );
   const visibleJournalEntries = sortedEntries.slice(0, visibleJournalCount);
-  const initialAssessment =
-    data.assessments.find((item) => item.stage === "initial") ?? null;
   const finalAssessment =
-    data.assessments.find((item) => item.stage === "final") ?? null;
+    data.assessments.find(
+      (item) => item.stage === "final" && isValidAssessment(item, "final"),
+    ) ?? null;
   const stats: AppStats = {
     discoveriesCompleted: nextDiscoveryIndex,
     pausesCompleted: data.practiceSessions.length,

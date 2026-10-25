@@ -171,7 +171,7 @@ export function ReleasePractice() {
           <div>
             <div className="stat-icon"><Check size={22} /></div>
             <p>
-              Este registro quedó en tu diario. Clarissa y Scarlett celebran que hayas creado un momento para escucharte y cuidar tu siguiente paso.
+              Este registro quedó en tu diario. Te diste un momento para escuchar lo que estaba presente y cuidar tu siguiente paso.
             </p>
             <button className="button button-secondary" type="button" onClick={restart}><RotateCcw size={17} /> Hacer otra pausa</button>
           </div>

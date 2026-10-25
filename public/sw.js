@@ -1,4 +1,4 @@
-const CACHE_NAME = "enfoca-tu-ser-static-v2";
+const CACHE_NAME = "enfoca-tu-ser-static-v3";
 const CACHE_PREFIX = "enfoca-tu-ser-";
 const PUBLIC_ASSETS = [
   "/manifest.webmanifest",
@@ -8,6 +8,10 @@ const PUBLIC_ASSETS = [
   "/icon-192.png",
   "/icon-512.png",
   "/icon-butterfly.png",
+  "/clarissa-scarlett-mentoras.png",
+  "/ETS-niveles-conciencia-oruga.png",
+  "/ETS-niveles-conciencia-crisalida.png",
+  "/ETS-niveles-conciencia-mariposa.png",
 ];
 const PUBLIC_ASSET_PATHS = new Set(PUBLIC_ASSETS);
 

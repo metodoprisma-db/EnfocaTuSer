@@ -19,7 +19,7 @@ export default function SobrePage() {
 
       <section className="story-grid">
         <div className="story-photo">
-          <Image src={ASSETS.clarissa} fill sizes="(max-width: 820px) 90vw, 34vw" alt="Clarissa Acevedo" />
+          <Image src={ASSETS.mentors} fill sizes="(max-width: 820px) 90vw, 34vw" alt="Clarissa Acevedo y Scarlett Vargas" />
         </div>
         <div className="story-copy">
           <span className="eyebrow"><HeartHandshake size={15} /> Nuestra intención</span>
@@ -28,10 +28,10 @@ export default function SobrePage() {
             Enfoca Tu Ser nace de una certeza sencilla: detrás de muchas metas, responsabilidades y luchas existe una mujer que desea sentirse en paz consigo misma.
           </p>
           <p>
-            Clarissa ha convertido su propia historia de búsqueda y transformación en una forma cercana de escuchar. Scarlett suma su presencia, sensibilidad y mirada práctica para sostener cada paso con humanidad.
+            Sus historias, su sensibilidad y su mirada práctica se encuentran en una forma cercana de escuchar y sostener cada paso con humanidad.
           </p>
           <p>
-            Juntas proponen preguntas, pausas y descubrimientos que ayudan a reconocer la emoción sin convertirla en identidad. Aquí no se trata de rendir ni de llegar antes. Se trata de mirarte con más verdad y elegir desde allí.
+            En este camino, las preguntas, pausas y descubrimientos ayudan a reconocer la emoción sin convertirla en identidad. Aquí no se trata de rendir ni de llegar antes. Se trata de mirarte con más verdad y elegir desde allí.
           </p>
           <div className="mentor-note" style={{ marginTop: 28 }}>
             <Image src={ASSETS.mentors} width={104} height={104} alt="Clarissa Acevedo y Scarlett Vargas juntas" />

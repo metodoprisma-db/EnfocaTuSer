@@ -16,11 +16,12 @@ export function AuthForm({ mode, initialError = "" }: { mode: "login" | "registe
   const [password, setPassword] = useState("");
   const [website, setWebsite] = useState("");
   const [captchaToken, setCaptchaToken] = useState("");
+  const [captchaUnavailable, setCaptchaUnavailable] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(initialError ? "No pudimos completar el acceso. Inténtalo otra vez." : "");
   const [success, setSuccess] = useState(false);
   const turnstileKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY?.trim() ?? "";
-  const canUseCloud = hasSupabaseEnvironment && Boolean(turnstileKey);
+  const canSubmitEmail = hasSupabaseEnvironment && (!turnstileKey || Boolean(captchaToken));
 
   const validate = () => {
     if (website) {
@@ -31,7 +32,7 @@ export function AuthForm({ mode, initialError = "" }: { mode: "login" | "registe
       setMessage("El acceso en la nube estará disponible cuando se conecte Supabase. Puedes entrar en modo local ahora.");
       return false;
     }
-    if (!turnstileKey || !captchaToken) {
+    if (turnstileKey && !captchaToken) {
       setMessage("Completa la verificación de seguridad para continuar.");
       return false;
     }
@@ -74,7 +75,7 @@ export function AuthForm({ mode, initialError = "" }: { mode: "login" | "registe
     });
     setLoading(false);
     if (error) {
-      setMessage("No pudimos crear la cuenta. Revisa los datos e inténtalo otra vez.");
+      setMessage("El registro sincronizado no está disponible en este momento. Puedes continuar como invitada y conservar el recorrido en este dispositivo.");
       return;
     }
     setSuccess(true);
@@ -83,7 +84,10 @@ export function AuthForm({ mode, initialError = "" }: { mode: "login" | "registe
 
   const signInWithGoogle = async () => {
     setMessage("");
-    if (!validate()) return;
+    if (!hasSupabaseEnvironment) {
+      setMessage("La sincronización todavía no está disponible. Puedes continuar como invitada.");
+      return;
+    }
     const client = getBrowserSupabaseClient();
     if (!client) return;
     setLoading(true);
@@ -109,7 +113,7 @@ export function AuthForm({ mode, initialError = "" }: { mode: "login" | "registe
           : "Tu progreso local se unirá a tu cuenta después del primer acceso."}
       </p>
 
-      <button className="button button-secondary" style={{ width: "100%" }} type="button" onClick={signInWithGoogle} disabled={loading || !canUseCloud}>
+      <button className="button button-secondary" style={{ width: "100%" }} type="button" onClick={signInWithGoogle} disabled={loading || !hasSupabaseEnvironment}>
         <Globe2 size={18} /> Continuar con Google
       </button>
 
@@ -141,31 +145,40 @@ export function AuthForm({ mode, initialError = "" }: { mode: "login" | "registe
           <div style={{ marginTop: 20, overflow: "hidden" }}>
             <Turnstile
               siteKey={turnstileKey}
-              onSuccess={setCaptchaToken}
+              onSuccess={(token) => {
+                setCaptchaToken(token);
+                setCaptchaUnavailable(false);
+              }}
               onExpire={() => setCaptchaToken("")}
-              onError={() => setCaptchaToken("")}
+              onError={() => {
+                setCaptchaToken("");
+                setCaptchaUnavailable(true);
+                setMessage("La verificación de seguridad no pudo cargarse. Puedes recargar la página o continuar como invitada.");
+              }}
               options={{ theme: "light", language: "es" }}
             />
           </div>
         ) : (
-          <p className="helper-text" style={{ marginTop: 18 }}>
+          <p className="pilot-access-note">
             <LockKeyhole size={14} style={{ verticalAlign: "-2px", marginRight: 5 }} />
-            El acceso protegido se activará al configurar Turnstile.
+            Piloto interno: la cuenta se intentará crear sin verificación visual. Si la protección remota la rechaza, podrás recorrer la experiencia como invitada.
           </p>
         )}
 
-        <button className="button button-primary" style={{ width: "100%", marginTop: 20 }} type="submit" disabled={loading || !canUseCloud}>
+        <button className="button button-primary" style={{ width: "100%", marginTop: 20 }} type="submit" disabled={loading || !canSubmitEmail}>
           {loading ? "Preparando..." : mode === "login" ? "Entrar a mi espacio" : "Crear mi acceso"} <ArrowRight size={18} />
         </button>
       </form>
 
       {message ? <div className={`form-message${success ? " success" : ""}`} role="status">{message}</div> : null}
 
-      {!hasSupabaseEnvironment ? (
-        <Link className="button button-secondary" style={{ width: "100%", marginTop: 14 }} href="/">
-          Entrar en modo local
+      <div className={`guest-access${captchaUnavailable ? " highlighted" : ""}`}>
+        <span className="eyebrow">Camino de prueba</span>
+        <p>Puedes explorar el piloto sin crear una cuenta. El avance quedará guardado solo en este dispositivo y podrás vincularlo más adelante.</p>
+        <Link className="button button-secondary" href="/">
+          Continuar como invitada <ArrowRight size={18} />
         </Link>
-      ) : null}
+      </div>
 
       <p className="helper-text" style={{ marginTop: 22, textAlign: "center" }}>
         {mode === "login" ? "¿Es tu primera vez?" : "¿Ya tienes un acceso?"}{" "}
