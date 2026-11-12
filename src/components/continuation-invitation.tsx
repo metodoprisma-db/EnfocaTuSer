@@ -19,14 +19,14 @@ export function ContinuationInvitation() {
 
   return (
     <section className="surface-card continuation-card" aria-labelledby="continuation-title">
-      <span className="eyebrow">{closing ? "Una invitación a continuar" : "Tu tiempo para conocer este espacio"}</span>
-      <h2 id="continuation-title">{closing ? "¿Qué te gustaría seguir explorando?" : "Haz lugar a un momento para ti"}</h2>
+      <span className="eyebrow">{closing ? "Para decidir cómo seguir" : "Durante tu prueba gratuita"}</span>
+      <h2 id="continuation-title">{closing ? "¿Quieres seguir con los ejercicios?" : "Prueba un ejercicio a la vez"}</h2>
       <p>{closing
-        ? "Puedes preguntarte qué pausa, frase o ejercicio te resultó útil y qué te gustaría seguir practicando. Tu propia experiencia puede orientarte para elegir cómo continuar."
-        : "Prueba una pausa breve, escucha las indicaciones y elige qué recursos te acompañan en tu día. Los quince descubrimientos tienen su propio ritmo; puedes recorrerlos sin ajustarlos al calendario de la prueba."}</p>
-      <p>Al terminar tu pase, puedes elegir continuar por {membershipOffer.priceLabel}. En la página de pago podrás revisar las condiciones antes de decidir.</p>
+        ? "Piensa qué ejercicio te sirvió y cuál te gustaría repetir. Puedes volver a tus notas para recordar lo que probaste y decidir si quieres continuar."
+        : "Lee los pasos y prueba los ejercicios a tu ritmo. Observa cuáles te sirven durante el día. Los quince descubrimientos pueden llevar más tiempo que los días de prueba."}</p>
+      <p>Para seguir usando la aplicación después de la prueba, puedes pagar {membershipOffer.priceLabel}. Antes de pagar podrás leer las condiciones y decidir.</p>
       {accessUntil && Number.isFinite(accessTimestamp) ? <p className="helper-text">Fecha de finalización de tu prueba: {formatLocalMoment(accessUntil)}, según el horario de este dispositivo.</p> : null}
-      {closing && meta.giftUnlocked ? <p><CalendarHeart size={18} aria-hidden="true" /> También tienes disponible tu charla de 30 minutos con Clarissa y Scarlett: puedes compartir una experiencia, aclarar una duda y explorar juntas un siguiente paso. Encontrarás la invitación más abajo.</p> : null}
+      {closing && meta.giftUnlocked ? <p><CalendarHeart size={18} aria-hidden="true" /> Tu charla de 30 minutos con Clarissa y Scarlett está disponible. Puedes contarnos qué probaste y preguntar cómo usar un ejercicio en una situación de tu día. Más abajo está el botón para coordinarla.</p> : null}
       <div className="button-row">
         <a className="button button-secondary" href={MEMBERSHIP_CHECKOUT_URL} target="_blank" rel="noreferrer">
           {HAS_MEMBERSHIP_CHECKOUT ? `Conocer la membresía: ${membershipOffer.priceLabel}` : "Consultar cómo continuar"} <ArrowRight size={17} />

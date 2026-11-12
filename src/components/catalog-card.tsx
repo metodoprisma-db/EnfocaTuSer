@@ -31,11 +31,11 @@ export function CatalogCard({
       <p>{item.description}</p>
       <div className="catalog-footer">
         {completed ? (
-          <span className="completed-badge"><Check size={14} /> Recorrido</span>
+          <span className="completed-badge"><Check size={14} /> Completado</span>
         ) : locked ? (
-          <span className="locked-badge"><LockKeyhole size={14} /> Aún cerrado</span>
+          <span className="locked-badge"><LockKeyhole size={14} /> Más adelante</span>
         ) : (
-          <span>Explorar</span>
+          <span>Abrir este ejercicio</span>
         )}
         {locked ? <LockKeyhole size={18} aria-hidden="true" /> : <ArrowRight size={18} aria-hidden="true" />}
       </div>

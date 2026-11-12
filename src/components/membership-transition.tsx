@@ -49,13 +49,13 @@ export function MembershipTransition() {
     <div className="membership-transition">
       <section className="membership-card">
         <Image src={ASSETS.mark} width={90} height={90} alt="Isotipo de Enfoca Tu Ser" />
-        <span className="eyebrow">Tu recorrido sigue siendo tuyo</span>
+        <span className="eyebrow">Elige cómo quieres seguir</span>
         <h1>Puedes elegir cómo continuar</h1>
         <p>
-          Tu período de acceso terminó. Puedes observar qué recursos te resultaron útiles y qué te gustaría seguir explorando.
-          La membresía te permite continuar el recorrido y volver a las prácticas que ya conoces.
+          Tu período de acceso terminó. Puedes pensar qué ejercicios te sirvieron y si quieres seguir practicando.
+          La membresía te permite seguir usando la aplicación y volver a los ejercicios.
         </p>
-        <p>Puedes continuar por {membershipOffer.priceLabel}. Revisa las condiciones en la página de pago y elige si esta propuesta encaja contigo.</p>
+        <p>Puedes continuar por {membershipOffer.priceLabel}. Antes de pagar podrás leer las condiciones y decidir si quieres seguir.</p>
 
         <div className="membership-actions">
           <button className="button button-secondary" type="button" onClick={actions.exportData}>
@@ -65,7 +65,7 @@ export function MembershipTransition() {
             <CreditCard size={18} /> {HAS_MEMBERSHIP_CHECKOUT ? `Continuar por ${membershipOffer.priceLabel}` : "Consultar cómo continuar"}
           </a>
         </div>
-        <p className="helper-text">La copia de tu diario se descarga en formato JSON, un archivo que conserva tus notas. Puedes descargarla aunque elijas continuar más adelante.</p>
+        <p className="helper-text">Al pulsar «Descargar», se guardará un archivo con tus notas en este dispositivo. El formato se llama JSON. Puedes descargarlo aunque decidas continuar más adelante.</p>
 
         {meta.giftUnlocked ? <GiftCard /> : null}
 

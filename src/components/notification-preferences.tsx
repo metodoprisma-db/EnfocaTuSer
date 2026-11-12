@@ -102,10 +102,10 @@ export function NotificationPreferences() {
   return (
     <section className="notification-settings" aria-labelledby="notification-title">
       <div className="notification-copy">
-        <span className="eyebrow"><Bell size={15} /> Avisos serenos</span>
+        <span className="eyebrow"><Bell size={15} /> Avisos de la aplicación</span>
         <h2 id="notification-title">Un aviso cuando puedas abrir el siguiente paso</h2>
         <p>
-          En Mi espacio encontrarás la fecha del próximo descubrimiento. Si quieres, puedes activar además un aviso de este dispositivo. El mensaje solo indica que hay un paso disponible y mantiene privadas tus notas.
+          En Mi espacio puedes ver cuándo se abre el próximo descubrimiento. Si quieres, activa también un aviso en este dispositivo. El aviso no incluye tus notas.
         </p>
       </div>
       <label className="preference-toggle">

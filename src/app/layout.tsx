@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     template: "%s | Enfoca Tu Ser",
   },
   description:
-    "Pausas y ejercicios paso a paso para escucharte con amabilidad y explorar nuevas posibilidades junto a Clarissa Acevedo y Scarlett Vargas.",
+    "Ejercicios con instrucciones sencillas para reconocer lo que sientes, respirar y elegir qué hacer, con Clarissa Acevedo y Scarlett Vargas.",
   icons: {
     icon: ASSETS.favicon,
     shortcut: ASSETS.favicon,

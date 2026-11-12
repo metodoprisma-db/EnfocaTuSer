@@ -8,10 +8,10 @@ export default function SoltarPage() {
   return (
     <div className="page-wrap">
       <header className="page-header">
-        <span className="eyebrow">Una pausa de presencia</span>
+        <span className="eyebrow">Una pausa para respirar y reconocer cómo estás</span>
         <h1>Soltar ahora</h1>
         <p>
-          Una pausa guiada para reconocer cómo estás, observar el cuerpo y respirar con suavidad. Sigue una pantalla a la vez usando «Continuar» y «Volver». Escribir es opcional. Puedes detenerte cuando lo necesites y cerrar aunque te sientas igual que al comenzar.
+          Sigue una pantalla a la vez. «Continuar» te lleva al paso siguiente y «Volver» al anterior. Puedes hacer la pausa sin escribir y parar cuando quieras.
         </p>
       </header>
       <ReleasePractice />

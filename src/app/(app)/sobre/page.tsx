@@ -12,9 +12,9 @@ export default function SobrePage() {
     <div className="page-wrap">
       <header className="page-header">
         <span className="eyebrow">Enfoca Tu Ser</span>
-        <h1>Un camino sostenido por personas reales</h1>
+        <h1>Clarissa y Scarlett te acompañan</h1>
         <p>
-          Clarissa Acevedo y Scarlett Vargas crearon este espacio para acompañarte a reconocer lo que sientes, escucharte con amabilidad y explorar pasos posibles en tu vida cotidiana.
+          Clarissa Acevedo y Scarlett Vargas crearon Enfoca Tu Ser para ayudarte a reconocer lo que sientes, respirar con calma y elegir qué quieres hacer después.
         </p>
       </header>
 
@@ -24,15 +24,15 @@ export default function SobrePage() {
         </div>
         <div className="story-copy">
           <span className="eyebrow"><HeartHandshake size={15} /> Nuestra intención</span>
-          <h2>Escucharte puede abrir una posibilidad</h2>
+          <h2>Ejercicios para escuchar cómo estás</h2>
           <p>
-            Entre las tareas, los vínculos y las responsabilidades de cada día, puedes hacer lugar a un momento para ti. Enfoca Tu Ser te propone pausas, preguntas y ejercicios sencillos para conocer qué necesitas y elegir cómo acompañarte.
+            Puedes dedicarte unos minutos entre tus actividades. Encontrarás preguntas para pensar, pausas para respirar y ejercicios para reconocer qué necesitas.
           </p>
           <p>
-            Clarissa y Scarlett reúnen su experiencia y su mirada práctica en un recorrido pensado para que puedas seguirlo por tu cuenta. Cada ejercicio incluye indicaciones y ejemplos. Puedes adaptar la postura, mantener los ojos abiertos y detenerte cuando lo necesites.
+            Cada ejercicio tiene indicaciones y ejemplos para que puedas hacerlo por tu cuenta. Puedes mantener los ojos abiertos, elegir una postura cómoda y parar cuando quieras.
           </p>
           <p>
-            Quizá una pausa te ayude a reconocer una emoción, una frase te ofrezca otra perspectiva o una pregunta quede abierta. Puedes observar tu experiencia a tu ritmo y conservar los recursos que te resulten útiles.
+            Si un ejercicio te sirve, puedes repetirlo durante el día. También puedes escribir una nota para recordar lo que probaste o una pregunta que quieras hacer.
           </p>
           <div className="mentor-note" style={{ marginTop: 28 }}>
             <Image src={ASSETS.mentors} width={104} height={104} alt="Clarissa Acevedo y Scarlett Vargas juntas" />
@@ -42,19 +42,19 @@ export default function SobrePage() {
       </section>
 
       <section className="section surface-card">
-        <span className="eyebrow">Conocer este espacio y elegir cómo seguir</span>
-        <h2>{membershipOffer.trialLabel} para explorar a tu ritmo</h2>
+        <span className="eyebrow">Prueba los ejercicios y decide si quieres seguir</span>
+        <h2>{membershipOffer.trialLabel} para conocer la aplicación</h2>
         <p>{membershipOffer.continuation} Puedes revisar las condiciones en la página de pago antes de elegir.</p>
-        <p>Los quince descubrimientos siguen una secuencia con tiempo de integración entre pasos. Los siete días de prueba son tiempo de acceso y no una fecha para completar el recorrido. Al completar el quinto descubrimiento tendrás disponible una charla de 30 minutos con Clarissa y Scarlett para compartir tu experiencia y explorar juntas un siguiente paso.</p>
+        <p>Los quince descubrimientos se abren en orden, con una espera entre uno y otro. Puedes dedicarles más tiempo que los días de prueba. Al completar el quinto, podrás coordinar una charla de 30 minutos con Clarissa y Scarlett para contarnos cómo te va y hacer preguntas.</p>
       </section>
 
       <section className="section" aria-labelledby="ethics-title">
         <div className="ethics-card">
           <ShieldCheck size={28} color="var(--etq-terracota)" style={{ flex: "0 0 auto" }} />
           <div>
-            <h3 id="ethics-title">Tu cuidado también incluye pedir apoyo</h3>
+            <h3 id="ethics-title">Puedes pedir más ayuda cuando la necesites</h3>
             <p style={{ marginBottom: 0 }}>
-              Este espacio ofrece reflexión y acompañamiento educativo. No reemplaza atención médica, psicológica ni servicios de emergencia. Si una emoción se vuelve difícil de sostener o existe riesgo para tu seguridad, busca apoyo profesional y cercano en tu localidad.
+              Esta aplicación ofrece ejercicios para reflexionar y aprender. No reemplaza la atención médica, psicológica ni los servicios de emergencia. Si necesitas más ayuda, busca compañía y atención profesional en tu localidad.
             </p>
           </div>
         </div>

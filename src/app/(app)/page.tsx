@@ -29,7 +29,7 @@ export default function HomePage() {
           <CalendarHeart size={21} />
           <div>
             <strong>Tomaste un respiro, hoy retomamos tu ritmo</strong>
-            <span>Tus {state.data.profile.presenceDaysCount} días de presencia siguen contigo.</span>
+            <span>Ya has entrado {state.data.profile.presenceDaysCount} días distintos. Puedes seguir desde donde te quedaste.</span>
           </div>
           <button type="button" onClick={actions.dismissRhythmMessage}>Entendido</button>
         </aside>
@@ -39,10 +39,10 @@ export default function HomePage() {
         <span className="eyebrow">{meta.initialAssessment ? "Mi espacio" : "Tu camino empieza aquí"}</span>
         <h1>{meta.initialAssessment
           ? state.data.profile.displayName ? `Qué bueno que regresaste, ${state.data.profile.displayName}` : "Qué bueno que regresaste"
-          : "Bienvenida, puedes empezar tal como estás"}</h1>
+          : "Bienvenida. Este momento es para ti"}</h1>
         <p>{meta.initialAssessment
-          ? "Observa qué está disponible y elige cómo acompañarte hoy. Puedes retomar el recorrido o dedicarte una pausa breve."
-          : "Comienza con cuatro preguntas sobre cómo te sientes. Las llamamos fotografía inicial: se responden con números, sin usar la cámara. Al completarlas podrás abrir «Empieza sin prisa», con un primer ejercicio de alrededor de un minuto."}</p>
+          ? "Puedes abrir tu próximo ejercicio o elegir una pausa para respirar. Hazlo con cariño hacia ti y a tu ritmo."
+          : "Para empezar, responde cuatro preguntas sobre cómo te sientes. Después podrás abrir tu primer ejercicio: «Empieza sin prisa»."}</p>
       </header>
 
       {!meta.initialAssessment ? (
@@ -50,9 +50,9 @@ export default function HomePage() {
       ) : activeInvitation ? (
         <section className="home-focus" aria-labelledby="home-focus-title">
           <div className="focus-intro">
-            <span className="eyebrow">Tu momento presente</span>
-            <h2 id="home-focus-title">Deja que lo recorrido encuentre su lugar</h2>
-            <p>Puedes seguir con tu día. Si te apetece, esta propuesta te acompaña fuera de la pantalla; es opcional y puedes dejarla pasar.</p>
+            <span className="eyebrow">Después del ejercicio de hoy</span>
+            <h2 id="home-focus-title">Puedes seguir con tu día</h2>
+            <p>Si quieres, prueba la idea de abajo durante tus actividades. Puedes hacerlo sin usar la aplicación.</p>
           </div>
           <IntegrationInvitation item={activeInvitation} nextUnlockAt={meta.progression.nextUnlockAt} />
         </section>
@@ -60,11 +60,11 @@ export default function HomePage() {
         <section className="home-focus focus-ready" aria-labelledby="home-focus-title">
           <div className="focus-intro">
             <span className="eyebrow">{meta.pathComplete ? "Tu camino completo" : "Cuando quieras continuar"}</span>
-            <h2 id="home-focus-title">{meta.pathComplete ? "Todo lo que caminaste ya puede mirarse" : nextDiscovery?.title}</h2>
-            <p>{meta.pathComplete ? "Tus dos miradas, tus pausas y tus reflexiones cuentan una historia propia." : nextDiscovery?.description}</p>
+            <h2 id="home-focus-title">{meta.pathComplete ? "Completaste los quince descubrimientos" : nextDiscovery?.title}</h2>
+            <p>{meta.pathComplete ? "Puedes volver a leerlos, consultar tus notas y elegir una de las doce prácticas para seguir usando lo que aprendiste." : nextDiscovery?.description}</p>
             <div className="hero-actions">
               <Link className="button button-primary" href={meta.pathComplete ? "/camino" : `/camino/discovery/${nextDiscovery?.slug}`}>
-                {meta.pathComplete ? "Mirar mi recorrido" : "Abrir mi descubrimiento"} <ArrowRight size={18} />
+                {meta.pathComplete ? "Ver mis ejercicios" : "Abrir mi descubrimiento"} <ArrowRight size={18} />
               </Link>
               <Link className="button button-secondary" href="/soltar"><Sparkles size={18} /> Hacer una pausa breve</Link>
             </div>
@@ -74,17 +74,17 @@ export default function HomePage() {
       )}
 
       <section className="quiet-actions" aria-label="Otros espacios disponibles">
-        <Link href="/camino"><Footprints size={20} /><span><strong>Mi camino</strong><small>Revisita lo que ya recorriste</small></span></Link>
+        <Link href="/camino"><Footprints size={20} /><span><strong>Mi camino</strong><small>Ver mis ejercicios</small></span></Link>
         <Link href="/diario"><BookHeart size={20} /><span><strong>Mi diario</strong><small>Escribe o vuelve a tus notas</small></span></Link>
-        <Link href="/soltar"><Sparkles size={20} /><span><strong>Soltar ahora</strong><small>Regálate una pausa breve</small></span></Link>
+        <Link href="/soltar"><Sparkles size={20} /><span><strong>Soltar ahora</strong><small>Respirar y reconocer cómo estás</small></span></Link>
       </section>
 
       <details className="home-details">
         <summary>Cómo usar tu espacio, paso a paso</summary>
         <ol className="exercise-steps">
-          <li>En «Mi camino» encontrarás los quince descubrimientos en orden. Lee uno, prueba el ejercicio y toca «Completar» cuando termines por hoy. La fecha del siguiente paso aparecerá en Mi espacio.</li>
-          <li>Entre descubrimientos puedes cerrar la aplicación y seguir con tu día. La propuesta «Llévalo contigo» es opcional y no cambia la apertura del siguiente paso.</li>
-          <li>«Soltar ahora» ofrece una pausa guiada. «Mi diario» permite escribir y volver a tus notas. En «Brújula» puedes elegir una emoción y leer una orientación. Estos espacios están disponibles durante el recorrido.</li>
+          <li>En «Mi camino» hay quince descubrimientos, cada uno con un ejercicio. Ábrelos en orden. Al terminar uno, pulsa «Completar».</li>
+          <li>Después habrá un tiempo de espera. Puedes cerrar la aplicación: el siguiente se abrirá a la hora indicada. La idea «Llévalo contigo» es opcional.</li>
+          <li>Mientras esperas, puedes usar «Soltar ahora» para respirar, «Mi diario» para escribir o «Brújula» para leer una idea sobre cómo te sientes.</li>
           <li>Al completar cinco descubrimientos se abre una charla de 30 minutos con Clarissa y Scarlett. Encontrarás aquí el botón para coordinarla con el equipo.</li>
         </ol>
       </details>
@@ -92,7 +92,7 @@ export default function HomePage() {
       <ContinuationInvitation />
 
       <details className="home-details">
-        <summary>Tus huellas y preferencias</summary>
+        <summary>Tu actividad y tus avisos</summary>
         <div className="home-secondary-grid">
           <section className="compact-stats" aria-label="Huellas de presencia">
             <div><strong>{meta.stats.discoveriesCompleted}</strong><span>descubrimientos</span></div>
@@ -102,6 +102,7 @@ export default function HomePage() {
           </section>
           <NotificationPreferences />
         </div>
+        <p className="helper-text">Los días de presencia son los días distintos en que entraste a la aplicación.</p>
       </details>
 
       {meta.giftUnlocked ? <section className="section gift-secondary"><GiftCard /></section> : null}

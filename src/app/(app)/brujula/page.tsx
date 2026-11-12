@@ -8,10 +8,10 @@ export default function BrujulaPage() {
   return (
     <div className="page-wrap">
       <header className="page-header">
-        <span className="eyebrow">Orientarte desde lo que sientes</span>
+        <span className="eyebrow">Para reconocer cómo te sientes</span>
         <h1>Brújula interior</h1>
         <p>
-          Elige una etapa y después toca la palabra que se acerque a cómo te sientes. Debajo aparecerá una orientación de Clarissa y Scarlett. Puedes cambiar tu elección cuando quieras: una emoción describe un momento de tu experiencia.
+          Primero elige una de las tres imágenes. Después elige una palabra. Debajo podrás leer una idea de Clarissa y Scarlett para ese momento. Puedes cambiar tu elección cuando quieras.
         </p>
       </header>
       <CompassView />

@@ -21,21 +21,21 @@ export function GiftCard() {
           <>
             <h3>Una charla cercana de 30 minutos con Clarissa y Scarlett</h3>
             <p>
-              Un encuentro directo con las dos creadoras de este espacio. Puedes traer una experiencia
-              de los ejercicios, una pregunta o algo que te gustaría comprender mejor. Te escucharemos
-              y exploraremos contigo un siguiente paso que tenga sentido para ti.
+              Conversa directamente con nosotras. Puedes contarnos qué ejercicio probaste y cómo te fue,
+              o preguntar cómo hacerlo en una situación de tu día. Te escucharemos y pensaremos contigo
+              qué podrías probar después.
             </p>
-            <p>Si te apetece, prepara un té o café. Puedes conversar tal como estás y elegir qué compartir. Al tocar el botón se abrirá la página para coordinar la charla con nuestro equipo.</p>
+            <p>Si quieres, prepara un té o café. Tú eliges qué compartir. Al pulsar el botón se abrirá la página para acordar la charla con nuestro equipo.</p>
             <a className="button button-primary" href={GIFT_CHAT_URL} target="_blank" rel="noreferrer">
               <CalendarHeart size={18} /> Coordinar mi charla con el equipo de Enfoca Tu Ser
             </a>
           </>
         ) : (
           <>
-            <h3>Un espacio para conversar sobre tu experiencia</h3>
+            <h3>Una charla para contar cómo te va y hacer preguntas</h3>
             <p>
               Al completar el quinto descubrimiento tendrás disponible una charla de 30 minutos con Clarissa y Scarlett.
-              Podrás aclarar dudas de los ejercicios, compartir lo que vas notando y explorar cómo seguir con apoyo cercano.
+              Podrás contarnos cómo te va, hacer preguntas sobre los ejercicios y pensar con nosotras qué quieres seguir practicando.
             </p>
             <div className="gift-steps" aria-label={`${completed} de 5 pasos para abrir el regalo`}>
               {[1, 2, 3, 4, 5].map((step) => (

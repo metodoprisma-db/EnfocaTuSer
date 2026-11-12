@@ -1315,7 +1315,7 @@ h3 {
 
 @keyframes breathe {
   0%, 100% { transform: scale(0.82); filter: saturate(0.85); }
-  50% { transform: scale(1); filter: saturate(1.08); }
+  37.5% { transform: scale(1); filter: saturate(1.08); }
 }
 
 @media (prefers-reduced-motion: reduce) {

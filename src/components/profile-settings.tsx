@@ -126,8 +126,8 @@ export function ProfileSettings() {
         <div className="modal-backdrop" role="presentation">
           <section className="modal-card timezone-modal" role="dialog" aria-modal="true" aria-labelledby="timezone-prompt-title">
             <span className="modal-icon"><MapPin size={24} /></span>
-            <span className="eyebrow">Tu horario puede acompañarte mejor</span>
-            <h2 id="timezone-prompt-title">Parece que estás en otra zona horaria</h2>
+            <span className="eyebrow">El horario de la aplicación</span>
+            <h2 id="timezone-prompt-title">Tu dispositivo muestra otra zona horaria</h2>
             <p>
               Tienes guardada <strong>{friendlyTimezone(state.data.profile.timezone ?? "UTC")}</strong> y
               tu navegador detecta <strong>{friendlyTimezone(currentDetectedTimezone)}</strong>.
@@ -159,9 +159,9 @@ export function ProfileSettings() {
               <X size={20} />
             </button>
             <span className="eyebrow"><Clock3 size={15} /> Mi Perfil / Ajustes</span>
-            <h2 id="profile-settings-title">Tu zona horaria</h2>
+            <h2 id="profile-settings-title">El horario de tu ciudad</h2>
             <p>
-              La usamos para contar tus días de presencia según el lugar donde estás, sin pedir información de ubicación.
+              Elige una ciudad con el mismo horario que tú. Eso se llama zona horaria. La usamos para contar los días en que entras a la aplicación, sin pedir tu ubicación.
             </p>
             <div className="field">
               <label htmlFor="manual-timezone">Zona horaria</label>

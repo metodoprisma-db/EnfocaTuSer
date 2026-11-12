@@ -4,7 +4,7 @@ import test from "node:test";
 
 import { ASSESSMENT_INDICATORS, compareAssessments, isValidAssessment } from "../src/lib/assessment.ts";
 import { journalDraftKey, lessonDraftKey, parseJournalDraft } from "../src/lib/draft-storage.ts";
-import { discoveries } from "../src/data/catalog.ts";
+import { allCatalogItems, discoveries } from "../src/data/catalog.ts";
 
 function assessment(stage: "initial" | "final", values: [number, number, number, number]) {
   return {
@@ -23,27 +23,29 @@ test("el catálogo conserva las quince invitaciones aprobadas", () => {
   assert.equal(discoveries.length, 15);
   assert.equal(discoveries.every((item) => item.integrationInvitation), true);
   assert.deepEqual(discoveries[0].integrationInvitation, {
-    title: "Un momento con suavidad",
-    text: "Cuando una emoción aparezca mientras sigues con tu día, haz una pausa por un instante y dile por dentro: «Esto también puede estar aquí por un momento».",
-    reminder: "Esto puede estar aquí por un momento.",
+    title: "Un momento para ti",
+    text: "Cuando notes una emoción durante el día, detente unos segundos. Reconoce qué estás sintiendo. Si te ayuda, repite la frase de abajo en silencio.",
+    reminder: "Puedo tomarme unos segundos para reconocer lo que siento.",
   });
   assert.equal(
     discoveries[14].integrationInvitation?.reminder,
-    "El miedo puede venir conmigo; el paso lo elijo yo.",
+    "Puedo elegir qué necesito antes de decidir.",
   );
 });
 
-test("cada descubrimiento ofrece una guía editorial completa", () => {
-  for (const item of discoveries) {
-    assert.ok(item.description.length > 90, `${item.id}: apertura`);
-    assert.ok((item.focus?.length ?? 0) > 70, `${item.id}: foco`);
-    assert.ok((item.whyItMatters?.length ?? 0) > 70, `${item.id}: sentido`);
-    assert.ok((item.presence?.length ?? 0) > 70, `${item.id}: presencia`);
-    assert.ok(item.insight.length > 120, `${item.id}: desarrollo`);
-    assert.ok((item.perspectives?.length ?? 0) >= 2, `${item.id}: perspectivas`);
-    assert.ok(item.prompts.length >= 3, `${item.id}: preguntas`);
-    assert.ok(item.action.length > 90, `${item.id}: experiencia`);
-    assert.ok((item.closing?.length ?? 0) > 45, `${item.id}: cierre`);
+test("cada ejercicio conserva la guía necesaria aunque su explicación sea breve", () => {
+  assert.equal(allCatalogItems.length, 27);
+  for (const item of allCatalogItems) {
+    for (const field of ["description", "presence", "insight", "action", "durationLabel", "seed", "mentorNote"] as const) {
+      assert.ok(item[field]?.trim(), `${item.id}: ${field}`);
+    }
+    assert.ok(item.prompts.length >= 2 && item.prompts.every((prompt) => prompt.trim()), `${item.id}: preguntas`);
+    assert.ok(item.actionSteps.length >= 3 && item.actionSteps.every((step) => step.trim()), `${item.id}: instrucciones`);
+    if (item.kind === "discovery") {
+      assert.ok(item.focus?.trim(), `${item.id}: qué observar`);
+      assert.ok(item.whyItMatters?.trim(), `${item.id}: para qué sirve`);
+      assert.ok(item.closing?.trim(), `${item.id}: cierre`);
+    }
   }
 });
 
@@ -76,10 +78,10 @@ test("cada indicador conserva extremos propios y compasivos", () => {
   assert.deepEqual(
     ASSESSMENT_INDICATORS.map(({ startLabel, endLabel }) => [startLabel, endLabel]),
     [
-      ["La prisa ocupa casi todo", "La calma tiene espacio"],
-      ["Me trato con mucha exigencia", "Me trato con mucha amabilidad"],
+      ["Siento mucha prisa", "Me siento en calma"],
+      ["Me cuesta tratarme con amabilidad", "Me trato con mucha amabilidad"],
       ["Me cuesta reconocer lo que siento", "Reconozco con claridad lo que siento"],
-      ["Me siento lejos de la paz y el presente", "Siento paz y presencia"],
+      ["Me cuesta estar tranquila y atenta a este momento", "Me siento tranquila y atenta a este momento"],
     ],
   );
 });

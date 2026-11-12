@@ -15,14 +15,14 @@ const stageImages = {
 
 const stageVerbs = {
   oruga: "Reconocer",
-  crisalida: "Explorar",
+  crisalida: "Aprender",
   mariposa: "Disfrutar",
 } as const;
 
 const stageTitles = {
-  oruga: "Observar lo que necesitas",
-  crisalida: "Explorar otras posibilidades",
-  mariposa: "Dar espacio a lo amable",
+  oruga: "Reconocer cómo te sientes",
+  crisalida: "Pensar qué puedes hacer",
+  mariposa: "Disfrutar lo que te hace bien",
 } as const;
 
 export function CompassView() {
@@ -42,11 +42,11 @@ export function CompassView() {
     <div className="frequency-compass">
       <section className="compass-guide" aria-labelledby="compass-guide-title">
         <div>
-          <span className="eyebrow">Cómo leer este mapa</span>
-          <h2 id="compass-guide-title">Un mapa para acompañar tu momento</h2>
+          <span className="eyebrow">Cómo usar la Brújula</span>
+          <h2 id="compass-guide-title">Elige una palabra para leer una idea</h2>
         </div>
         <p>
-          Oruga, Crisálida y Mariposa son imágenes que ayudan a organizar este mapa. Tus emociones pueden variar y todas merecen cuidado. Los números son referencias simbólicas, no puntuaciones. Elige una palabra cercana a tu experiencia; puedes volver a elegir más tarde.
+          Las imágenes agrupan distintas palabras. Pulsa una y después elige una palabra para leer una idea. Tú decides si esa palabra se parece a lo que sientes. Los números pertenecen a este mapa simbólico y no son una calificación.
         </p>
       </section>
 
@@ -73,7 +73,7 @@ export function CompassView() {
               </span>
               <span className="metamorphosis-stage">{stageVerbs[zone.id as keyof typeof stageVerbs]} · Etapa {zone.stage}</span>
               <strong>{stageTitles[zone.id as keyof typeof stageTitles]}</strong>
-              <span className="metamorphosis-count">{zone.frequencies.length} palabras para explorar</span>
+              <span className="metamorphosis-count">{zone.frequencies.length} palabras para elegir</span>
             </button>
           );
         })}
@@ -97,12 +97,12 @@ export function CompassView() {
         </div>
 
         <details className="compass-map-terms">
-          <summary>Conocer los nombres de esta escala</summary>
+          <summary>Leer los nombres originales de esta escala</summary>
           <p>{selectedZone.leadership} · {selectedZone.calibration}.</p>
-          <p>{selectedZone.title}. Estos son los nombres del mapa; describen estados simbólicos, no tu identidad ni tu valor.</p>
+          <p>{selectedZone.title}. Estos nombres agrupan emociones dentro de la escala. No describen cómo eres como persona.</p>
         </details>
 
-        <div className="frequency-list" aria-label={`Frecuencias de la etapa ${selectedZone.stage}`}>
+        <div className="frequency-list" aria-label={`Palabras de la etapa ${selectedZone.stage}`}>
           {selectedZone.frequencies.map((frequency) => {
             const active = selectedFrequency.emotion === frequency.emotion;
             return (
@@ -123,7 +123,7 @@ export function CompassView() {
 
       <section className="surface-card compass-result" aria-live="polite">
         <div className="selected-frequency-value">
-          <span>Referencia del mapa</span>
+          <span>Número del mapa</span>
           <strong>{selectedFrequency.value}</strong>
         </div>
         <div className="selected-frequency-copy">
@@ -146,7 +146,7 @@ export function CompassView() {
       </section>
 
       <p className="compass-disclaimer">
-        Esta escala es una brújula simbólica de orientación emocional y espiritual.
+        La Brújula usa imágenes y números como una guía emocional y espiritual.
         No es una medición científica ni una medida de tu valor personal.
       </p>
     </div>

@@ -131,6 +131,8 @@ npm run build
 
 Revisión editorial basada en la reunión del 10 de noviembre de 2026:
 
+La revisión del 12 de noviembre usa la transcripción completa: reemplaza metáforas abiertas por acciones concretas, acorta repeticiones y explica los términos de respiración. Los encabezados compartidos son «Lo que puedes descubrir», «Detente, haz una pausa» y «Escúchate». La guía visual opcional dedica tres segundos a tomar aire y cinco a soltarlo, durante cinco ciclos; el texto y la animación usan ese mismo ritmo. Las pruebas del catálogo verifican que haya instrucciones completas sin exigir una longitud mínima de las explicaciones.
+
 - Los 15 descubrimientos y las 12 prácticas ofrecen preparación, ejemplos, pasos numerados y duración orientativa. Las preguntas y la escritura son opcionales.
 - Los textos priorizan observación y posibilidades creíbles, con lenguaje cotidiano y opciones para detenerse. El cierre de una práctica no depende de sentir una mejoría.
 - La guía de respiración puede detenerse. Las intensidades inicial y final parten del mismo valor y se describen sin presuponer un descenso.

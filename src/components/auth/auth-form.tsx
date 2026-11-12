@@ -198,7 +198,7 @@ export function AuthForm({
             <LockKeyhole size={14} style={{ verticalAlign: "-2px", marginRight: 5 }} />
             {restrictedAccess
               ? "El equipo está preparando la verificación de acceso. Si necesitas ayuda, encontrarás el enlace más abajo."
-              : "Puedes explorar como invitada y conservar tu recorrido en este dispositivo."}
+              : "Puedes probar los ejercicios sin crear una cuenta. Tus notas y avances quedarán en este dispositivo."}
           </p>
         )}
 
@@ -216,7 +216,7 @@ export function AuthForm({
 
       {!restrictedAccess ? (
         <div className={`guest-access${captchaUnavailable ? " highlighted" : ""}`}>
-          <span className="eyebrow">Explorar como invitada</span>
+          <span className="eyebrow">Probar sin crear una cuenta</span>
           <p>Puedes conocer este espacio sin crear una cuenta. Tu avance quedará en este navegador y dispositivo. Para recuperarlo en otro dispositivo, vuelve aquí y crea una cuenta que permita conservarlo en ambos.</p>
           <Link className="button button-secondary" href="/">
             Continuar como invitada <ArrowRight size={18} />
