@@ -6,7 +6,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Enfoca Tu Ser: Un camino para soltar y volver a ti",
     short_name: "Enfoca Tu Ser",
     description:
-      "Un espacio cálido para escucharte, soltar peso emocional y avanzar con presencia.",
+      "Ejercicios con instrucciones sencillas para reconocer lo que sientes, respirar y elegir qué hacer.",
     start_url: "/",
     scope: "/",
     display: "standalone",

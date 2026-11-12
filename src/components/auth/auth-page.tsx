@@ -20,11 +20,11 @@ export function AuthPage({
           <Image src={ASSETS.logo} width={420} height={130} alt="Enfoca Tu Ser" priority />
         </Link>
         <div className="auth-story-copy">
-          <span className="eyebrow eyebrow-light">Tu recorrido puede acompañarte</span>
-          <h1>Vuelve a ti, estés donde estés.</h1>
+          <span className="eyebrow eyebrow-light">Tus ejercicios y tus notas</span>
+          <h1>Un momento para reconocer cómo te sientes</h1>
           <p>{restrictedAccess
             ? "Este piloto está reservado para el equipo autorizado. Tu cuenta permite guardar y recuperar el recorrido de forma sincronizada."
-            : "Este espacio está sostenido para que tus notas y descubrimientos tengan un lugar cuidado, tanto si pruebas el recorrido como invitada como si decides sincronizarlo."}</p>
+            : "Clarissa Acevedo y Scarlett Vargas te acompañan con ejercicios para reconocer lo que sientes, respirar y decidir qué necesitas. Sigue las indicaciones a tu ritmo."}</p>
         </div>
       </section>
       <section className="auth-form-wrap">

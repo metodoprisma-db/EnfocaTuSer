@@ -838,7 +838,7 @@ h3 {
 
 .helper-text {
   color: var(--etq-chocolate-suave);
-  font-size: 0.82rem;
+  font-size: 0.9rem;
 }
 
 .practice-shell {
@@ -971,9 +971,20 @@ h3 {
 }
 
 .breath-orb strong {
+  max-width: 78%;
+  color: var(--etq-chocolate);
   font-family: var(--font-title);
-  font-size: 2.2rem;
+  font-size: 1.6rem;
   font-weight: 400;
+  text-align: center;
+  line-height: 1.25;
+}
+
+.breathing-status {
+  min-height: 3.5em;
+  color: var(--etq-azul);
+  font-size: 1.125rem;
+  font-weight: 600;
 }
 
 .journal-layout {
@@ -1304,7 +1315,7 @@ h3 {
 
 @keyframes breathe {
   0%, 100% { transform: scale(0.82); filter: saturate(0.85); }
-  50% { transform: scale(1); filter: saturate(1.08); }
+  37.5% { transform: scale(1); filter: saturate(1.08); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1939,6 +1950,62 @@ h3 {
   border-top-color: var(--etq-champagne);
 }
 
+.lesson-howto {
+  margin: 12px 0 28px;
+  padding: 18px 22px;
+  border: 1px solid var(--etq-linea);
+  border-radius: 16px;
+  background: var(--etq-crema);
+}
+
+.lesson-howto summary {
+  min-height: 44px;
+  align-content: center;
+  color: var(--etq-azul);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.lesson-howto p:last-child {
+  margin-bottom: 0;
+}
+
+.continuation-card {
+  margin-top: 28px;
+}
+
+.continuation-card h2 {
+  color: var(--etq-azul);
+}
+
+.compass-map-terms {
+  margin: 20px 0;
+  color: var(--etq-chocolate-suave);
+}
+
+.compass-map-terms summary {
+  min-height: 44px;
+  align-content: center;
+  cursor: pointer;
+}
+
+.exercise-steps {
+  margin: 20px 0;
+  padding-left: 1.6em;
+}
+
+.exercise-steps li {
+  padding-left: 8px;
+  margin-bottom: 18px;
+  line-height: 1.7;
+}
+
+.exercise-steps li::marker {
+  color: var(--etq-azul);
+  font-family: var(--font-ui);
+  font-weight: 700;
+}
+
 .lesson-journal {
   border-top-color: var(--etq-salvia);
 }
@@ -1968,7 +2035,7 @@ h3 {
   margin: 10px 0 0;
   color: var(--etq-salvia);
   font-family: var(--font-ui);
-  font-size: 0.72rem;
+  font-size: 0.875rem;
   font-weight: 650;
 }
 
@@ -2364,7 +2431,8 @@ h3 {
   justify-content: space-between;
   gap: 12px;
   color: var(--etq-chocolate-suave);
-  font-size: 0.66rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
 }
 
 .range-ends span {

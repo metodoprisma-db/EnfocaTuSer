@@ -121,10 +121,27 @@ contraseña, token ni mensaje remoto completo.
 ## Verificación
 
 ```bash
+npm run test
 npm run lint
 npx tsc --noEmit
 npm run build
 ```
+
+## Contenido y acompañamiento
+
+Revisión editorial basada en la reunión del 10 de noviembre de 2026:
+
+La revisión del 12 de noviembre usa la transcripción completa: reemplaza metáforas abiertas por acciones concretas, acorta repeticiones y explica los términos de respiración. Los encabezados compartidos son «Lo que puedes descubrir», «Detente, haz una pausa» y «Escúchate». La guía visual opcional dedica tres segundos a tomar aire y cinco a soltarlo, durante cinco ciclos; el texto y la animación usan ese mismo ritmo. Las pruebas del catálogo verifican que haya instrucciones completas sin exigir una longitud mínima de las explicaciones.
+
+- Los 15 descubrimientos y las 12 prácticas ofrecen preparación, ejemplos, pasos numerados y duración orientativa. Las preguntas y la escritura son opcionales.
+- Los textos priorizan observación y posibilidades creíbles, con lenguaje cotidiano y opciones para detenerse. El cierre de una práctica no depende de sentir una mejoría.
+- La guía de respiración puede detenerse. Las intensidades inicial y final parten del mismo valor y se describen sin presuponer un descenso.
+- Los IDs, índices y slugs se conservan para mantener progreso, borradores y enlaces anteriores. Los títulos visibles se actualizan.
+- La nomenclatura oficial de la Brújula permanece en una explicación desplegable; la entrada usa palabras cotidianas y aclara el carácter simbólico de los números.
+- `src/data/membership-offer.ts` centraliza la información editorial de siete días gratuitos y USD 17 al mes desde el día 8. El precio y las condiciones de la página de pago deben configurarse manualmente y coincidir con ese texto. Esta revisión no activa cobros ni modifica planes, SQL o vencimientos.
+- La invitación a continuar aparece para cuentas con plan `trial`, usando el perfil cargado y el instante local existente. En las últimas 24 horas del pase, o al volver después, invita a revisar la experiencia y destaca la charla si está disponible. No añade consultas ni sondeo.
+- La charla se habilita al completar el quinto descubrimiento. Continúa disponible en la transición de membresía si ya fue obtenida. Los siete días de acceso no se confunden con el número de descubrimientos completados.
+- Sin `NEXT_PUBLIC_MEMBERSHIP_CHECKOUT_URL`, el botón ofrece consultar cómo continuar mediante soporte, en lugar de simular una compra.
 
 La sincronización usa espacios locales separados para invitada y para cada UUID
 autenticado. Al iniciar sesión, el espacio invitado se reclama para una sola

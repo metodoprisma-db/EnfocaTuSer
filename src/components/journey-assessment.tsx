@@ -44,12 +44,12 @@ export function JourneyAssessment({ stage }: { stage: AssessmentStage }) {
       <section className="assessment-card assessment-saved" aria-live="polite">
         <span className="assessment-check"><Check size={24} /></span>
         <div>
-          <span className="eyebrow">Mirada guardada</span>
-          <h2>{isInitial ? "Tu punto de partida quedó contigo" : "Tu mirada de hoy ya está lista"}</h2>
+          <span className="eyebrow">Respuestas conservadas</span>
+          <h2>{isInitial ? "Ya puedes abrir el primer descubrimiento" : "Ya puedes comparar tus respuestas"}</h2>
           <p>
             {isInitial
-              ? "No es una nota ni un diagnóstico. Es tu percepción de este momento, elegida conscientemente por ti."
-              : "Ahora puedes acercar ambos momentos sin convertirlos en una competencia."}
+              ? "Al terminar los quince descubrimientos volverás a responder estas cuatro preguntas."
+              : "Ahora puedes ver qué elegiste al empezar y qué elegiste hoy."}
           </p>
         </div>
       </section>
@@ -59,19 +59,19 @@ export function JourneyAssessment({ stage }: { stage: AssessmentStage }) {
   return (
     <section className="assessment-card" aria-labelledby={`${stage}-assessment-title`}>
       <div className="assessment-intro">
-        <span className="eyebrow">{isInitial ? "Fotografía inicial · paso imprescindible" : "Fotografía final"}</span>
+        <span className="eyebrow">{isInitial ? "Fotografía inicial" : "Fotografía final"}</span>
         <h2 id={`${stage}-assessment-title`}>
-          {isInitial ? "Antes de dar el primer paso, haz visible cómo estás hoy" : "Al cerrar este camino, ¿cómo te sientes hoy?"}
+          {isInitial ? "¿Cómo te sientes hoy?" : "Después de los quince descubrimientos, ¿cómo te sientes?"}
         </h2>
         <p>
           {isInitial
-            ? "Esta mirada será tu punto de partida. Al terminar los 15 descubrimientos volverás a responder lo mismo para acercar el antes y el después de tu propio recorrido."
-            : "Responde desde este momento. Después podrás mirar ambas fotografías juntas, sin convertirlas en una competencia."}
+            ? "A estas respuestas las llamamos fotografía inicial; no se usa la cámara. Lee cada pregunta y pulsa un número del 1 al 10 según cómo te sientes hoy."
+            : "Responde las mismas cuatro preguntas según cómo te sientes hoy. Después podrás ver tus respuestas del comienzo y las de ahora."}
         </p>
         <div className="assessment-purpose" aria-label="Para qué sirve esta fotografía">
-          <p><Info size={17} /> No es un examen ni una medición clínica.</p>
-          <p><Repeat2 size={17} /> No hay respuestas correctas: elige lo que se acerque a tu percepción de hoy.</p>
-          <p><Footprints size={17} /> Nos ayuda a hacer visible el recorrido interno, no a medir tu valor.</p>
+          <p><Info size={17} /> Lee las frases que aparecen junto al 1 y al 10 antes de elegir.</p>
+          <p><Repeat2 size={17} /> Si te sientes entre las dos frases, puedes elegir un número del medio, como el 5.</p>
+          <p><Footprints size={17} /> Puedes cambiar tu elección antes de pulsar el botón de abajo. Los números describen cómo te sientes; no son una calificación.</p>
         </div>
       </div>
       <form className="assessment-form" onSubmit={submit}>
@@ -109,12 +109,12 @@ export function JourneyAssessment({ stage }: { stage: AssessmentStage }) {
             id={`${stage}-reflection`}
             value={reflectionNote}
             onChange={(event) => setReflectionNote(event.target.value)}
-            placeholder="Hoy reconozco que..."
+            placeholder="Hoy me siento..."
           />
         </div>
-        {!complete ? <p className="form-guidance"><Info size={16} /> Elige un valor para cada indicador antes de guardar.</p> : null}
+        {!complete ? <p className="form-guidance"><Info size={16} /> El botón se habilitará cuando elijas un número en las cuatro preguntas. La frase escrita es opcional.</p> : null}
         <button className="button button-primary" type="submit" disabled={!complete}>
-          <Footprints size={18} /> {isInitial ? "Guardar y abrir el Descubrimiento 01" : "Guardar mi fotografía final"}
+          <Footprints size={18} /> {isInitial ? "Conservar mis respuestas y abrir el primer paso" : "Conservar mi fotografía final"}
         </button>
       </form>
     </section>
@@ -138,14 +138,14 @@ export function JourneyComparison() {
   if (comparison.status === "incomplete") {
     return (
       <section className="journey-comparison comparison-missing" aria-labelledby="journey-comparison-title">
-        <span className="eyebrow">Mira cuánto has recorrido</span>
-        <h2 id="journey-comparison-title">Aún no podemos acercar los dos momentos</h2>
+        <span className="eyebrow">Lo que has caminado</span>
+        <h2 id="journey-comparison-title">Tus respuestas del comienzo y de hoy</h2>
         <p>
           {!initial && !final
-            ? "Faltan tu punto de partida y tu mirada de hoy. No mostraremos resultados inventados."
+            ? "Cuando respondas las preguntas del comienzo y las del final, podrás verlas juntas aquí."
             : !initial
-              ? "Falta tu punto de partida. Conservamos tu mirada de hoy, pero no inventaremos una comparación."
-              : "Falta tu mirada de hoy. Cuando la completes, podrás ver ambos momentos juntos."}
+              ? "Tus respuestas finales están conservadas. Para compararlas hacen falta también las del comienzo. Puedes seguir consultando tus notas."
+              : "Responde las cuatro preguntas finales para verlas junto a tus respuestas del comienzo."}
         </p>
       </section>
     );
@@ -155,10 +155,10 @@ export function JourneyComparison() {
     <section className="journey-comparison" aria-labelledby="journey-comparison-title">
       <div className="comparison-heading">
         <div>
-          <span className="eyebrow">Mira cuánto has recorrido</span>
-          <h2 id="journey-comparison-title">Dos momentos de tu propia mirada</h2>
+          <span className="eyebrow">Lo que has caminado</span>
+          <h2 id="journey-comparison-title">Tus respuestas al empezar y al terminar</h2>
         </div>
-        <p>Estos números no miden tu valor ni prometen una transformación. Solo acercan cómo te percibías entonces y cómo te percibes hoy.</p>
+        <p>Aquí puedes ver qué números elegiste al empezar y cuáles elegiste hoy. Pueden ser mayores, iguales o menores. Observa cómo estás ahora y qué te gustaría seguir practicando.</p>
       </div>
 
       <div className="comparison-list">

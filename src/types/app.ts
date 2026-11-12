@@ -21,6 +21,8 @@ export interface CatalogItem {
   perspectives?: string[];
   prompts: string[];
   action: string;
+  actionSteps: string[];
+  durationLabel: string;
   seed: string;
   mentorNote: string;
   closing?: string;

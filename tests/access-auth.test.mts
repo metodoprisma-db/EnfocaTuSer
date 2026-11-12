@@ -74,11 +74,11 @@ test("los errores de Auth se explican por código sin filtrar datos sensibles", 
   );
   assert.equal(
     authErrorFeedback({ code: "email_address_not_authorized", status: 400 }, "sign_up").message,
-    "Supabase no puede enviar el correo de confirmación a esta dirección con la configuración actual. El equipo debe revisar el servicio de correo.",
+    "El correo de confirmación no pudo enviarse a esta dirección. Consulta al equipo y comparte la referencia que aparece debajo para que podamos ayudarte.",
   );
   assert.equal(
     authErrorFeedback({ code: "unexpected_failure", status: 500 }, "sign_up").message,
-    "La cuenta no pudo crearse por un problema interno de datos. El equipo puede revisar el trigger de perfil con esta referencia.",
+    "El servicio de acceso encontró una dificultad. Puedes volver a intentarlo más tarde o compartir esta referencia con el equipo para recibir ayuda.",
   );
   assert.equal(
     authErrorFeedback({ code: "invalid_credentials", status: 400 }, "sign_in").message,

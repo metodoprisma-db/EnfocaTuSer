@@ -4,13 +4,13 @@ export const ASSESSMENT_INDICATORS = [
   {
     key: "calmScore",
     label: "Calma frente a la prisa",
-    startLabel: "La prisa ocupa casi todo",
-    endLabel: "La calma tiene espacio",
+    startLabel: "Siento mucha prisa",
+    endLabel: "Me siento en calma",
   },
   {
     key: "selfKindnessScore",
     label: "Amabilidad conmigo misma",
-    startLabel: "Me trato con mucha exigencia",
+    startLabel: "Me cuesta tratarme con amabilidad",
     endLabel: "Me trato con mucha amabilidad",
   },
   {
@@ -22,8 +22,8 @@ export const ASSESSMENT_INDICATORS = [
   {
     key: "peaceScore",
     label: "Paz y presencia",
-    startLabel: "Me siento lejos de la paz y el presente",
-    endLabel: "Siento paz y presencia",
+    startLabel: "Me cuesta estar tranquila y atenta a este momento",
+    endLabel: "Me siento tranquila y atenta a este momento",
   },
 ] as const;
 

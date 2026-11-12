@@ -7,33 +7,36 @@ export const discoveries: CatalogItem[] = [
     index: 0,
     number: 1,
     kind: "discovery",
-    title: "Empieza sin luchar",
-    description: "Comenzar no significa sentirte lista ni dejar de sentir. Significa encontrarte como estás y darte permiso para no convertir este momento en otra batalla.",
-    focus: "La forma en que reaccionas cuando aparece una emoción incómoda: si intentas apartarla, explicarla enseguida o exigirte que desaparezca.",
-    whyItMatters: "Pelear con lo que ya está presente suele sumar una segunda capa de cansancio. Reconocer la emoción puede devolverte un poco de espacio para elegir cómo cuidarte.",
-    presence: "Apoya los pies donde estés. Mira tres cosas a tu alrededor y nota que estás aquí. No busques respirar de una manera especial: deja que el aire entre y salga como pueda hoy.",
-    insight:
-      "Una emoción puede ser intensa sin ser una orden. Cuando aparece, quizá tu impulso sea resolverla, ocultarla o juzgarte por sentirla. Este descubrimiento propone algo más pequeño: reconocer que está aquí antes de decidir qué hacer con ella.",
+    title: "Empieza sin prisa",
+    description: "Hoy puedes dedicarte un momento para reconocer cómo te sientes. Elige una emoción que te resulte familiar y observa qué necesitas.",
+    focus: "La emoción que sientes ahora y lo que te dices cuando aparece.",
+    whyItMatters: "Reconocer una emoción puede ayudarte a decidir qué hacer: descansar, hablar con alguien o seguir con tu actividad.",
+    presence: "Apoya los pies en el suelo y la espalda en la silla. Acomódate como te resulte cómodo. Observa tres cosas a tu alrededor. Deja que el aire entre y salga naturalmente, sin esfuerzo.",
+    insight: "Puedes sentir alegría, inquietud, tristeza u otra emoción. Para empezar, pregúntate: «¿Qué estoy sintiendo?». Si aún no encuentras una palabra, puedes decirte: «Todavía no sé cómo llamarlo».",
     perspectives: [
-      "Aceptar su presencia por un momento no significa resignarte ni estar de acuerdo con todo lo que ocurre. Significa dejar de gastar energía en negar tu experiencia inmediata.",
-      "Puedes nombrarla con precisión o apenas decir: «hay algo difícil en mí». Ambas formas son válidas. Lo importante es que no tengas que abandonarte para seguir adelante.",
+      "Puedes reconocer lo que sientes y decidir después qué hacer. Tienes tiempo para escucharte."
     ],
     prompts: [
-      "¿Qué emoción o sensación estoy intentando apartar hoy?",
+      "¿Qué emoción o sensación noto hoy?",
       "¿Qué me digo a mí misma cuando aparece?",
-      "¿Qué cambiaría si, por un instante, no tuviera que resolverla?",
+      "¿Qué cambiaría si me diera unos segundos antes de responder?"
     ],
-    action:
-      "Elige una emoción que resulte manejable. Nómbrala en silencio y dile: «puedes estar aquí por un momento». Después observa si tu cuerpo pide espacio, agua, movimiento, compañía o simplemente continuar con más suavidad.",
-    seed: "Puedo escucharme sin convertirme en una batalla.",
-    mentorNote:
-      "No necesitas hacerlo perfecto para que cuente. Haber detenido la lucha durante unos segundos ya es una forma de estar de tu lado.",
-    closing: "Hoy no tienes que salir distinta. Puedes salir un poco más cerca de ti.",
+    action: "Elige una emoción que te resulte familiar. Puedes hacer el ejercicio en silencio.",
+    actionSteps: [
+      "Recuerda un momento de hoy, como un desayuno tranquilo o una llamada pendiente.",
+      "Pregúntate: «¿Qué siento al recordar ese momento?». Elige tus propias palabras.",
+      "Di en silencio el nombre de la emoción. Por ejemplo: «Hoy siento inquietud».",
+      "Pregúntate qué necesitas ahora. Puede ser beber agua, moverte, descansar o conversar con alguien. Elige lo que te ayude."
+    ],
+    durationLabel: "Alrededor de 1 minuto",
+    seed: "Puedo escuchar lo que siento.",
+    mentorNote: "Gracias por tomarte este tiempo para ti. Puedes repetir esta pausa cuando la necesites.",
+    closing: "Puede que hoy sigas sintiendo lo mismo. Te has dedicado un momento para escucharte.",
     integrationInvitation: {
-      title: "Un momento sin lucha",
-      text: "Cuando una emoción aparezca mientras sigues con tu día, haz una pausa por un instante y dile por dentro: «Esto también puede estar aquí por un momento».",
-      reminder: "Esto puede estar aquí por un momento.",
-    },
+      title: "Un momento para ti",
+      text: "Cuando notes una emoción durante el día, detente unos segundos. Reconoce qué estás sintiendo. Si te ayuda, repite la frase de abajo en silencio.",
+      reminder: "Puedo tomarme unos segundos para reconocer lo que siento."
+    }
   },
   {
     id: "discovery-02",
@@ -41,33 +44,36 @@ export const discoveries: CatalogItem[] = [
     index: 1,
     number: 2,
     kind: "discovery",
-    title: "Mira dónde estás",
-    description: "Antes de buscar un cambio, vale la pena mirar el lugar desde el que estás partiendo. Sin exagerarlo, sin minimizarlo y sin ponerte una nota.",
-    focus: "Tu presente real: lo que ocupa tu energía, lo que se siente liviano y aquello que vienes sosteniendo casi en automático.",
-    whyItMatters: "Cuando no reconoces dónde estás, puedes exigirte movimientos que no responden a lo que necesitas. Una mirada honesta permite elegir pasos más propios y posibles.",
-    presence: "Deja por un momento la idea de cómo deberías estar. Nota el apoyo de tu cuerpo y completa por dentro esta frase: «Hoy llego aquí con...». Una palabra es suficiente.",
-    insight:
-      "Mirarte no es evaluarte. Es reconocer el clima interno de este momento: quizá haya cansancio, esperanza, ruido, alivio o varias cosas a la vez. No necesitas ordenar todo para hacer una fotografía sincera.",
+    title: "Observa cómo te sientes hoy",
+    description: "Qué bueno que regresaste. Hoy vas a recordar una situación de tu día, reconocer qué necesitas y pensar quién o qué podría ayudarte.",
+    focus: "Una situación que tengas en mente, cómo te sientes y qué necesitas ahora.",
+    whyItMatters: "Saber cómo estás puede ayudarte a elegir qué atender primero y qué ayuda pedir.",
+    presence: "Apoya la espalda en la silla o elige otra postura cómoda. Observa cómo está tu cuerpo. Termina esta frase con tus propias palabras: «Hoy me siento...». Puedes pensar la respuesta, decirla o escribirla.",
+    insight: "Puedes sentir varias cosas a la vez. Por ejemplo: «Estoy cansada y me alegra haber hablado con una amiga». Observar cómo estás es reconocer lo que sientes en este momento.",
     perspectives: [
-      "La prisa suele reducir la experiencia a «estoy bien» o «estoy mal». Cuando amplías la mirada aparecen matices: algo puede doler y, al mismo tiempo, una parte de ti puede sentirse disponible para cuidarse.",
-      "Este punto de partida no define tu identidad. Solo nombra desde dónde continúas hoy y te ayuda a notar, más adelante, movimientos que podrían pasar desapercibidos.",
+      "Lo que sientes hoy puede cambiar. Por ahora, basta con describir cómo estás."
     ],
     prompts: [
-      "¿Qué está ocupando más espacio en mí en este momento?",
-      "¿Qué parte de mi vida pide ser mirada con más honestidad y menos juicio?",
-      "¿Qué recurso, apoyo o fortaleza ya está presente, aunque sea pequeño?",
+      "¿En qué situación de hoy estoy pensando?",
+      "¿Qué necesito en este momento?",
+      "¿Quién podría ayudarme o qué podría hacerme bien?"
     ],
-    action:
-      "Imagina una fotografía amplia de tu día. Nombra una dificultad, una necesidad y un apoyo disponible. No busques una conclusión: permite que las tres cosas formen parte de la misma imagen.",
-    seed: "Puedo mirarme con honestidad y ternura.",
-    mentorNote:
-      "Ver con claridad no es ser dura contigo. La honestidad también puede tener una voz cálida.",
-    closing: "Tu punto de partida merece verdad, pero también cuidado.",
+    action: "Recuerda una parte de tu día, como el desayuno o una conversación. Termina estas tres frases como prefieras.",
+    actionSteps: [
+      "Termina: «Hoy pasó...». Por ejemplo: «Hoy tuve varias tareas pendientes».",
+      "Termina: «Ahora necesito...». Por ejemplo: «Ahora necesito descansar unos minutos».",
+      "Termina: «Podría ayudarme...». Puede ser una persona, hacer una pausa o pedir información.",
+      "Piensa en tus tres respuestas y elige qué quieres atender primero. Si todavía no lo sabes, puedes terminar aquí."
+    ],
+    durationLabel: "De 1 a 2 minutos",
+    seed: "Puedo reconocer cómo estoy hoy.",
+    mentorNote: "Puedes usar tus propias palabras. Una frase sencilla es suficiente para reconocer cómo estás.",
+    closing: "Ahora puedes elegir si quieres descansar, seguir con tu día o pedir ayuda para algo.",
     integrationInvitation: {
-      title: "Tu punto de partida",
-      text: "En un cambio de actividad, pregúntate qué está ocupando más espacio en ti. Nómbralo con una palabra, sin calificarlo como bueno o malo. Solo reconoce desde dónde sigues el día.",
-      reminder: "Puedo mirar dónde estoy sin ponerme nota.",
-    },
+      title: "Reconoce cómo estás",
+      text: "Al terminar una actividad, pregúntate: «¿Cómo me siento ahora?». Puedes responder con una palabra, como «cansada», «tranquila» o la que tú elijas.",
+      reminder: "Puedo observar cómo me siento."
+    }
   },
   {
     id: "discovery-03",
@@ -75,33 +81,36 @@ export const discoveries: CatalogItem[] = [
     index: 2,
     number: 3,
     kind: "discovery",
-    title: "Siente más, piensa menos",
-    description: "A veces la mente trabaja sin descanso para explicar lo que duele. Hoy vas a practicar una pausa breve entre la historia que piensas y la experiencia que está ocurriendo.",
-    focus: "El momento en que una idea se repite tanto que parece ocupar todo el panorama, y la posibilidad de volver a una sensación concreta.",
-    whyItMatters: "Pensar puede ayudarte a comprender, pero cuando se vuelve circular también puede alejarte de lo que necesitas. Regresar al cuerpo ofrece información sin exigir una respuesta inmediata.",
-    presence: "Elige un punto de contacto: los pies con el suelo, la espalda con el respaldo o las manos entre sí. Quédate allí unos segundos. Si mirar el cuerpo no resulta cómodo, enfoca un objeto cercano.",
-    insight:
-      "Tu mente intenta completar vacíos, anticipar riesgos y encontrar explicaciones. Esa capacidad es valiosa, pero no cada pensamiento describe un hecho ni cada pregunta necesita resolverse ahora.",
+    title: "Reconoce lo que piensas y sientes",
+    description: "Una idea puede repetirse y hacerte sentir tristeza, enojo o inquietud. Hoy vas a reconocer esa idea y hacer una pausa para respirar.",
+    focus: "Lo que ocurrió, lo que piensas sobre eso y la emoción que sientes al recordarlo.",
+    whyItMatters: "Distinguir lo que sabes de lo que imaginas puede ayudarte a decidir si quieres preguntar algo o esperar más información.",
+    presence: "Siéntate con la espalda apoyada y los pies en el suelo. Puedes mantener los ojos abiertos o fijar la vista en un objeto. Nota cómo la silla sostiene tu espalda y cómo se sienten tus pies sobre el suelo.",
+    insight: "Por ejemplo: enviaste un mensaje y aún no te respondieron. Eso es lo que sabes. Pensar «está molesta conmigo» es una posible explicación, pero todavía no sabes si es así. Esa idea puede hacerte sentir tristeza o enojo.",
     perspectives: [
-      "Sentir más no significa sumergirte en algo abrumador. Puede ser tan simple como notar temperatura, presión, movimiento o ausencia de sensación. Tú decides hasta dónde acercarte.",
-      "Cuando distingues la sensación de la historia, aparece una pausa. En esa pausa puedes preguntar qué necesitas, en lugar de seguir automáticamente el hilo de la preocupación.",
+      "Puedes reconocer esa emoción y preguntarte qué información te falta. También puedes notar una sensación del cuerpo, como calor en las manos o tensión en los hombros."
     ],
     prompts: [
-      "¿Qué historia se repite en mi mente cuando aparece esta emoción?",
-      "¿Qué dato conozco y qué parte estoy completando con temor o suposición?",
-      "¿Qué sensación concreta puedo notar sin tener que explicarla?",
+      "¿Qué pasó y qué estoy pensando sobre eso?",
+      "¿Qué emoción siento al pensar en esa situación?",
+      "¿Qué información conozco y qué parte estoy imaginando?"
     ],
-    action:
-      "Durante treinta segundos, deja la historia en pausa y vuelve a un punto de contacto. Luego completa: «Ahora mismo noto...». No hace falta interpretar lo que aparezca.",
-    seed: "Soy más amplia que la historia que mi mente cuenta.",
-    mentorNote:
-      "Comprender puede esperar un momento. Primero puedes darte la experiencia de estar aquí, acompañándote.",
-    closing: "No todo se resuelve pensando más; algunas cosas comienzan a ordenarse cuando vuelves a estar presente.",
+    action: "Prueba esta pausa. Lee los pasos antes de empezar; después puedes hacerlos a tu ritmo.",
+    actionSteps: [
+      "Reconoce la idea que se repite y la emoción que te produce. Por ejemplo: «Pienso que mi amiga está molesta y siento tristeza».",
+      "Observa un objeto o cierra los ojos si te resulta cómodo. Nota la presión de tus pies sobre el suelo.",
+      "Toma aire lentamente: eso es inhalar. Después suéltalo con suavidad, un poco más despacio: eso es exhalar. Repítelo cinco veces, a tu ritmo y sin esfuerzo.",
+      "Durante unos 30 segundos, nota cómo se sienten tus pies o tus manos. Después termina la frase: «Ahora noto...». Puedes decir «mis manos están tibias», por ejemplo."
+    ],
+    durationLabel: "De 1 a 2 minutos",
+    seed: "Puedo distinguir lo que sé de lo que imagino.",
+    mentorNote: "Puedes tomarte un momento antes de seguir pensando en esa situación. Puedes decidir después qué quieres preguntar.",
+    closing: "Al terminar, observa cómo te sientes ahora. Puedes seguir con tu día o descansar un poco.",
     integrationInvitation: {
-      title: "Vuelve a una sensación",
-      text: "Cuando notes que una historia se repite en tu mente, lleva la atención al contacto de los pies con el piso, la espalda con la silla o el aire en la piel. Quédate ahí unos segundos, sin buscar una explicación.",
-      reminder: "Primero noto; después veo si necesito entender.",
-    },
+      title: "Haz una pausa para respirar",
+      text: "Si notas que vuelves a pensar en lo mismo, detente unos segundos. Siente tus pies sobre el suelo. Toma aire y suéltalo naturalmente, sin esfuerzo.",
+      reminder: "Puedo detenerme y respirar antes de seguir."
+    }
   },
   {
     id: "discovery-04",
@@ -109,33 +118,36 @@ export const discoveries: CatalogItem[] = [
     index: 3,
     number: 4,
     kind: "discovery",
-    title: "Cuestiona tus reglas",
-    description: "Hay frases que dirigen tu vida sin pedir permiso: «debo poder con todo», «descansar es perder tiempo», «si digo que no, decepciono». Hoy vas a mirarlas de cerca.",
-    focus: "Las reglas internas que se presentan como verdades absolutas y que quizá aprendiste para pertenecer, protegerte o recibir aprobación.",
-    whyItMatters: "Una regla antigua puede seguir organizando tus decisiones aunque ya no cuide a la mujer que eres hoy. Revisarla abre alternativas sin negar la historia en la que nació.",
-    presence: "Observa si alguna palabra como «debo», «tengo que» o «no puedo» aparece en tu mente. No la discutas todavía. Solo nota qué ocurre en tu cuerpo cuando la escuchas.",
-    insight:
-      "Muchas reglas internas comenzaron como intentos de adaptación. Quizá te ayudaron a evitar conflicto, a sentir control o a responder a expectativas importantes. Reconocer su origen permite tratarlas con respeto sin seguir obedeciéndolas automáticamente.",
+    title: "Observa cómo te hablas",
+    description: "Hoy vas a observar qué palabras te dices al hacer una tarea. Puedes probar otra frase y decidir si te ayuda.",
+    focus: "Una frase que te dices a menudo y cómo te sientes al escucharla.",
+    whyItMatters: "Cambiar una frase puede ayudarte a ver otra opción, como hacer una parte de la tarea o pedir ayuda.",
+    presence: "Piensa en una tarea de hoy. Recuerda qué te dijiste al hacerla. Repite esa frase en silencio y observa cómo te sientes.",
+    insight: "Las palabras que te dices en silencio forman tu diálogo interno. Una creencia es una idea que has aprendido y que sueles dar por cierta. Por ejemplo: «Si pido ayuda, es porque no puedo». Puedes observar si una frase así se parece a lo que tú piensas.",
     perspectives: [
-      "Cuestionar una regla no te obliga a hacer lo contrario. Solo te devuelve la posibilidad de elegir. Entre obedecerla y rechazarla por completo puede existir una forma más flexible y amable.",
-      "Una regla útil orienta; una regla rígida aprieta incluso cuando la realidad cambia. Puedes preguntarte si sigue protegiendo algo valioso o si hoy necesita una actualización.",
+      "También puedes probar: «Puedo hacer mi parte y pedir ayuda para lo demás». Tú eliges si esa frase tiene sentido para ti."
     ],
     prompts: [
-      "¿Qué «tengo que» aparece con más frecuencia en mi vida?",
-      "¿Qué intenta proteger y qué precio estoy pagando por obedecerlo siempre?",
-      "¿Qué opción más amable también sería responsable y válida?",
+      "¿Qué me digo cuando tengo una tarea pendiente?",
+      "¿Cómo me siento al decirme eso?",
+      "¿Qué otra frase podría ayudarme en esa situación?"
     ],
-    action:
-      "Elige una regla de bajo riesgo y cambia su tono. Por ejemplo: de «tengo que hacerlo perfecto» a «quiero hacerlo con cuidado y puedo aprender mientras avanzo». Nota cómo se siente la nueva frase.",
-    seed: "Una creencia aprendida puede abrirse a una nueva mirada.",
-    mentorNote:
-      "No estás traicionando tu historia al revisar lo aprendido. Estás permitiendo que tu vida actual también tenga voz.",
-    closing: "Una regla deja de ser una jaula cuando vuelve a convertirse en una elección.",
+    action: "Elige una frase que te digas de verdad. Prueba otras palabras que te parezcan posibles y sinceras.",
+    actionSteps: [
+      "Recuerda una tarea pequeña, como ordenar una habitación o preparar una llamada.",
+      "Reconoce la frase que te dices. Por ejemplo: «Tengo que terminar todo hoy». Si no te reconoces en el ejemplo, elige otra.",
+      "Prueba una frase distinta. Por ejemplo: «Hoy puedo ordenar una parte y dejar el resto para mañana».",
+      "Repite tu nueva frase y observa cómo te sientes. Puedes usarla, cambiarla o seguir pensando en otras palabras."
+    ],
+    durationLabel: "De 2 a 3 minutos",
+    seed: "Puedo elegir otras palabras para hablarme.",
+    mentorNote: "La frase es tuya. Elige palabras que entiendas y que puedas creer hoy.",
+    closing: "Puedes probar esa frase la próxima vez que hagas una tarea parecida y observar si te ayuda.",
     integrationInvitation: {
-      title: "Prueba otra manera",
-      text: "Si aparece un «esto se hace así» que te aprieta, pregúntate en silencio: «¿Qué opción más amable también sería válida?». No cambies nada por obligación; basta con notar que puede haber más de una forma.",
-      reminder: "Una regla aprendida no es la única opción.",
-    },
+      title: "Prueba otras palabras",
+      text: "Cuando hagas una tarea, observa qué te dices. Si quieres probar otra frase, empieza por «Hoy puedo...». Por ejemplo: «Hoy puedo hacer una parte y pedir ayuda».",
+      reminder: "Puedo probar otra forma de hablarme."
+    }
   },
   {
     id: "discovery-05",
@@ -143,33 +155,36 @@ export const discoveries: CatalogItem[] = [
     index: 4,
     number: 5,
     kind: "discovery",
-    title: "Haz espacio a la resistencia",
-    description: "Cuando algo en ti posterga, se endurece o quiere escapar, no siempre necesita más presión. A veces necesita que alguien escuche qué está intentando proteger.",
-    focus: "La resistencia que aparece frente a un cambio, una conversación o incluso frente a este mismo proceso.",
-    whyItMatters: "Forzarte puede aumentar el cierre. Escuchar la resistencia permite distinguir entre miedo, cansancio, falta de seguridad, un límite necesario o una decisión que todavía necesita tiempo.",
-    presence: "Piensa en una situación pequeña que estés evitando. Nota el primer impulso que aparece. No te obligues a acercarte más de lo que se sienta seguro.",
-    insight:
-      "La resistencia suele expresarse de formas conocidas: posponer, controlar cada detalle, distraerte, irritarte o quedarte inmóvil. En vez de tomarla como enemiga, puedes verla como una señal que merece contexto.",
+    title: "Decide cómo seguir con una tarea",
+    description: "Si has dejado una tarea para después, puedes preguntarte qué necesitas para hacerla. Tal vez sea descansar, pedir información o empezar por una parte.",
+    focus: "Una tarea que tienes pendiente y lo que podría ayudarte a hacerla.",
+    whyItMatters: "Saber qué te hace falta puede ayudarte a elegir una acción más sencilla o a pedir ayuda.",
+    presence: "Piensa en una tarea pequeña, como responder un mensaje. Observa qué sientes al recordarla. Deja que el aire entre y salga naturalmente.",
+    insight: "Una tarea puede quedar para después por distintos motivos. Quizá estés cansada o todavía no sepas cómo hacerla. Puedes preguntarte qué pasa hoy, en lugar de decidir de antemano por qué la has pospuesto.",
     perspectives: [
-      "Escucharla no significa dejar que decida todo. Significa incluir su información antes de elegir. Quizá necesites dividir el paso, pedir apoyo, poner un límite o reconocer que hoy no es el momento.",
-      "También puede haber una parte que sí quiere avanzar. No tienes que elegir una y expulsar a la otra. Puedes dejar que ambas expresen qué necesitan para sentirse cuidadas.",
+      "También puedes querer hacer algo y necesitar más tiempo. Puedes tener en cuenta ambas cosas al decidir."
     ],
     prompts: [
-      "¿Cómo se muestra mi resistencia: postergando, controlando, alejándome o exigiéndome?",
-      "¿Qué podría estar intentando proteger?",
-      "¿Qué condición haría este paso un poco más seguro o posible?",
+      "¿Qué tarea tengo pendiente?",
+      "¿Qué necesito para hacerla?",
+      "¿Qué parte podría hacer hoy?"
     ],
-    action:
-      "Pon una mano donde resulte cómodo y pregunta: «¿Qué necesitas que yo sepa antes de avanzar?». Escucha la primera respuesta sin prometer obedecerla. Luego elige entre seguir, reducir el paso, esperar o pedir apoyo.",
-    seed: "Incluso mi resistencia merece ser escuchada.",
-    mentorNote:
-      "Tu ritmo también contiene sabiduría. Avanzar con respeto suele sostenerse mejor que empujarte hasta agotarte.",
-    closing: "La resistencia deja de gritar cuando descubre que puede ser escuchada.",
+    action: "Elige una tarea y busca una forma sencilla de empezar o de pedir ayuda.",
+    actionSteps: [
+      "Nombra una sola tarea. Por ejemplo: «Pedir una cita».",
+      "Pregúntate qué te falta. Puede ser el número de teléfono, saber el horario o tener unos minutos libres.",
+      "Elige una acción: buscar el número, preguntar el horario o decidir cuándo llamar.",
+      "Haz esa acción si te viene bien ahora. También puedes decidir cuándo retomarla o a quién pedir ayuda."
+    ],
+    durationLabel: "De 1 a 2 minutos para decidir",
+    seed: "Puedo decidir qué necesito para seguir.",
+    mentorNote: "Al completar este descubrimiento podrás coordinar tu charla con Clarissa y Scarlett. Puedes conversar con nosotras sobre lo que has probado o sobre una duda.",
+    closing: "Puedes terminar con una acción elegida o con una pregunta que quieras hacer a alguien.",
     integrationInvitation: {
-      title: "Escucha el freno",
-      text: "Si surgen ganas de postergar, controlar o alejarte, nota el impulso antes de discutir con él. Pregúntate: «¿Qué puede haber detrás de esto?». Puedes seguir, esperar o pedir apoyo; la respuesta queda en tus manos.",
-      reminder: "Mi resistencia también trae información.",
-    },
+      title: "Piensa qué te hace falta",
+      text: "Si dejas una tarea para después, pregúntate: «¿Qué necesito para hacerla?». Puedes elegir una parte pequeña, pedir información o descansar antes.",
+      reminder: "Puedo empezar por una parte o pedir ayuda."
+    }
   },
   {
     id: "discovery-06",
@@ -177,34 +192,37 @@ export const discoveries: CatalogItem[] = [
     index: 5,
     number: 6,
     kind: "discovery",
-    title: "Haz sitio a lo bueno",
-    description: "Reconocer lo difícil no exige cerrar la puerta a todo lo amable. Hoy vas a practicar recibir algo bueno sin usarlo para negar lo que duele.",
-    focus: "La capacidad de notar un gesto, una sensación o una experiencia amable y permitir que tenga un lugar real en el momento.",
-    whyItMatters: "Cuando has estado mucho tiempo en alerta, lo agradable puede pasar rápido o despertar desconfianza. Detenerte unos segundos ayuda a que el cuidado también forme parte de tu experiencia.",
-    presence: "Mira a tu alrededor y encuentra algo que no te pida esfuerzo: una luz, una textura, una temperatura o un sonido. Permite que tu atención descanse allí brevemente.",
-    insight:
-      "Hacer sitio a lo bueno no es pensar en positivo ni convencerte de que todo está bien. Es reconocer que la experiencia humana puede contener dificultad y cuidado al mismo tiempo.",
+    title: "Reconoce algo agradable",
+    description: "Hoy puedes observar algo de tu día que te resulte agradable. Puede ser una bebida, una conversación o sentarte a descansar.",
+    focus: "Un momento agradable o cómodo que ya esté ocurriendo en tu día.",
+    whyItMatters: "Observar esos momentos puede ayudarte a reconocer qué cosas sencillas disfrutas o te hacen bien.",
+    presence: "Observa a tu alrededor. Elige algo que te guste o te resulte cómodo, como una planta o el respaldo de la silla. Quédate unos segundos observándolo.",
+    insight: "Puedes tener una preocupación y disfrutar de una taza de té al mismo tiempo. Disfrutar ese momento no borra lo que te preocupa. Puedes reconocer las dos cosas.",
     perspectives: [
-      "A veces lo amable es muy pequeño: agua fresca, una respuesta considerada, una tarea terminada o el alivio de sentarte. Su tamaño no reduce su valor.",
-      "Recibir también puede dar vulnerabilidad. Si notas incomodidad, no tienes que forzar gratitud. Basta con reconocer: «esto fue un poco amable conmigo».",
+      "Si hoy no encuentras algo agradable, puedes elegir algo cómodo, como la temperatura del agua al lavarte las manos."
     ],
     prompts: [
-      "¿Qué experiencia amable suelo pasar por alto cuando estoy preocupada?",
-      "¿Qué siento cuando algo bueno llega sin que tenga que ganármelo?",
-      "¿Qué cualidad deseo recibir hoy: calma, paciencia, compañía, confianza u otra?",
+      "¿Qué momento de hoy me resultó agradable?",
+      "¿Qué detalle me gustó de ese momento?",
+      "¿Me gustaría repetirlo otro día?"
     ],
-    action:
-      "Elige algo agradable que ya esté ocurriendo. Detente entre diez y veinte segundos para percibirlo. No lo conviertas en conclusión ni solución: solo deja que también esté aquí.",
-    seed: "Lo amable también puede encontrar espacio en mí.",
-    mentorNote:
-      "Llegaste hasta aquí escuchándote con valentía. El regalo que se abre en este tramo quiere ofrecerte presencia real y un espacio para ordenar lo que estás viviendo.",
-    closing: "Recibir un instante amable no borra tu historia; le agrega un lugar donde descansar.",
+    action: "Dedica unos segundos a observar algo que te resulte agradable o cómodo.",
+    actionSteps: [
+      "Elige algo que tengas cerca, como una taza, una planta o una tela suave.",
+      "Observa un detalle: el color de la planta, la temperatura de la taza o cómo se siente la tela.",
+      "Quédate entre diez y veinte segundos con ese detalle. Puedes respirar de forma natural.",
+      "Di en silencio qué te resultó agradable. Después puedes seguir con tu actividad, aunque te sientas igual."
+    ],
+    durationLabel: "De 10 a 20 segundos de observación",
+    seed: "Puedo disfrutar de un momento sencillo.",
+    mentorNote: "Puedes observar qué cosas disfrutas, por pequeñas que sean. Tú eliges cuánto tiempo dedicarles.",
+    closing: "Puedes recordar ese detalle más tarde o buscar otro que te guste durante el día.",
     integrationInvitation: {
-      title: "Recibe algo amable",
-      text: "En una actividad habitual, deja que tu atención encuentre algo agradable o sereno: la temperatura del agua, una voz cercana o una tarea que salió con menos esfuerzo. Recíbelo unos segundos sin usarlo para negar lo difícil.",
-      reminder: "Lo difícil y lo amable pueden compartir el momento.",
+      title: "Disfruta de un detalle",
+      text: "Durante una actividad de tu día, observa algo que te guste: el sabor de una bebida, una canción o una conversación. Dedícale unos segundos.",
+      reminder: "Puedo disfrutar de este momento."
     },
-    hasGift: true,
+    hasGift: true
   },
   {
     id: "discovery-07",
@@ -212,32 +230,36 @@ export const discoveries: CatalogItem[] = [
     index: 6,
     number: 7,
     kind: "discovery",
-    title: "Suelta una piedra a la vez",
-    description: "Cuando todo parece importante al mismo tiempo, el peso se vuelve inmenso. Hoy no vas a resolverlo todo: vas a separar una sola piedra del montón.",
-    focus: "La diferencia entre cargar un problema completo en la mente y atender la parte concreta que pertenece a este momento.",
-    whyItMatters: "Reducir el tamaño del paso no es abandonar la meta. Es cuidar tu capacidad de actuar sin quedar paralizada por una exigencia demasiado grande.",
-    presence: "Mira el lugar donde estás y pregúntate: «¿Qué pertenece verdaderamente a este momento?». Deja fuera, por unos minutos, lo que no necesita una respuesta ahora.",
-    insight:
-      "La mente suele presentar un asunto como una sola masa: la relación, el trabajo, el dinero, la casa, el futuro. Al mirarlo más de cerca aparecen partes diferentes, y no todas requieren la misma atención.",
+    title: "Atiende una cosa a la vez",
+    description: "Si tienes varias cosas por hacer, puedes elegir una parte pequeña. Hoy vas a decidir qué puedes atender ahora y qué puede esperar.",
+    focus: "Una situación que puedas dividir en tareas más pequeñas.",
+    whyItMatters: "Elegir una sola tarea puede ayudarte a saber por dónde empezar y cuándo hacer una pausa.",
+    presence: "Observa el lugar donde estás. Piensa en una tarea de hoy, como ordenar la casa o preparar una conversación. Elige solo una para este ejercicio.",
+    insight: "«Ordenar la casa» reúne muchas tareas. Puedes separarlas: guardar la ropa, recoger la mesa o lavar unos platos. Así puedes elegir una parte que se ajuste al tiempo que tienes hoy.",
     perspectives: [
-      "Una parte puede ser una llamada, una pregunta, un objeto que ordenar, una decisión que investigar o un descanso que permitirte. Lo concreto ayuda a que la energía encuentre dirección.",
-      "También puedes descubrir que el paso de hoy es no actuar todavía. Esperar información o pedir compañía puede ser una elección consciente, no una falla.",
+      "También puedes elegir pedir ayuda o descansar. Ten en cuenta cómo estás antes de decidir."
     ],
     prompts: [
-      "¿Qué asunto estoy cargando como si tuviera que resolverlo completo?",
-      "¿Qué partes lo componen y cuál pertenece realmente a hoy?",
-      "¿Cuál sería un paso suficientemente pequeño para no abandonarme al hacerlo?",
+      "¿Qué quiero atender hoy?",
+      "¿En qué partes pequeñas puedo dividirlo?",
+      "¿Cuál puedo hacer con el tiempo y la energía que tengo?"
     ],
-    action: "Nombra una sola parte y decide una acción de menos de diez minutos, o una pausa consciente si eso es lo que necesitas. Escribe mentalmente: «por ahora, solo esto».",
-    seed: "Un movimiento pequeño también cambia mi camino.",
-    mentorNote:
-      "No necesitas demostrar fortaleza cargando todo junto. Elegir una parte es una forma concreta de cuidarte y avanzar.",
-    closing: "Lo demás no desaparece, pero puede esperar fuera de este momento.",
+    action: "Elige una parte de una tarea. Puedes pensarla o escribirla.",
+    actionSteps: [
+      "Nombra una tarea: «Organizar la casa», por ejemplo.",
+      "Sepárala en dos o tres partes, como guardar la ropa, recoger la mesa y lavar los platos.",
+      "Elige una acción de menos de diez minutos. Por ejemplo: «Voy a guardar tres prendas».",
+      "Haz esa parte si puedes ahora. Al terminar, decide si quieres descansar o continuar con otra cosa."
+    ],
+    durationLabel: "1 minuto para elegir; hasta 10 para hacer la tarea",
+    seed: "Puedo hacer una cosa a la vez.",
+    mentorNote: "Puedes reconocer la parte que hiciste hoy y dejar las demás para cuando tengas tiempo.",
+    closing: "Puedes terminar por hoy después de atender esa parte. Tú decides cómo continuar.",
     integrationInvitation: {
-      title: "Solo una parte",
-      text: "Si un asunto se siente enorme, separa mentalmente una parte que puedas atender ahora: una llamada, un objeto o una decisión. Lo demás puede quedar fuera de este momento, sin que eso signifique abandonarlo.",
-      reminder: "Ahora, solo esta parte.",
-    },
+      title: "Elige una sola tarea",
+      text: "Cuando se junten varias cosas por hacer, elige una parte pequeña. Por ejemplo: responder un mensaje o guardar un objeto. Después decide qué quieres hacer.",
+      reminder: "Ahora puedo atender esta parte."
+    }
   },
   {
     id: "discovery-08",
@@ -245,33 +267,36 @@ export const discoveries: CatalogItem[] = [
     index: 7,
     number: 8,
     kind: "discovery",
-    title: "Mira tus pensamientos con distancia",
-    description: "Un pensamiento repetido puede sentirse como una verdad completa. Hoy vas a practicar mirarlo como una frase que aparece en tu mente, no como todo el panorama.",
-    focus: "La distancia entre lo que piensas, los hechos que conoces y las interpretaciones que tu mente construye para llenar los vacíos.",
-    whyItMatters: "Cuando una idea se vuelve certeza, puede dirigir emociones y decisiones sin ser revisada. Tomar distancia devuelve curiosidad y opciones.",
-    presence: "Imagina que colocas el pensamiento frente a ti, escrito en una hoja. No intentes borrarlo. Solo deja de sostenerlo pegado a tu rostro por unos segundos.",
-    insight:
-      "Pensar «voy a fallar» no es lo mismo que tener un dato sobre el futuro. Pensar «no le importo» no es lo mismo que conocer todo lo que ocurre en la otra persona. El lenguaje puede ayudarte a recordar esa diferencia.",
+    title: "Separa lo que sabes de lo que imaginas",
+    description: "A veces una idea parece segura aunque todavía nos falte información. Hoy vas a distinguir lo que sabes de lo que estás suponiendo.",
+    focus: "Una idea que se repite y la información que tienes sobre esa situación.",
+    whyItMatters: "Reconocer qué sabes y qué te falta puede ayudarte a hacer una pregunta o a esperar antes de decidir.",
+    presence: "Piensa en una situación sencilla de hoy. Puedes escribir tu idea, decirla en voz baja o pensarla en silencio. Elige la forma que prefieras.",
+    insight: "Si piensas «seguro que la cita saldrá mal», estás imaginando lo que puede pasar. Todavía no sabes cómo será. Puedes cambiar esa frase por «me preocupa cómo será la cita» y pensar qué información necesitas.",
     perspectives: [
-      "Agregar «estoy pensando que...» no ridiculiza lo que sientes. Reconoce que la idea existe y que, al mismo tiempo, tú eres quien puede observarla.",
-      "Después puedes separar tres elementos: el hecho comprobable, la interpretación y lo que necesitas saber o preguntar. Esa distinción no elimina la incertidumbre, pero evita que una suposición ocupe todo.",
+      "Lo que imaginas puede hacerte sentir algo real. Puedes reconocer esa emoción y comprobar lo que aún no sabes."
     ],
     prompts: [
-      "¿Qué frase estoy repitiendo como si fuera una certeza?",
-      "¿Qué parte puedo comprobar y qué parte estoy imaginando o anticipando?",
-      "¿Qué pregunta más abierta y honesta podría hacerme?",
+      "¿Qué estoy pensando sobre esta situación?",
+      "¿Qué sé que ocurrió?",
+      "¿Qué me gustaría preguntar o comprobar?"
     ],
-    action:
-      "Repite lentamente: «estoy pensando que...», y completa con tu frase. Luego nombra un hecho que sí conoces y una cosa que todavía no sabes.",
-    seed: "Puedo comprobar los hechos sin entregar mi dirección al miedo.",
-    mentorNote:
-      "No tienes que creer ni combatir cada pensamiento. Puedes escucharlo, comprobar lo que cuenta y conservar tu capacidad de elegir.",
-    closing: "Una idea puede visitarte sin quedarse a cargo de tu dirección.",
+    action: "Elige una idea y distingue qué sabes y qué todavía no sabes.",
+    actionSteps: [
+      "Di tu idea en silencio. Por ejemplo: «Mi amiga está molesta porque no respondió».",
+      "Añade al principio: «Estoy pensando que...». Repite la frase completa.",
+      "Nombra lo que sabes: «Le envié un mensaje y aún no respondió». Después di lo que no sabes: «No sé por qué».",
+      "Elige si quieres preguntarle, esperar o seguir con otra actividad por ahora."
+    ],
+    durationLabel: "De 1 a 2 minutos",
+    seed: "Puedo preguntar antes de sacar una conclusión.",
+    mentorNote: "Puedes darte tiempo para conocer más antes de decidir qué significa una situación para ti.",
+    closing: "Puedes terminar reconociendo lo que sabes y la pregunta que todavía quieres hacer.",
     integrationInvitation: {
-      title: "Toma distancia de la idea",
-      text: "Cuando una frase dura aparezca como una certeza, cambia «esto es así» por «estoy pensando que esto es así». Después distingue qué dato conoces de verdad y qué parte estás imaginando.",
-      reminder: "Un pensamiento no es todo el panorama.",
-    },
+      title: "Comprueba lo que sabes",
+      text: "Cuando pienses «seguro que...», pregúntate: «¿Lo sé o lo estoy imaginando?». Puedes buscar más información o darte tiempo para saberlo.",
+      reminder: "Puedo comprobar lo que sé y preguntar lo que me falta."
+    }
   },
   {
     id: "discovery-09",
@@ -279,33 +304,36 @@ export const discoveries: CatalogItem[] = [
     index: 8,
     number: 9,
     kind: "discovery",
-    title: "Un pequeño sí puedo",
-    description: "Hay días en que incluso lo sencillo parece demasiado. Hoy no vas a exigirte motivación: vas a buscar el gesto posible que todavía puede ofrecerte apoyo.",
-    focus: "Lo que sí está a tu alcance cuando la energía, el ánimo o la claridad son limitados.",
-    whyItMatters: "La exigencia de hacer mucho puede confirmar la sensación de incapacidad. Reconocer una posibilidad real devuelve agencia sin negar el cansancio.",
-    presence: "Pregúntale a tu cuerpo cuánta energía hay disponible, sin ponerle nota. Imagina que ajustas el tamaño del día a esa respuesta.",
-    insight:
-      "Cuando estás cansada, tu mente puede comparar el paso posible con todo lo que falta y concluir que no vale la pena. Pero el cuidado no necesita ser grande para ser real.",
+    title: "Haz algo que te ayude hoy",
+    description: "Hay días en los que tienes menos energía. Hoy puedes elegir algo sencillo que te ayude, como beber agua, sentarte un rato o pedir compañía.",
+    focus: "Lo que necesitas ahora y una acción que puedas hacer hoy.",
+    whyItMatters: "Atender una necesidad sencilla puede ayudarte a cuidarte, aunque otras tareas queden para después.",
+    presence: "Observa si tienes sed, hambre o ganas de descansar. Puedes empezar por una de esas señales. Deja que el aire entre y salga naturalmente.",
+    insight: "Lo que puedes hacer cambia de un día a otro. Si hoy tienes menos energía, puedes elegir una tarea más pequeña o descansar. Por ejemplo, servirte agua puede ser lo que necesitas ahora.",
     perspectives: [
-      "Un «sí puedo» puede ser beber agua, abrir una ventana, responder un mensaje importante, pedir ayuda o dejar una tarea para mañana. También puede ser reconocer que necesitas atención profesional o compañía.",
-      "La medida del gesto no es productividad, sino apoyo. La pregunta no es cuánto logras, sino si esa elección te acerca un poco a lo que necesitas.",
+      "Pedir compañía también es una opción. Puedes decir: «¿Tienes un momento para hablar conmigo?»."
     ],
     prompts: [
-      "¿En qué parte del día me estoy pidiendo más de lo que hoy puedo sostener?",
-      "¿Qué necesidad básica podría atender primero?",
-      "¿Cuál es el gesto más pequeño que todavía se siente posible y amable?",
+      "¿Qué necesito ahora?",
+      "¿Qué podría hacer en unos minutos para atenderlo?",
+      "¿Me ayudaría pedir algo a alguien?"
     ],
-    action:
-      "Elige un gesto de menos de cinco minutos. Hazlo sin usarlo como prueba de que ahora debes hacer más. Cuando termines, permite que sea suficiente por este momento.",
-    seed: "Hoy basta con el paso que sí está a mi alcance.",
-    mentorNote:
-      "Lo pequeño no es una versión menor de tu camino. A veces es la forma más honesta de seguir de tu lado.",
-    closing: "Hoy cuenta lo que puedes sostener, no lo que la exigencia quisiera imponerte.",
+    action: "Elige una acción sencilla para atender una necesidad de hoy.",
+    actionSteps: [
+      "Reconoce una necesidad: beber agua, comer, descansar o hablar con alguien.",
+      "Elige una acción de menos de cinco minutos. Por ejemplo: «Voy a servirme un vaso de agua».",
+      "Hazla si puedes ahora. Si necesitas ayuda, piensa a quién podrías pedírsela.",
+      "Al terminar, observa cómo estás. Puedes reconocer lo que hiciste sin añadir otra tarea."
+    ],
+    durationLabel: "Menos de 5 minutos",
+    seed: "Puedo atender una necesidad de hoy.",
+    mentorNote: "Puedes ajustar lo que haces a cómo te sientes hoy. Descansar y pedir ayuda también son opciones.",
+    closing: "Puedes terminar después de esa acción, aunque tu ánimo siga igual que al comenzar.",
     integrationInvitation: {
-      title: "Encuentra lo posible",
-      text: "En un momento de poca energía, mira qué gesto cabe de verdad: beber agua, sentarte, abrir una ventana, pedir compañía o dejar una tarea para más tarde. Elige uno, solo si te ofrece apoyo.",
-      reminder: "Hoy cuenta lo que sí está a mi alcance.",
-    },
+      title: "Atiende algo sencillo",
+      text: "Durante el día, pregúntate: «¿Qué necesito ahora?». Puedes beber agua, cambiar de postura, descansar o pedir compañía. Elige una sola cosa.",
+      reminder: "Puedo atender lo que necesito ahora."
+    }
   },
   {
     id: "discovery-10",
@@ -313,32 +341,36 @@ export const discoveries: CatalogItem[] = [
     index: 9,
     number: 10,
     kind: "discovery",
-    title: "Afloja la necesidad de ganar",
-    description: "En una conversación tensa, querer tener la última palabra puede ocultar algo más sensible. Hoy vas a mirar qué deseas cuidar antes de responder.",
-    focus: "El impulso de demostrar, corregir o cerrar una discusión, y la necesidad que podría estar intentando defender.",
-    whyItMatters: "Responder desde la urgencia puede alejarte de lo que realmente importa: un límite, una reparación, comprensión o paz. Hacer una pausa amplía tus opciones.",
-    presence: "Recuerda una conversación de intensidad manejable. Nota qué parte de tu cuerpo se prepara para responder. Afloja la mandíbula o las manos, si hacerlo resulta cómodo.",
-    insight:
-      "La necesidad de ganar no siempre nace de arrogancia. Puede proteger el miedo a no ser vista, a que tu dolor sea invalidado o a perder control. Reconocerlo permite hablar desde un lugar más claro.",
+    title: "Prepara lo que quieres decir",
+    description: "Antes de una conversación, puedes pensar qué quieres expresar. Hoy vas a preparar una frase que diga cómo estás y qué necesitas.",
+    focus: "Lo que quieres que otra persona entienda y una forma clara de decirlo.",
+    whyItMatters: "Preparar tus palabras puede ayudarte a expresar una necesidad, hacer una pregunta o pedir tiempo para responder.",
+    presence: "Elige una conversación de todos los días. Vas a practicar a solas. Puedes decidir después si quieres hablar con esa persona.",
+    insight: "Puedes decir «me preocupa este cambio de horario y quisiera que lo habláramos». La frase cuenta cómo estás y qué pides. También puedes decir «necesito un momento para pensar» si prefieres responder más tarde.",
     perspectives: [
-      "Aflojar no significa aceptar maltrato ni renunciar a tu verdad. Puedes sostener un límite firme sin convertir la conversación en una competencia.",
-      "Antes de responder, puedes elegir entre aclarar, preguntar, poner un límite, pedir tiempo o guardar silencio. Ninguna opción necesita demostrar quién vale más.",
+      "Puedes expresar lo que necesitas y escuchar la respuesta de la otra persona. Si hablar no se siente seguro, puedes tomar distancia y pedir ayuda."
     ],
     prompts: [
-      "¿Qué temo que signifique para mí no tener la última palabra?",
-      "¿Qué necesidad o herida estoy intentando proteger?",
-      "¿Qué quiero cuidar de verdad en esta conversación?",
+      "¿Qué quiero que la otra persona comprenda?",
+      "¿Cómo me siento al pensar en esa conversación?",
+      "¿Qué quiero pedir o preguntar?"
     ],
-    action: "Antes de una respuesta, deja pasar una respiración natural y completa: «quiero cuidar...». Elige después si hablar, preguntar, pedir una pausa o no continuar el intercambio.",
-    seed: "Mi paz puede importar más que cerrar una discusión.",
-    mentorNote:
-      "Tu firmeza no depende de elevar la voz ni de convencer. Puede aparecer en una frase clara, un límite o una retirada a tiempo.",
-    closing: "No todas las conversaciones necesitan una vencedora; algunas necesitan más verdad y más aire.",
+    action: "Prueba una frase a solas. Puedes pensarla, decirla o escribirla.",
+    actionSteps: [
+      "Elige una situación sencilla, como un cambio de horario que quieras conversar.",
+      "Di cómo te sientes: «Me preocupa que cambiemos la hora a último momento».",
+      "Añade una petición: «¿Podemos avisarnos con más tiempo?».",
+      "Repite la frase con tus propias palabras. Elige si quieres usarla después, cambiarla o pedir tiempo antes de hablar."
+    ],
+    durationLabel: "De 2 a 3 minutos",
+    seed: "Puedo decir cómo me siento y qué necesito.",
+    mentorNote: "Puedes hablar con claridad y tomarte tiempo para responder. Tú decides cuándo conversar.",
+    closing: "Puedes terminar con una frase preparada y elegir más adelante si quieres compartirla.",
     integrationInvitation: {
-      title: "Deja aire en la conversación",
-      text: "En una conversación tensa, deja pasar unos segundos antes de responder. Pregúntate qué quieres cuidar y elige entre hablar, preguntar o guardar silencio. Tener claridad puede importar más que cerrar el intercambio.",
-      reminder: "No necesito cerrar cada discusión.",
-    },
+      title: "Piensa antes de responder",
+      text: "Antes de responder en una conversación importante, deja entrar y salir el aire una vez. Pregúntate qué quieres decir. Puedes hablar, preguntar o pedir un momento.",
+      reminder: "Puedo tomarme tiempo para responder."
+    }
   },
   {
     id: "discovery-11",
@@ -346,33 +378,36 @@ export const discoveries: CatalogItem[] = [
     index: 10,
     number: 11,
     kind: "discovery",
-    title: "Libera el peso de culpar",
-    description: "Reconocer un daño y cuidar tu presente pueden convivir. Hoy no se trata de justificar lo ocurrido, sino de escuchar qué necesita la parte que sigue cargándolo.",
-    focus: "El reproche que vuelve una y otra vez, la emoción que vive debajo y las necesidades actuales que quizá están pidiendo atención.",
-    whyItMatters: "La culpa dirigida hacia ti o hacia otra persona puede mantenerte unida al momento doloroso. Nombrar la necesidad ayuda a recuperar una parte de tu energía y tu capacidad de cuidarte.",
-    presence: "Elige una situación que puedas mirar sin desbordarte. Si notas que se vuelve demasiado intensa, detente, mira a tu alrededor y busca compañía o apoyo profesional.",
-    insight:
-      "Culpar puede ofrecer una sensación momentánea de orden: alguien fue responsable, algo no debió ocurrir. Esa claridad puede ser importante. El peso aparece cuando el reproche se vuelve el único lugar desde el que te relacionas con lo vivido.",
+    title: "Reconoce qué necesitas ahora",
+    description: "Al recordar una situación que te afectó, puedes reconocer cómo te sientes hoy. Después puedes elegir qué ayuda o cuidado necesitas.",
+    focus: "Lo que sientes al recordar una situación y lo que necesitas en este momento.",
+    whyItMatters: "Reconocer una necesidad puede ayudarte a pedir compañía, descansar o decidir qué quieres conversar.",
+    presence: "Elige una situación de todos los días que te resulte cómodo recordar. Puedes dejar otros recuerdos para un momento en que tengas compañía.",
+    insight: "Por ejemplo, alguien cambió un acuerdo y eso te molestó. Puedes reconocer lo que pasó y decir: «Hoy necesito aclarar qué acordamos». También puedes necesitar descanso o tiempo antes de hablar.",
     perspectives: [
-      "Liberar peso no equivale a perdonar, reconciliarte ni olvidar. Puedes conservar la memoria, la dignidad y los límites mientras atiendes lo que necesitas hoy.",
-      "Debajo del reproche quizá haya tristeza, temor, enojo o una necesidad de reparación. No todas las reparaciones dependen de ti, pero algunas formas de cuidado presente sí pueden estar en tus manos.",
+      "Tú eliges si quieres hablar, tomar distancia o pedir compañía. Puedes atender lo que necesitas ahora."
     ],
     prompts: [
-      "¿Qué emoción aparece debajo del reproche?",
-      "¿Qué necesidad actual está pidiendo atención: distancia, claridad, reparación, descanso o apoyo?",
-      "¿Qué límite o gesto de cuidado sí depende de mí hoy?",
+      "¿Qué siento al recordar esa situación?",
+      "¿Qué necesito hoy?",
+      "¿Qué puedo pedir o hacer para atender esa necesidad?"
     ],
-    action:
-      "Completa: «lo ocurrido importó, y hoy necesito...». Elige una necesidad y tradúcela en un gesto seguro: pedir apoyo, tomar distancia, escribir para ti o dejar una decisión para más adelante.",
-    seed: "Puedo protegerme y hacer espacio para la paz.",
-    mentorNote:
-      "No necesitas suavizar la verdad para tratarte con compasión. Tu historia y tus límites merecen respeto.",
-    closing: "Puedes dejar de alimentar el peso sin dejar de honrar lo que viviste.",
+    action: "Piensa en una necesidad de hoy y elige cómo atenderla.",
+    actionSteps: [
+      "Recuerda una situación cotidiana que te resulte cómoda para este ejercicio.",
+      "Termina esta frase: «Hoy necesito...». Por ejemplo: «Hoy necesito descansar antes de decidir».",
+      "Elige una acción, como hacer una pausa, pedir compañía o preparar una pregunta.",
+      "Vuelve a observar el lugar donde estás. Si recordar la situación te hace sentir peor, puedes parar y buscar compañía."
+    ],
+    durationLabel: "De 1 a 2 minutos",
+    seed: "Puedo atender lo que necesito hoy.",
+    mentorNote: "Lo que viviste merece respeto. Puedes elegir qué contar, a quién y en qué momento.",
+    closing: "Puedes terminar el ejercicio con una necesidad reconocida, aunque todavía no sepas cómo atenderla.",
     integrationInvitation: {
-      title: "Cuida lo que necesitas",
-      text: "Si un reproche vuelve a tu mente, nombra en silencio qué necesitas ahora: distancia, claridad, descanso, apoyo o un límite. No hace falta justificar lo ocurrido para atender esa necesidad.",
-      reminder: "Reconocer el daño y cuidar mi presente pueden convivir.",
-    },
+      title: "Pregunta qué necesitas",
+      text: "Si vuelves a pensar en una situación que te afectó, pregúntate: «¿Qué necesito ahora?». Puede ser descanso, compañía, distancia o una conversación.",
+      reminder: "Puedo elegir cómo cuidarme hoy."
+    }
   },
   {
     id: "discovery-12",
@@ -380,32 +415,36 @@ export const discoveries: CatalogItem[] = [
     index: 11,
     number: 12,
     kind: "discovery",
-    title: "Querer sin agarrar",
-    description: "Cuando algo importa mucho, el miedo a perderlo puede volver más fuerte el impulso de controlar. Hoy vas a explorar una forma de querer que también deje respirar.",
-    focus: "La diferencia entre cuidar un vínculo o un proyecto y pedirle que garantice toda tu seguridad o bienestar.",
-    whyItMatters: "El control promete certeza, pero puede aumentar la tensión y alejarnos de la experiencia que deseamos cuidar. Dar espacio permite relacionarte desde elección, no solo desde miedo.",
-    presence: "Piensa en algo valioso para ti. Nota la gratitud por su presencia antes de pensar en cuánto durará o en cómo asegurarla.",
-    insight:
-      "Apegarte no significa que ames mal. Muchas veces muestra cuánto valoras algo y cuánto deseas sentir seguridad. La invitación es reconocer esa necesidad sin poner todo su peso sobre una persona, un resultado o una etapa.",
+    title: "Cuida lo que quieres y cuida de ti",
+    description: "Puedes querer a una persona o disfrutar de un proyecto y también dedicarte tiempo a ti. Hoy vas a pensar cómo atender ambas cosas.",
+    focus: "Algo que valoras y una necesidad tuya que también quieras atender.",
+    whyItMatters: "Reconocer ambas cosas puede ayudarte a decidir cuánto tiempo dedicar, qué pedir y qué quieres reservar para ti.",
+    presence: "Piensa en una persona, una actividad o un proyecto que valores. Elige algo que te resulte cómodo recordar hoy.",
+    insight: "Puedes disfrutar de conversar con alguien y necesitar descansar después. Puedes querer terminar un proyecto y pedir más tiempo. Decir lo que necesitas permite que la otra persona lo conozca.",
     perspectives: [
-      "Querer con espacio incluye expresar necesidades, hacer acuerdos y poner límites. No es indiferencia. Es recordar que cada persona y cada proceso conservan movimiento propio.",
-      "También puedes cultivar dentro y alrededor de ti varias fuentes de apoyo. Así, lo que amas deja de cargar con la tarea imposible de sostener todo tu bienestar.",
+      "Puedes ofrecer algo y también preguntar si le viene bien a la otra persona. Cada una puede expresar lo que necesita."
     ],
     prompts: [
-      "¿Qué temo perder y qué necesidad profunda representa para mí?",
-      "¿Dónde estoy confundiendo cuidado con control?",
-      "¿Qué parte de la seguridad que busco puedo construir en mí o compartir con una red más amplia?",
+      "¿Qué valoro de esa persona, actividad o proyecto?",
+      "¿Qué quiero ofrecer y cuánto tiempo tengo hoy?",
+      "¿Qué necesito reservar para mí?"
     ],
-    action: "Agradece en silencio algo que valoras. Después afloja una expectativa pequeña: permite que ese vínculo, proyecto o momento sea importante sin pedirle que asegure todo el futuro.",
-    seed: "Puedo amar y al mismo tiempo dejar respirar.",
-    mentorNote:
-      "El espacio no reduce el amor. Puede volverlo más honesto, más libre y más capaz de sostener límites.",
-    closing: "Querer también puede ser agradecer, cuidar y permitir movimiento.",
+    action: "Piensa en algo que quieras cuidar y en un cuidado para ti.",
+    actionSteps: [
+      "Elige una relación o actividad que valores. Puede ser conversar con una amiga o dedicarte a una afición.",
+      "Nombra qué disfrutas de ella. Por ejemplo: «Me gusta compartir tiempo con mi amiga».",
+      "Reconoce qué necesitas tú. Por ejemplo: «Hoy también necesito acostarme temprano».",
+      "Elige cómo atender ambas cosas: proponer una llamada más corta, cambiar de horario o reservar tiempo para otro día."
+    ],
+    durationLabel: "De 2 a 3 minutos",
+    seed: "Puedo querer a alguien y atender mis necesidades.",
+    mentorNote: "Puedes expresar cariño y decir cuánto tiempo tienes. Ambas cosas pueden formar parte de una relación.",
+    closing: "Puedes terminar con una idea de qué quieres ofrecer y qué necesitas para ti hoy.",
     integrationInvitation: {
-      title: "Agradece sin sujetar",
-      text: "Cuando disfrutes de una persona, un proyecto o algo que valoras, reconoce por un instante lo que aporta a tu vida. Déjalo ser valioso sin pedirle que asegure todo tu bienestar ni que permanezca igual.",
-      reminder: "Querer también puede dejar espacio.",
-    },
+      title: "Ten en cuenta tus necesidades",
+      text: "Al organizar tiempo con alguien o con un proyecto, pregúntate cuánto tiempo quieres dedicar y qué necesitas para ti. Puedes expresar ambas cosas.",
+      reminder: "Mis necesidades también cuentan al hacer planes."
+    }
   },
   {
     id: "discovery-13",
@@ -413,33 +452,36 @@ export const discoveries: CatalogItem[] = [
     index: 12,
     number: 13,
     kind: "discovery",
-    title: "Dale espacio a la tristeza",
-    description: "La tristeza no necesita ser apresurada ni convertida en una lección. Hoy vas a acercarte solo hasta donde resulte seguro y a recordar que sentir no significa hacerlo todo a solas.",
-    focus: "Una tristeza concreta y manejable, la forma en que aparece y el tipo de cuidado o compañía que podría necesitar.",
-    whyItMatters: "Ignorar la tristeza puede aumentar el esfuerzo de sostenerla. Darle un lugar acotado permite reconocerla sin pedirte que permanezcas dentro de ella.",
-    presence: "Antes de acercarte, mira el espacio donde estás y confirma que se siente suficientemente seguro. Recuerda que puedes detenerte en cualquier momento.",
-    insight:
-      "La tristeza puede llegar como llanto, cansancio, silencio, irritación o una sensación difícil de nombrar. No hay una manera correcta de sentirla ni un tiempo exacto para que cambie.",
+    title: "Acompáñate cuando sientas tristeza",
+    description: "Si hoy sientes tristeza, puedes reconocerla durante un momento y elegir cómo cuidarte. Puedes hacerlo con compañía y parar cuando quieras.",
+    focus: "Cómo te sientes y qué te ayudaría a estar acompañada o más cómoda ahora.",
+    whyItMatters: "Reconocer la tristeza puede ayudarte a decir cómo estás y a pedir la compañía que necesitas.",
+    presence: "Busca un lugar donde te sientas cómoda. Observa tres cosas a tu alrededor. Puedes tener cerca agua o el teléfono de alguien con quien quieras hablar.",
+    insight: "La tristeza puede sentirse como ganas de llorar, cansancio o pocas ganas de hablar. Cada persona la vive de forma distinta. Puedes reconocer cómo te sientes y elegir cuánto tiempo dedicar a este ejercicio.",
     perspectives: [
-      "Puedes darle un espacio pequeño: unos minutos junto a una ventana, una canción que te acompañe o una conversación con alguien de confianza. Poner un borde también es cuidado.",
-      "Si la emoción se vuelve intensa, persiste o afecta tu seguridad, buscar atención psicológica o médica es una forma responsable de acompañarte. Esta práctica no sustituye ese apoyo.",
+      "Si la tristeza continúa y te cuesta hacer tus actividades de cada día, pedir atención profesional también es una forma de cuidarte."
     ],
     prompts: [
-      "¿Qué tristeza específica puedo reconocer hoy sin abrir todo a la vez?",
-      "¿Cómo me avisa mi cuerpo que necesita una pausa?",
-      "¿Qué compañía, límite o gesto de cuidado haría este momento más seguro?",
+      "¿Cómo se siente hoy la tristeza en mí?",
+      "¿Qué me haría estar más cómoda ahora?",
+      "¿Con quién me gustaría conversar?"
     ],
-    action:
-      "Si te resulta cómodo, dedica unos minutos a estar con una parte pequeña de la tristeza. Puedes apoyar una mano en el pecho, tomar agua o mirar por la ventana. Termina cuando lo necesites y busca compañía si se intensifica.",
-    seed: "Sentir tristeza no reduce mi valor.",
-    mentorNote:
-      "No tienes que convertir el dolor en fortaleza para que sea digno de cuidado. Puedes recibir apoyo tal como estás.",
-    closing: "La tristeza puede tener un lugar sin tener que ocuparlo todo.",
+    action: "Solo si te apetece, dedica unos segundos a reconocer cómo estás.",
+    actionSteps: [
+      "Siéntate o elige una postura cómoda. Puedes mantener los ojos abiertos.",
+      "Di en silencio: «Hoy siento tristeza». Puedes añadir por qué, si quieres, o dejar la frase así.",
+      "Quédate unos segundos, o hasta un minuto si te viene bien. Puedes mirar por la ventana o sostener una taza.",
+      "Para terminar, observa tres objetos del lugar. Elige si quieres beber agua, descansar o hablar con alguien. Si te sientes peor, para y busca compañía."
+    ],
+    durationLabel: "Unos segundos o hasta 1 minuto",
+    seed: "Puedo pedir compañía cuando la necesito.",
+    mentorNote: "Puedes elegir qué contar y con quién hablar. No tienes que contar todo para recibir compañía.",
+    closing: "Puedes terminar cuando lo necesites y buscar la ayuda que te venga bien hoy.",
     integrationInvitation: {
-      title: "Un lugar para la tristeza",
-      text: "Si te resulta cómodo y seguro, puedes observar la tristeza cuando se asome. Quizá sea mientras tomas agua, miras por la ventana o apoyas una mano sobre el pecho. Puedes detenerte en cualquier momento. Si se vuelve intensa, busca compañía o atención profesional.",
-      reminder: "Sentir no significa cargar con todo a solas.",
-    },
+      title: "Elige cómo acompañarte",
+      text: "Si notas tristeza durante el día, puedes preguntarte qué te ayudaría ahora. Tal vez sea sentarte, beber agua o hablar con alguien. Puedes pedir compañía.",
+      reminder: "Puedo dejarme acompañar."
+    }
   },
   {
     id: "discovery-14",
@@ -447,32 +489,36 @@ export const discoveries: CatalogItem[] = [
     index: 13,
     number: 14,
     kind: "discovery",
-    title: "Encuentra apoyo en ti",
-    description: "Apoyarte no significa resolver sola. Significa reconocer qué puedes ofrecerte y cuándo una forma de cuidado también es pedir compañía con claridad.",
-    focus: "Los recursos internos que ya has cultivado y la posibilidad de combinarlos con apoyo externo sin perder tu centro.",
-    whyItMatters: "Cuando todo el sostén parece venir de afuera, la incertidumbre crece. Cuando todo debe venir de ti, aparece aislamiento. Integrar ambas fuentes crea una base más humana.",
-    presence: "Recuerda una ocasión en la que atravesaste algo difícil. No busques una historia heroica. Nota un recurso sencillo que estuvo presente: paciencia, humor, pedir ayuda, descansar o volver a intentar.",
-    insight:
-      "El apoyo interno se construye en la forma en que te hablas, respetas tus límites y reconoces tus necesidades. No es autosuficiencia perfecta; es una relación más confiable contigo.",
+    title: "Reconoce cómo puedes ayudarte",
+    description: "Hoy vas a recordar algo que te haya ayudado antes. Después puedes elegir qué puedes hacer tú y qué ayuda quieres pedir a otra persona.",
+    focus: "Una forma de ayudarte que ya conoces y alguien a quien puedas pedir compañía o información.",
+    whyItMatters: "Recordar lo que te ha ayudado antes puede darte ideas para atender lo que necesitas hoy.",
+    presence: "Recuerda un momento en que algo te ayudó. Puede haber sido descansar, preguntar, conversar o dedicarte a una actividad que disfrutas.",
+    insight: "Ayudarte puede ser organizar una tarea, descansar o hablarte con amabilidad. También puedes necesitar lo que sabe otra persona o su compañía. Puedes combinar ambas formas de ayuda.",
     perspectives: [
-      "Pedir ayuda desde ese lugar no te hace menos capaz. Puede ser una expresión de claridad: sabes qué necesitas, qué puedes ofrecerte y qué requiere la presencia de otra persona.",
-      "A veces el primer apoyo es dejar de hablarte como enemiga. Otras veces es hacer una llamada, buscar orientación profesional o decir con sencillez: «hoy necesito compañía».",
+      "Pedir ayuda puede ser una decisión concreta: reconoces qué necesitas y se lo dices a alguien."
     ],
     prompts: [
-      "¿Qué busco con mucha fuerza afuera y qué necesidad revela?",
-      "¿Qué parte de ese cuidado puedo ofrecerme de forma concreta?",
-      "¿Qué apoyo externo sería sano pedir, y cómo podría pedirlo con claridad?",
+      "¿Qué me ha ayudado en otras ocasiones?",
+      "¿Qué puedo hacer hoy para ayudarme?",
+      "¿A quién podría pedir compañía o información?"
     ],
-    action: "Completa dos frases: «hoy puedo ofrecerme...» y «hoy puedo dejarme acompañar en...». Elige solo uno de esos gestos para llevar a la práctica.",
-    seed: "Puedo recibir amor sin perderme de mí.",
-    mentorNote:
-      "Sostenerte no es cerrarte. Tu autonomía y tu capacidad de recibir pueden crecer juntas.",
-    closing: "Volver a ti también puede incluir abrir la puerta a una compañía segura.",
+    action: "Piensa en una forma de ayudarte hoy y en una ayuda que podrías pedir.",
+    actionSteps: [
+      "Recuerda algo que te haya servido antes, como preparar una lista o descansar unos minutos.",
+      "Termina: «Hoy puedo ayudarme con...». Elige algo que puedas hacer.",
+      "Termina: «Podría pedir ayuda para...». Piensa a quién podrías pedírsela.",
+      "Elige una de las dos opciones. Si decides pedir ayuda, prepara una frase como «¿Puedes escucharme unos minutos?»."
+    ],
+    durationLabel: "De 1 a 2 minutos",
+    seed: "Puedo ayudarme y pedir ayuda.",
+    mentorNote: "Puedes hacer algunas cosas por ti misma y contar con otras personas para las demás.",
+    closing: "Puedes terminar con una acción que quieras probar o con una petición que quieras hacer.",
     integrationInvitation: {
-      title: "Apoyo propio y compartido",
-      text: "Antes de buscar una respuesta afuera, pregúntate: «¿Qué puedo ofrecerme en este momento?». Tal vez sea hablarte con menos dureza, tomar distancia o pedir ayuda con claridad. Sostenerte también puede incluir compañía.",
-      reminder: "Apoyarme también incluye dejarme acompañar.",
-    },
+      title: "Recuerda una ayuda que conoces",
+      text: "Cuando necesites ayuda, recuerda qué te sirvió antes. Puede ser descansar, organizarte o conversar. Elige algo que puedas hacer o pedir hoy.",
+      reminder: "Puedo usar lo que he aprendido y pedir ayuda."
+    }
   },
   {
     id: "discovery-15",
@@ -480,33 +526,37 @@ export const discoveries: CatalogItem[] = [
     index: 14,
     number: 15,
     kind: "discovery",
-    title: "Mira al miedo con ternura",
-    description: "Llegas al último descubrimiento sin tener que haber dejado atrás el miedo. Hoy vas a mirarlo como una señal que puede acompañarte, no como quien decide por ti.",
-    focus: "Un miedo concreto, lo que intenta proteger y el paso más seguro que aún respeta algo importante para ti.",
-    whyItMatters: "Esperar a que el miedo desaparezca puede dejar decisiones valiosas en pausa. Escucharlo con ternura permite incluir su información sin entregarle toda la dirección.",
-    presence: "Mira hacia atrás por un instante y reconoce que llegaste hasta aquí. Nota el apoyo del suelo y permite que el cuerpo reciba ese dato antes de pensar en el próximo paso.",
-    insight:
-      "El miedo intenta anticipar dolor, pérdida o incertidumbre. A veces señala un riesgo real; otras veces reacciona a experiencias anteriores. Escucharlo con calma ayuda a distinguir protección de parálisis.",
+    title: "Acompáñate cuando sientas miedo",
+    description: "Si una decisión pequeña te da miedo, puedes pensar qué necesitas saber antes de elegir. Puede ayudarte preparar una pregunta, esperar o pedir compañía.",
+    focus: "Una preocupación de hoy y la información o compañía que necesitas antes de decidir.",
+    whyItMatters: "Saber qué te preocupa puede ayudarte a elegir una acción que te resulte segura y posible.",
+    presence: "Observa el lugar donde estás y nota el apoyo de tus pies. Recuerda una decisión sencilla, como preguntar por una actividad nueva.",
+    insight: "Puedes querer probar algo y sentir miedo al mismo tiempo. Por ejemplo, te interesa una clase, pero te preocupa no conocer a nadie. Puedes preguntar cómo es la clase o pedir a alguien que te acompañe.",
     perspectives: [
-      "La ternura no vuelve pequeño el desafío. Cambia la forma en que te acompañas frente a él. En lugar de «no debería sentir esto», puedes preguntar: «¿qué necesita esta parte para avanzar con más seguridad?».",
-      "Un paso valiente puede ser acercarte, hacer una pregunta, pedir ayuda, reunir información, poner un límite o esperar. Lo valiente no siempre es avanzar rápido; es elegir con presencia.",
+      "Si hay un peligro real, lo primero es buscar un lugar seguro y pedir ayuda. Este ejercicio se propone para decisiones cotidianas."
     ],
     prompts: [
-      "¿Qué miedo específico está pidiendo ser escuchado?",
-      "¿Qué intenta proteger y qué información útil trae?",
-      "¿Cuál es el movimiento más seguro que todavía honra lo importante para mí?",
+      "¿Qué me preocupa de esta decisión?",
+      "¿Qué información me gustaría tener?",
+      "¿Qué me ayudaría a decidir con más calma?"
     ],
-    action: "Nombra el miedo y responde: «entiendo que intentas cuidarme». Después elige un paso pequeño con una condición de seguridad clara. Si todavía no es momento, define qué información o apoyo necesitas antes.",
-    seed: "Puedo avanzar con suavidad y presencia.",
-    mentorNote:
-      "No llegaste aquí para convertirte en alguien sin miedo. Llegaste para relacionarte contigo con más verdad, cuidado y libertad de elección.",
-    closing: "Tu recorrido no termina en una respuesta perfecta. Continúa en la forma en que eliges acompañarte.",
+    action: "Elige una decisión pequeña. Puedes prepararte para ella sin tener que resolverla ahora.",
+    actionSteps: [
+      "Nombra la decisión. Por ejemplo: «Quiero preguntar por una clase nueva».",
+      "Di qué te preocupa: «Me preocupa no conocer a nadie», por ejemplo.",
+      "Elige qué te ayudaría: preguntar cómo es la clase, conocer el lugar o pedir compañía.",
+      "Decide si quieres hacer eso hoy o darte más tiempo. Al completar este descubrimiento podrás volver a tus respuestas iniciales y conocer las doce prácticas."
+    ],
+    durationLabel: "De 2 a 3 minutos",
+    seed: "Puedo preguntar, pedir ayuda y decidir a mi ritmo.",
+    mentorNote: "Gracias por dedicarte estos quince encuentros. Puedes volver a los ejercicios que te hayan servido y seguir practicando.",
+    closing: "Puedes reconocer qué aprendiste, qué quieres repetir y qué ayuda te gustaría recibir ahora.",
     integrationInvitation: {
-      title: "Un paso seguro",
-      text: "Ante una decisión pequeña que te dé miedo, puedes notar dónde se siente en el cuerpo, solo si hacerlo te resulta cómodo. Luego busca el movimiento más seguro que aún respete lo importante para ti: acercarte un poco, hacer una pregunta o esperar más información.",
-      reminder: "El miedo puede venir conmigo; el paso lo elijo yo.",
-    },
-  },
+      title: "Prepara una decisión pequeña",
+      text: "Ante algo nuevo, pregúntate qué necesitas saber y qué ayuda te vendría bien. Puedes hacer una pregunta, pedir compañía o darte más tiempo para decidir.",
+      reminder: "Puedo elegir qué necesito antes de decidir."
+    }
+  }
 ];
 
 export const depthPractices: CatalogItem[] = [
@@ -516,17 +566,24 @@ export const depthPractices: CatalogItem[] = [
     index: 0,
     number: 1,
     kind: "extra",
-    title: "Desear sin apretar",
-    description: "Cuida tus metas sin pedirles que definan tu valor.",
-    insight:
-      "Querer algo puede inspirarte. El peso aparece cuando la paz queda atada al resultado.",
+    title: "Elige una acción para tu meta",
+    description: "Piensa en algo que quieras hacer. Hoy vas a elegir una acción pequeña que dependa de ti.",
+    presence: "Acomódate y piensa en una meta de todos los días, como retomar las caminatas o aprender una receta.",
+    insight: "Para acercarte a una meta puedes elegir algo que puedas hacer hoy. Si quieres caminar mañana, por ejemplo, hoy puedes preparar el calzado. Hay otras cosas, como el clima, que conocerás después.",
     prompts: [
-      "¿Qué persigo como si mi bienestar dependiera de ello?",
-      "¿Cómo actuaría hoy con menos necesidad de controlar?",
+      "¿Qué me gustaría hacer?",
+      "¿Qué puedo preparar o hacer hoy?"
     ],
-    action: "Da un paso hacia tu meta y deja abierto el resultado.",
-    seed: "Puedo desear sin quedar atrapada.",
-    mentorNote: "Puedes acercarte a lo que deseas sin poner tu valor en manos del resultado.",
+    action: "Elige una acción de menos de cinco minutos.",
+    actionSteps: [
+      "Nombra una meta concreta: «Quiero volver a caminar por las tardes», por ejemplo.",
+      "Piensa en algo que puedas hacer tú, como preparar el calzado o preguntar un horario.",
+      "Elige una sola acción y hazla si tienes tiempo ahora.",
+      "Al terminar, reconoce qué preparaste. Puedes decidir más adelante cuándo continuar."
+    ],
+    durationLabel: "Menos de 5 minutos",
+    seed: "Puedo hacer una parte hoy.",
+    mentorNote: "Puedes acercarte a lo que quieres con acciones pequeñas y ajustar tus planes cuando lo necesites."
   },
   {
     id: "extra-02",
@@ -534,17 +591,24 @@ export const depthPractices: CatalogItem[] = [
     index: 1,
     number: 2,
     kind: "extra",
-    title: "Enfado que no manda",
-    description: "Escucha la fuerza de la emoción antes de elegir una acción.",
-    insight:
-      "El enfado puede señalar un límite, una pena o una necesidad. Sentirlo no decide lo que haces después.",
+    title: "Reconoce qué necesitas cuando te enojas",
+    description: "Si sientes enojo, puedes tomarte un momento para pensar qué necesitas antes de responder.",
+    presence: "Elige una molestia de todos los días que puedas recordar con comodidad. Vas a practicar a solas.",
+    insight: "El enojo puede aparecer cuando algo te importa. Por ejemplo, si una llamada interrumpe tu descanso, quizá necesites acordar otro horario. Puedes reconocer lo que sientes y elegir cómo expresarlo.",
     prompts: [
-      "¿Qué necesidad vive debajo de mi enfado?",
-      "¿Qué límite claro puedo expresar con respeto?",
+      "¿Qué me molestó de esa situación?",
+      "¿Qué me gustaría pedir o aclarar?"
     ],
-    action: "Espera una respiración y elige una frase breve desde tu experiencia.",
-    seed: "Puedo sentir fuerza y elegir cuidado.",
-    mentorNote: "Tu firmeza puede tener fuerza y, al mismo tiempo, conservar el cuidado.",
+    action: "Prepara una frase para decir cómo te sientes y qué necesitas.",
+    actionSteps: [
+      "Recuerda la situación con pocas palabras. Por ejemplo: «Me llamaron mientras descansaba».",
+      "Deja que el aire entre y salga naturalmente una vez.",
+      "Prueba una frase: «Me molestó la llamada a esa hora. ¿Podemos hablar más tarde?».",
+      "Cambia las palabras para que se parezcan a las tuyas. Puedes usarlas después o pedir más tiempo antes de hablar."
+    ],
+    durationLabel: "De 2 a 3 minutos",
+    seed: "Puedo decir qué necesito antes de responder.",
+    mentorNote: "Puedes sentir enojo y tomarte tiempo para elegir tus palabras. Si hablar no es seguro, puedes tomar distancia y pedir ayuda."
   },
   {
     id: "extra-03",
@@ -552,17 +616,24 @@ export const depthPractices: CatalogItem[] = [
     index: 2,
     number: 3,
     kind: "extra",
-    title: "Aflojar la armadura",
-    description: "Tu valor no depende de parecer invulnerable.",
-    insight:
-      "La necesidad de impresionar o evitar errores suele proteger una parte sensible. Reconocerla abre aprendizaje.",
+    title: "Date tiempo para aprender",
+    description: "Elige algo que estés aprendiendo. Hoy puedes reconocer qué sabes hacer y preparar una pregunta sobre lo que te falta.",
+    presence: "Piensa en una actividad sencilla, como usar una función del teléfono o preparar una receta.",
+    insight: "Cuando aprendes algo, hay partes que ya conoces y otras que todavía necesitas practicar. Una pregunta concreta puede ayudarte a continuar. Por ejemplo: «¿Dónde encuentro la nota que escribí?».",
     prompts: [
-      "¿Dónde necesito quedar por encima?",
-      "¿Qué libertad aparece si admito que estoy aprendiendo?",
+      "¿Qué estoy aprendiendo?",
+      "¿Qué me gustaría preguntar o practicar?"
     ],
-    action: "Reconoce algo que aún estás aprendiendo y respira.",
-    seed: "Mi valor no necesita una armadura.",
-    mentorNote: "Reconocer que estás aprendiendo puede acercarte a una forma más libre de estar contigo.",
+    action: "Elige una duda y piensa cómo podrías encontrar una respuesta.",
+    actionSteps: [
+      "Termina esta frase: «Estoy aprendiendo a...».",
+      "Reconoce una parte que ya sabes hacer, aunque sea pequeña.",
+      "Prepara una pregunta sobre lo que aún quieres aprender. Intenta preguntar por una sola cosa.",
+      "Decide si quieres preguntar a alguien, volver a leer una indicación o practicar otro día."
+    ],
+    durationLabel: "De 1 a 2 minutos",
+    seed: "Puedo aprender poco a poco y hacer preguntas.",
+    mentorNote: "Puedes preguntar las veces que necesites y darte tiempo para practicar."
   },
   {
     id: "extra-04",
@@ -570,17 +641,24 @@ export const depthPractices: CatalogItem[] = [
     index: 3,
     number: 4,
     kind: "extra",
-    title: "Un paso valiente",
-    description: "La valentía puede ser pedir ayuda y moverte con cuidado.",
-    insight:
-      "El coraje no exige dejar de temblar. Es disposición para mirar y actuar dentro de lo posible.",
+    title: "Prepara un paso que quieras dar",
+    description: "Piensa en algo nuevo que quieras probar. Puedes preparar una parte pequeña y elegir si necesitas compañía.",
+    presence: "Apoya los pies o la espalda donde te resulte cómodo. Piensa en una actividad que sea segura para ti.",
+    insight: "Para probar algo nuevo puedes empezar por conocerlo mejor. Si te interesa una actividad, puedes preguntar el horario antes de decidir si irás. Prepararte también puede incluir pedir compañía.",
     prompts: [
-      "¿Qué puedo mirar con un poco más de calma?",
-      "¿Qué acción segura me acerca a lo que importa?",
+      "¿Qué me gustaría probar?",
+      "¿Qué información o compañía me ayudaría?"
     ],
-    action: "Haz una acción pequeña o pide compañía para realizarla.",
-    seed: "El coraje también puede sentirse suave.",
-    mentorNote: "No necesitas dejar de temblar para elegir un paso posible.",
+    action: "Prepara una acción pequeña antes de tomar una decisión.",
+    actionSteps: [
+      "Elige algo cotidiano, como llamar para preguntar por una actividad.",
+      "Piensa qué te ayudaría a hacerlo. Por ejemplo, escribir antes la pregunta.",
+      "Prepara esa pregunta o pide a alguien que te acompañe.",
+      "Elige si quieres llamar hoy o darte más tiempo. Puedes terminar con la pregunta preparada."
+    ],
+    durationLabel: "De 2 a 3 minutos",
+    seed: "Puedo prepararme antes de decidir.",
+    mentorNote: "Puedes decidir qué quieres probar y cuándo hacerlo."
   },
   {
     id: "extra-05",
@@ -588,17 +666,24 @@ export const depthPractices: CatalogItem[] = [
     index: 4,
     number: 5,
     kind: "extra",
-    title: "Aceptar para elegir",
-    description: "Reconocer la realidad abre decisiones más claras.",
-    insight:
-      "Aceptar lo que existe hoy no aprueba lo injusto. Te ayuda a reconocer el punto de partida y elegir desde allí.",
+    title: "Elige qué puedes hacer ahora",
+    description: "Cuando un plan cambia, puedes reconocer cómo te sientes y pensar qué opciones tienes ahora.",
+    presence: "Observa tres cosas a tu alrededor. Recuerda un cambio de hoy, como una cita que pasó a otro horario.",
+    insight: "Reconocer que algo ocurrió te ayuda a decidir qué hacer después. Si una cita cambió de horario, puedes expresar que te incomoda y preguntar por otra hora. Puedes reconocer el cambio y decir qué prefieres.",
     prompts: [
-      "¿Qué hecho deseo que fuera distinto?",
-      "¿Qué opción útil queda disponible ahora?",
+      "¿Qué ocurrió?",
+      "¿Qué quiero preguntar, pedir o hacer ahora?"
     ],
-    action: "Nombra el hecho y una elección que todavía te pertenece.",
-    seed: "Puedo ver lo que hay y conservar mi capacidad de elegir.",
-    mentorNote: "Ver la realidad con claridad también puede abrir una esperanza con raíces.",
+    action: "Nombra lo ocurrido y elige una opción que tengas disponible.",
+    actionSteps: [
+      "Describe lo que pasó con pocas palabras: «La cita cambió de horario».",
+      "Reconoce cómo te sientes. Por ejemplo: «Me incomoda porque ya había organizado mi día».",
+      "Piensa en una opción: pedir otra hora, reorganizar una tarea o preguntar por otra fecha.",
+      "Elige si quieres hacer eso ahora o decidir más tarde."
+    ],
+    durationLabel: "De 1 a 2 minutos",
+    seed: "Puedo reconocer lo que pasó y elegir qué hacer.",
+    mentorNote: "Puedes decir lo que prefieres y preguntar qué otras opciones hay."
   },
   {
     id: "extra-06",
@@ -606,17 +691,24 @@ export const depthPractices: CatalogItem[] = [
     index: 5,
     number: 6,
     kind: "extra",
-    title: "Amor con espacio",
-    description: "El cariño también incluye respeto, límites y cuidado propio.",
-    insight:
-      "Amar se vuelve más libre cuando una persona no carga con la tarea de completar todo lo que falta.",
+    title: "Expresa cariño y tus necesidades",
+    description: "Puedes tener un gesto de cariño y también decir lo que necesitas. Hoy vas a pensar cómo hacer ambas cosas.",
+    presence: "Elige una relación en la que te sientas cómoda. Si prefieres, piensa en una actividad que disfrutas.",
+    insight: "Puedes querer acompañar a alguien y necesitar descansar. Por ejemplo: «Me gustaría escucharte. Hoy tengo diez minutos, ¿te viene bien?». Así la otra persona conoce lo que puedes ofrecer.",
     prompts: [
-      "¿Dónde confundo amar con controlar?",
-      "¿Cómo puedo ofrecer cariño sin abandonar mis límites?",
+      "¿Qué gesto de cariño quiero tener?",
+      "¿Qué necesito tener en cuenta para mí?"
     ],
-    action: "Ofrece un gesto de cariño sin exigir una respuesta concreta.",
-    seed: "El amor deja respirar.",
-    mentorNote: "Elegirte y dejar espacio en el vínculo también son formas de amar.",
+    action: "Elige un gesto sencillo que quieras ofrecer.",
+    actionSteps: [
+      "Piensa en un gesto, como enviar un saludo o escuchar a alguien unos minutos.",
+      "Observa cuánto tiempo tienes y cómo te sientes hoy.",
+      "Prepara una frase que diga qué ofreces y cuándo puedes hacerlo.",
+      "Elige si quieres compartirla ahora o en otro momento. La otra persona también puede decir qué necesita."
+    ],
+    durationLabel: "De 1 a 2 minutos",
+    seed: "Puedo expresar cariño y decir lo que necesito.",
+    mentorNote: "Puedes ofrecer compañía de una forma que también te permita descansar y atender tus cosas."
   },
   {
     id: "extra-07",
@@ -624,17 +716,24 @@ export const depthPractices: CatalogItem[] = [
     index: 6,
     number: 7,
     kind: "extra",
-    title: "Descansar en la quietud",
-    description: "La paz puede aparecer en un momento cotidiano.",
-    insight:
-      "Entre una idea y otra existe un instante de silencio. No necesita convertirse en una prueba de avance.",
+    title: "Haz una pausa de un minuto",
+    description: "Dedica unos segundos a observar algo que tengas cerca. Puedes hacer esta pausa con los ojos abiertos.",
+    presence: "Siéntate o elige una postura cómoda. Busca un objeto cercano, como una taza o una planta.",
+    insight: "Para hacer esta pausa basta con observar un detalle: el color de una hoja o la forma de una taza. Los pensamientos pueden seguir apareciendo. Cuando lo notes, puedes volver a observar el objeto.",
     prompts: [
-      "¿Dónde aparece un poco de quietud en mi día?",
-      "¿Qué noto si dejo que ese momento sea suficiente?",
+      "¿Qué detalle puedo observar ahora?",
+      "¿Cómo me siento después de detenerme un momento?"
     ],
-    action: "Mira la luz, el cielo o un objeto durante un minuto.",
-    seed: "Este instante puede ofrecerme descanso.",
-    mentorNote: "La quietud no tiene que demostrar nada para ofrecerte descanso.",
+    action: "Observa un objeto durante unos segundos o hasta un minuto.",
+    actionSteps: [
+      "Elige un objeto que puedas observar desde donde estás.",
+      "Observa su color y su forma. Después elige un solo detalle.",
+      "Deja que el aire entre y salga naturalmente, sin esfuerzo. Si te distraes, vuelve a observar ese detalle.",
+      "Cuando quieras terminar, observa el resto del lugar y mueve las manos con suavidad. Puedes seguir con tu día."
+    ],
+    durationLabel: "Unos segundos o hasta 1 minuto",
+    seed: "Puedo detenerme un momento y observar.",
+    mentorNote: "Puedes hacer la pausa durante el tiempo que te venga bien, aunque sigan apareciendo pensamientos."
   },
   {
     id: "extra-08",
@@ -642,17 +741,24 @@ export const depthPractices: CatalogItem[] = [
     index: 7,
     number: 8,
     kind: "extra",
-    title: "Escuchar al cuerpo",
-    description: "Tu cuerpo merece cuidado además de observación.",
-    insight:
-      "Las emociones pueden sentirse como tensión o cansancio. Escuchar ayuda a conocerte sin atribuir cada dolencia a una causa emocional.",
+    title: "Observa cómo está tu cuerpo",
+    description: "Hoy puedes observar una sensación del cuerpo y elegir algo que te ayude a estar más cómoda.",
+    presence: "Acomódate y apoya las manos sobre tus piernas. Puedes mantener los ojos abiertos durante todo el ejercicio.",
+    insight: "Puedes notar calor en las manos, tensión en los hombros o ganas de cambiar de postura. Describe lo que sientes con tus propias palabras. Una sensación física puede tener distintas causas; este ejercicio no busca decirte cuál es.",
     prompts: [
-      "¿Qué señal corporal he dejado al final?",
-      "¿Qué cuidado real necesito hoy?",
+      "¿Qué sensación noto ahora?",
+      "¿Qué podría hacer para estar más cómoda?"
     ],
-    action: "Ajusta tu postura, hidrátate, descansa o busca atención profesional.",
-    seed: "Cuidar mi cuerpo es una forma de volver a mí.",
-    mentorNote: "Escuchar al cuerpo incluye atenderlo con acciones reales y pedir ayuda cuando la necesita.",
+    action: "Observa una sola parte del cuerpo y elige un cuidado sencillo.",
+    actionSteps: [
+      "Elige las manos, los pies o la espalda. Si prefieres, puedes observar un objeto en lugar del cuerpo.",
+      "Nombra lo que notas: calor, frescor, tensión o comodidad. También puedes decir «ahora no noto nada particular».",
+      "Elige si quieres cambiar de postura, descansar o beber agua si tienes sed. Evita movimientos que te molesten.",
+      "Para terminar, vuelve a observar el lugar donde estás. Si una molestia física persiste o te preocupa, consulta con un profesional de salud."
+    ],
+    durationLabel: "De 1 a 2 minutos",
+    seed: "Puedo reconocer una sensación y atender mi cuerpo.",
+    mentorNote: "Puedes observar cómo estás y buscar atención de salud cuando la necesites."
   },
   {
     id: "extra-09",
@@ -660,17 +766,24 @@ export const depthPractices: CatalogItem[] = [
     index: 8,
     number: 9,
     kind: "extra",
-    title: "Relaciones con aire",
-    description: "Acercarte a otra persona sin perder tu centro.",
-    insight:
-      "Hablar con claridad permite pedir lo que necesitas y reconocer que la otra persona también elige.",
+    title: "Practica cómo pedir algo",
+    description: "Prepara una petición con palabras claras. Puedes decir cómo te sientes y preguntar por algo concreto.",
+    presence: "Piensa en una petición de todos los días. Vas a practicar a solas y decidir después si quieres compartirla.",
+    insight: "Una petición es más fácil de entender si dices qué te gustaría. Por ejemplo: «Cuando cambiamos el horario al final, me cuesta organizarme. ¿Podemos avisarnos el día anterior?». La otra persona puede responder y proponer otra opción.",
     prompts: [
-      "¿Qué espero que otra persona haga para sentir paz?",
-      "¿Qué puedo pedir con honestidad y respeto?",
+      "¿Qué me gustaría pedir?",
+      "¿Qué palabras ayudarían a entender mi petición?"
     ],
-    action: "Habla desde yo siento y yo necesito, sin acusar.",
-    seed: "Puedo acercarme sin controlar.",
-    mentorNote: "Un vínculo con aire permite expresar lo que necesitas sin abandonar tu centro.",
+    action: "Prepara una frase que cuente lo que pasa y lo que quieres pedir.",
+    actionSteps: [
+      "Describe la situación: «Cuando cambiamos la hora a último momento...».",
+      "Añade cómo te afecta: «...me cuesta organizarme».",
+      "Haz una petición: «¿Podemos avisarnos el día anterior?».",
+      "Repite la frase con tus propias palabras. Puedes decidir después cuándo hablar. Si hablar no es seguro, puedes buscar compañía o ayuda."
+    ],
+    durationLabel: "De 2 a 3 minutos",
+    seed: "Puedo pedir lo que necesito con palabras claras.",
+    mentorNote: "Puedes preparar tus palabras, escuchar la respuesta y decidir si quieres seguir conversando."
   },
   {
     id: "extra-10",
@@ -678,17 +791,24 @@ export const depthPractices: CatalogItem[] = [
     index: 9,
     number: 10,
     kind: "extra",
-    title: "Trabajar sin castigarte",
-    description: "Avanza hacia tus metas sin convertir cada error en condena.",
-    insight:
-      "Puedes aprender y buscar resultados sin medir tu valor por el desempeño. Menos presión deja más espacio para claridad.",
+    title: "Organiza una tarea y un descanso",
+    description: "Elige una parte pequeña de una tarea y decide cuándo descansar. Puedes trabajar teniendo en cuenta cómo estás hoy.",
+    presence: "Ajusta tu postura para estar cómoda. Piensa en una tarea de trabajo, de casa o de algo que quieras aprender.",
+    insight: "Puedes empezar por una parte de la tarea y detenerte después. Por ejemplo, escribir un párrafo y descansar unos minutos. Al volver, puedes decidir si tienes tiempo y energía para continuar.",
     prompts: [
-      "¿Qué meta persigo desde el miedo a no valer?",
-      "¿Qué haría con más presencia si no buscara demostrarme?",
+      "¿Qué parte de la tarea puedo atender hoy?",
+      "¿Cuándo me vendría bien descansar?"
     ],
-    action: "Realiza un avance pequeño y reconoce su lugar en el proceso.",
-    seed: "Mi valor no depende de un resultado.",
-    mentorNote: "La excelencia puede crecer desde la presencia, no desde el castigo.",
+    action: "Elige una acción de unos cinco minutos y una pausa para después.",
+    actionSteps: [
+      "Nombra una parte pequeña: escribir un párrafo, revisar un mensaje u ordenar un cajón.",
+      "Decide cuándo parar. Puedes elegir unos cinco minutos o terminar esa parte de la tarea.",
+      "Haz lo que elegiste si tienes tiempo ahora. Si surge una duda, puedes anotarla o preguntar.",
+      "Al llegar al momento elegido, haz una pausa. Después decide si quieres continuar o retomar otro día."
+    ],
+    durationLabel: "Unos 5 minutos y la pausa que elijas",
+    seed: "Puedo avanzar y hacer pausas para descansar.",
+    mentorNote: "Puedes ajustar tus tareas a cómo te sientes y pedir ayuda cuando la necesites."
   },
   {
     id: "extra-11",
@@ -696,17 +816,24 @@ export const depthPractices: CatalogItem[] = [
     index: 10,
     number: 11,
     kind: "extra",
-    title: "Más amplia que mi historia",
-    description: "Una emoción o etiqueta no contiene todo lo que eres.",
-    insight:
-      "La mente crea identidades rígidas. Cambiar soy por estoy sintiendo abre espacio entre tu ser y el momento.",
+    title: "Describe cómo estás hoy",
+    description: "Una frase sobre ti puede sonar como si fuera cierta todos los días. Hoy puedes probar una descripción de lo que te pasa ahora.",
+    presence: "Recuerda una frase que uses para hablar de ti. Elige una que te resulte cómodo observar hoy.",
+    insight: "En lugar de «soy indecisa», puedes decir «hoy me cuesta elegir entre estas dos opciones». La segunda frase describe una situación. También te permite pensar qué necesitas para decidir.",
     prompts: [
-      "¿Qué etiqueta repito sobre mí?",
-      "¿Cómo me describiría sin usar esa etiqueta?",
+      "¿Qué frase uso para describirme?",
+      "¿Cómo puedo contar lo que me pasa hoy?"
     ],
-    action: "Cambia una frase que empieza con soy por una observación temporal.",
-    seed: "Mi ser es más amplio que una etiqueta.",
-    mentorNote: "Hay más posibilidades en ti que las contenidas en una historia fija.",
+    action: "Prueba una frase que diga qué te pasa y en qué situación.",
+    actionSteps: [
+      "Elige una frase que te digas. Por ejemplo: «Soy indecisa».",
+      "Describe el momento: «Hoy me cuesta decidir entre estas dos opciones».",
+      "Añade algo que puedas hacer: «Puedo pedir información o darme más tiempo».",
+      "Repite la frase y elige las palabras que tengan sentido para ti. Puedes conservarla o cambiarla."
+    ],
+    durationLabel: "De 1 a 2 minutos",
+    seed: "Puedo describir lo que me pasa hoy.",
+    mentorNote: "Puedes reconocer cómo estás ahora y dejar abierta la posibilidad de sentirte de otra manera otro día."
   },
   {
     id: "extra-12",
@@ -714,18 +841,25 @@ export const depthPractices: CatalogItem[] = [
     index: 11,
     number: 12,
     kind: "extra",
-    title: "Gratitud que se vuelve vida",
-    description: "Deja que el agradecimiento se transforme en presencia.",
-    insight:
-      "Agradecer no borra lo difícil. Permite reconocer una fuente de apoyo y convertirla en un gesto concreto.",
+    title: "Recuerda algo que agradeces",
+    description: "Piensa en algo de hoy que te haya hecho bien. Puedes agradecerlo en silencio o elegir un gesto para expresarlo.",
+    presence: "Recuerda un momento sencillo, como una conversación, una comida o un descanso. Si hoy no te apetece, puedes elegir otra práctica.",
+    insight: "Puedes agradecer que alguien te escuchó y seguir preocupada por otras cosas. Agradecer es reconocer algo que valoras de ese momento. Tú eliges si quieres decirlo o quedarte con ese recuerdo.",
     prompts: [
-      "¿Qué puedo agradecer hoy sin negar lo difícil?",
-      "¿Qué bien pequeño puedo compartir?",
+      "¿Qué agradezco de hoy?",
+      "¿Quiero expresarlo de alguna forma?"
     ],
-    action: "Nombra algo que agradeces y ofrece un gesto libre de obligación.",
-    seed: "La gratitud puede habitar mis acciones.",
-    mentorNote: "Gracias por haber traído tu presencia, incluso en los días en que volver costó más.",
-  },
+    action: "Reconoce un momento que valores. Después decide si quieres hacer algo más.",
+    actionSteps: [
+      "Nombra algo de hoy que te haya hecho bien: «Me escucharon unos minutos», por ejemplo.",
+      "Piensa qué agradeces de ese momento, como la compañía o la atención que recibiste.",
+      "Si lo deseas, elige un gesto sencillo: decir gracias, enviar un mensaje o dedicarte otro descanso.",
+      "Hazlo si te viene bien. También puedes terminar reconociendo en silencio lo que agradeces."
+    ],
+    durationLabel: "De 1 a 2 minutos",
+    seed: "Puedo agradecer algo sencillo de hoy.",
+    mentorNote: "Gracias por dedicarte este momento. Puedes volver a las prácticas que te hayan servido."
+  }
 ];
 
 export const compassZones: CompassZone[] = [
@@ -735,18 +869,57 @@ export const compassZones: CompassZone[] = [
     leadership: "Liderazgos Egocéntricos (-200)",
     calibration: "Fuerza / Baja Calibración",
     title: "Estados de supervivencia, reacción y desconexión",
-    detail:
-      "Aquí no hay nada que juzgar. Reconocer el estado presente ya abre un poco de espacio para acompañarte.",
+    detail: "Elige una palabra que se parezca a cómo te sientes. Debajo encontrarás una idea para acompañarte hoy.",
     frequencies: [
-      { emotion: "Vergüenza", value: "20", guidance: "Esta emoción puede hacerte querer esconderte. Intenta separar lo que sientes de lo que vales: tu dignidad no cambia con este momento.", discoverySlug: "mira-donde-estas" },
-      { emotion: "Culpa", value: "30", guidance: "Puedes reconocer lo ocurrido sin convertir el error en identidad. La reparación también puede empezar con amabilidad.", discoverySlug: "libera-el-peso-de-culpar" },
-      { emotion: "Apatía", value: "50", guidance: "Cuando falta energía, el paso más pequeño cuenta. Hoy puede bastar con recibir apoyo y cuidar tu cuerpo.", discoverySlug: "un-pequeno-si-puedo" },
-      { emotion: "Sufrimiento", value: "75", guidance: "No necesitas sostenerlo todo de una vez. Acércate solo a una parte manejable y busca compañía si el peso se vuelve intenso.", discoverySlug: "dale-espacio-a-la-tristeza" },
-      { emotion: "Temor", value: "100", guidance: "El miedo intenta proteger algo importante. Puedes escucharlo y elegir un movimiento pequeño y seguro.", discoverySlug: "mira-al-miedo-con-ternura" },
-      { emotion: "Deseo", value: "125", guidance: "Desear no es un problema. La invitación es aflojar la urgencia para que tu paz no dependa del resultado.", discoverySlug: "querer-sin-agarrar" },
-      { emotion: "Ira", value: "150", guidance: "La fuerza de la ira puede señalar un límite. Haz espacio antes de decidir cómo expresarlo con claridad.", discoverySlug: "libera-el-peso-de-culpar" },
-      { emotion: "Orgullo", value: "175", guidance: "Quizá una parte de ti está cuidando una herida. No necesitas demostrar nada para volver a tu centro.", discoverySlug: "afloja-la-necesidad-de-ganar" },
-    ],
+      {
+        emotion: "Vergüenza",
+        value: "20",
+        guidance: "Si esta palabra se parece a lo que sientes, puedes preguntarte qué te ayudaría ahora. Tal vez quieras hablar con alguien de confianza o tomarte un momento a solas.",
+        discoverySlug: "mira-donde-estas"
+      },
+      {
+        emotion: "Culpa",
+        value: "30",
+        guidance: "Puedes preguntarte si hay algo que quieras aclarar o reparar. Si todavía no lo sabes, puedes tomarte tiempo y conversar con alguien de confianza.",
+        discoverySlug: "libera-el-peso-de-culpar"
+      },
+      {
+        emotion: "Apatía",
+        value: "50",
+        guidance: "Si tienes pocas ganas o poca energía, puedes empezar por algo sencillo, como beber agua, descansar o pedir compañía.",
+        discoverySlug: "un-pequeno-si-puedo"
+      },
+      {
+        emotion: "Sufrimiento",
+        value: "75",
+        guidance: "Puedes elegir qué necesitas ahora y pedir ayuda para atenderlo. Si lo que sientes es muy intenso o continúa, busca compañía y atención profesional.",
+        discoverySlug: "dale-espacio-a-la-tristeza"
+      },
+      {
+        emotion: "Temor",
+        value: "100",
+        guidance: "Puedes nombrar qué te preocupa y pensar qué información o compañía necesitas. Tú decides cuándo dar un paso o esperar.",
+        discoverySlug: "mira-al-miedo-con-ternura"
+      },
+      {
+        emotion: "Deseo",
+        value: "125",
+        guidance: "Piensa en algo que quieras y elige una acción pequeña que puedas hacer hoy. Puedes decidir el resto cuando tengas más información.",
+        discoverySlug: "querer-sin-agarrar"
+      },
+      {
+        emotion: "Ira",
+        value: "150",
+        guidance: "Si sientes enojo, puedes detenerte antes de responder. Pregúntate qué te molestó y qué quieres pedir o aclarar.",
+        discoverySlug: "libera-el-peso-de-culpar"
+      },
+      {
+        emotion: "Orgullo",
+        value: "175",
+        guidance: "Puedes reconocer algo que hiciste bien. También puedes escuchar otra idea o preguntar algo que quieras comprender.",
+        discoverySlug: "afloja-la-necesidad-de-ganar"
+      }
+    ]
   },
   {
     id: "crisalida",
@@ -754,15 +927,39 @@ export const compassZones: CompassZone[] = [
     leadership: "Liderazgos Transformadores (+200)",
     calibration: "El Puente",
     title: "Estados de aprendizaje y toma de conciencia",
-    detail:
-      "Este puente permite observar, aprender y elegir. No exige tener todas las respuestas antes de avanzar.",
+    detail: "Elige una palabra y lee la idea que aparece debajo. Puedes usarla para pensar qué quieres hacer hoy.",
     frequencies: [
-      { emotion: "Coraje", value: "200", guidance: "El coraje puede convivir con el temblor. Reconoce ese sí pequeño que nace desde tu verdad y cuida el tamaño del paso.", discoverySlug: "un-pequeno-si-puedo" },
-      { emotion: "Neutralidad", value: "250", guidance: "No todo necesita resolverse hoy. Puedes dejar una pregunta abierta y conservar tu paz.", discoverySlug: "mira-tus-pensamientos-con-distancia" },
-      { emotion: "Voluntad", value: "310", guidance: "Tu disposición abre movimiento. Elige un paso realista que cuide tu energía y tu intención.", discoverySlug: "suelta-una-piedra-a-la-vez" },
-      { emotion: "Aceptación", value: "350", guidance: "Aceptar el punto de partida no es resignarse. Es ver con claridad desde dónde deseas elegir.", discoverySlug: "haz-espacio-a-la-resistencia" },
-      { emotion: "Razonamiento", value: "400", guidance: "La comprensión puede ordenar lo vivido. Recuerda incluir al cuerpo y al sentir en esa mirada.", discoverySlug: "siente-mas-piensa-menos" },
-    ],
+      {
+        emotion: "Coraje",
+        value: "200",
+        guidance: "Elige algo pequeño que quieras probar. Puedes prepararlo, pedir compañía o decidir cuándo te viene bien hacerlo.",
+        discoverySlug: "un-pequeno-si-puedo"
+      },
+      {
+        emotion: "Neutralidad",
+        value: "250",
+        guidance: "Puedes observar una situación y darte tiempo antes de decidir. Pregúntate si necesitas saber algo más.",
+        discoverySlug: "mira-tus-pensamientos-con-distancia"
+      },
+      {
+        emotion: "Voluntad",
+        value: "310",
+        guidance: "Si tienes ganas de hacer algo, elige una tarea pequeña y un momento para hacerla. Puedes ajustar el plan después.",
+        discoverySlug: "suelta-una-piedra-a-la-vez"
+      },
+      {
+        emotion: "Aceptación",
+        value: "350",
+        guidance: "Puedes reconocer lo que está ocurriendo y decir cómo te sientes. Después elige qué quieres preguntar, pedir o hacer.",
+        discoverySlug: "haz-espacio-a-la-resistencia"
+      },
+      {
+        emotion: "Razonamiento",
+        value: "400",
+        guidance: "Piensa qué información tienes y qué te falta para decidir. También puedes tener en cuenta cómo te sientes y qué necesitas.",
+        discoverySlug: "siente-mas-piensa-menos"
+      }
+    ]
   },
   {
     id: "mariposa",
@@ -770,15 +967,34 @@ export const compassZones: CompassZone[] = [
     leadership: "Liderazgos Auténticos (+500)",
     calibration: "Poder / Alta Calibración",
     title: "Estados de expansión, conexión, claridad y creación consciente",
-    detail:
-      "Recibe esta apertura sin convertirla en obligación. Cada estado puede visitarte y también transformarse.",
+    detail: "Puedes reconocer un momento de cariño, alegría o tranquilidad. Elige una palabra para leer una idea sobre ese momento.",
     frequencies: [
-      { emotion: "Amor", value: "500", guidance: "El amor también incluye límites, espacio y cuidado propio. Permite que esta presencia alcance tu siguiente elección.", discoverySlug: "querer-sin-agarrar" },
-      { emotion: "Alegría", value: "540", guidance: "Puedes disfrutar este momento sin sujetarlo. Deja que la ligereza tenga un lugar sin pedirle que permanezca igual.", discoverySlug: "haz-sitio-a-lo-bueno" },
-      { emotion: "Paz", value: "600", guidance: "Deja que la quietud sea suficiente por un instante. No necesitas convertirla en una meta perfecta.", discoverySlug: "encuentra-apoyo-en-ti" },
-      { emotion: "Iluminación", value: "700-1000", guidance: "Esta escala es una brújula simbólica, no una medida científica. Vuelve a la presencia y a la humildad de un gesto concreto.", discoverySlug: "empieza-sin-luchar" },
-    ],
-  },
+      {
+        emotion: "Amor",
+        value: "500",
+        guidance: "Puedes expresar cariño y atender tus necesidades. Piensa qué te gustaría ofrecer y qué necesitas reservar para ti hoy.",
+        discoverySlug: "querer-sin-agarrar"
+      },
+      {
+        emotion: "Alegría",
+        value: "540",
+        guidance: "Puedes dedicar unos segundos a disfrutar de lo que te alegra. Observa qué te gusta de este momento.",
+        discoverySlug: "haz-sitio-a-lo-bueno"
+      },
+      {
+        emotion: "Paz",
+        value: "600",
+        guidance: "Si hoy te sientes tranquila, puedes dedicar un momento a reconocerlo. Observa qué actividad o compañía te está haciendo bien.",
+        discoverySlug: "encuentra-apoyo-en-ti"
+      },
+      {
+        emotion: "Iluminación",
+        value: "700-1000",
+        guidance: "En este mapa, esta palabra habla de sentirte conectada contigo y con lo que te rodea. Puedes observar cómo vives eso hoy, por ejemplo al escuchar a alguien o disfrutar de un lugar.",
+        discoverySlug: "empieza-sin-luchar"
+      }
+    ]
+  }
 ];
 
 export const allCatalogItems = [...discoveries, ...depthPractices];

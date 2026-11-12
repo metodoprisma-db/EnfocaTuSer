@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     template: "%s | Enfoca Tu Ser",
   },
   description:
-    "Un espacio cálido para soltar peso emocional, escucharte y volver a tu centro junto a Clarissa Acevedo y Scarlett Vargas.",
+    "Ejercicios con instrucciones sencillas para reconocer lo que sientes, respirar y elegir qué hacer, con Clarissa Acevedo y Scarlett Vargas.",
   icons: {
     icon: ASSETS.favicon,
     shortcut: ASSETS.favicon,

@@ -81,30 +81,32 @@ export function JournalView() {
       <aside className="surface-card journal-compose">
         <span className="eyebrow"><FileHeart size={15} /> Nota libre</span>
         <h2 style={{ fontSize: "2rem", color: "var(--etq-azul)" }}>Escribe solo si te ayuda</h2>
+        <p className="helper-text">Puedes empezar con «Hoy me siento...» o «Quiero recordar...». Después pulsa «Conservar en Mi diario» para leer tu nota en la lista.</p>
         <div className="field">
-          <label htmlFor="journal-title">Título</label>
+          <label htmlFor="journal-title">Título (opcional)</label>
           <input id="journal-title" value={title} onChange={(event) => setTitle(event.target.value)} placeholder="Algo que deseo recordar" />
         </div>
         <div className="field">
           <label htmlFor="journal-content">Tu nota</label>
-          <textarea id="journal-content" value={content} onChange={(event) => setContent(event.target.value)} placeholder="Una sensación, una pregunta o algo que deseas recordar..." />
+          <textarea id="journal-content" value={content} onChange={(event) => setContent(event.target.value)} placeholder="Hoy me siento... / Quiero recordar..." />
         </div>
         <button className="button button-primary" style={{ width: "100%", marginTop: 18 }} type="button" onClick={save} disabled={!content.trim()}>
-          <Save size={17} /> Guardar en mi diario
+          <Save size={17} /> Conservar en Mi diario
         </button>
         {title.trim() || content.trim() ? <p className="draft-status">Borrador guardado en este dispositivo</p> : null}
         <div className="button-row">
-          <button className="button button-secondary" type="button" onClick={actions.exportData}><Download size={16} /> Exportar JSON</button>
+          <button className="button button-secondary" type="button" onClick={actions.exportData}><Download size={16} /> Descargar una copia de mi diario</button>
           <button className="button button-danger" type="button" onClick={clearAll}><Trash2 size={16} /> Borrar todos mis datos</button>
         </div>
+        <p className="helper-text">Al pulsar «Descargar», se guardará un archivo con tus notas en este dispositivo. El formato se llama JSON. También puedes seguir leyendo tus notas aquí.</p>
       </aside>
 
       <section>
         {meta.visibleJournalEntries.length === 0 ? (
           <div className="empty-state">
             <FileHeart size={32} style={{ marginBottom: 14 }} />
-            <h3>Este espacio está disponible cuando lo necesites</h3>
-            <p>Si decides guardar una nota libre, una reflexión o una pausa, aparecerá aquí. No hay nada pendiente por completar.</p>
+            <h3>Aquí aparecerán tus notas</h3>
+            <p>Cuando escribas una nota y pulses «Conservar en Mi diario», podrás leerla aquí. También aparecerán las pausas que conserves desde «Soltar ahora».</p>
           </div>
         ) : (
           <div className="journal-list">
@@ -127,7 +129,7 @@ export function JournalView() {
             ))}
             {meta.hasMoreJournalEntries ? (
               <button className="button button-secondary" type="button" onClick={loadOlder} disabled={loading}>
-                {loading ? <LoaderCircle size={17} /> : null} Cargar anteriores
+                {loading ? <LoaderCircle size={17} /> : null} Ver notas anteriores
               </button>
             ) : null}
           </div>
