@@ -11,7 +11,7 @@ export default function BrujulaPage() {
         <span className="eyebrow">Orientarte desde lo que sientes</span>
         <h1>Brújula interior</h1>
         <p>
-          Recorre las etapas Oruga, Crisálida y Mariposa. Toca la frecuencia que se acerque a tu momento y recibe una orientación amable para acompañarla.
+          Elige una etapa y después toca la palabra que se acerque a cómo te sientes. Debajo aparecerá una orientación de Clarissa y Scarlett. Puedes cambiar tu elección cuando quieras: una emoción describe un momento de tu experiencia.
         </p>
       </header>
       <CompassView />

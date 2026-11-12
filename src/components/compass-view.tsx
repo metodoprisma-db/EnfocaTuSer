@@ -15,8 +15,14 @@ const stageImages = {
 
 const stageVerbs = {
   oruga: "Reconocer",
-  crisalida: "Transformar",
-  mariposa: "Expandir",
+  crisalida: "Explorar",
+  mariposa: "Disfrutar",
+} as const;
+
+const stageTitles = {
+  oruga: "Observar lo que necesitas",
+  crisalida: "Explorar otras posibilidades",
+  mariposa: "Dar espacio a lo amable",
 } as const;
 
 export function CompassView() {
@@ -37,10 +43,10 @@ export function CompassView() {
       <section className="compass-guide" aria-labelledby="compass-guide-title">
         <div>
           <span className="eyebrow">Cómo leer este mapa</span>
-          <h2 id="compass-guide-title">Tres etapas para orientarte, no para clasificarte</h2>
+          <h2 id="compass-guide-title">Un mapa para acompañar tu momento</h2>
         </div>
         <p>
-          Las frecuencias se agrupan en un recorrido visual: reconocer estados de reacción, atravesar el puente de la conciencia y abrir espacio a una presencia más amplia. No tienes que subir ni permanecer en una etapa. Elige la palabra que más se acerque a hoy.
+          Oruga, Crisálida y Mariposa son imágenes que ayudan a organizar este mapa. Tus emociones pueden variar y todas merecen cuidado. Los números son referencias simbólicas, no puntuaciones. Elige una palabra cercana a tu experiencia; puedes volver a elegir más tarde.
         </p>
       </section>
 
@@ -66,10 +72,8 @@ export function CompassView() {
                 />
               </span>
               <span className="metamorphosis-stage">{stageVerbs[zone.id as keyof typeof stageVerbs]} · Etapa {zone.stage}</span>
-              <strong>{zone.leadership}</strong>
-              <span className="metamorphosis-calibration">{zone.calibration}</span>
-              <span className="metamorphosis-detail">{zone.title}</span>
-              <span className="metamorphosis-count">{zone.frequencies.length} frecuencias para explorar</span>
+              <strong>{stageTitles[zone.id as keyof typeof stageTitles]}</strong>
+              <span className="metamorphosis-count">{zone.frequencies.length} palabras para explorar</span>
             </button>
           );
         })}
@@ -79,7 +83,7 @@ export function CompassView() {
         <div className="frequency-panel-heading">
           <div>
             <span className="eyebrow">Etapa {selectedZone.stage}</span>
-            <h2>{selectedZone.leadership}</h2>
+            <h2>{stageTitles[selectedZone.id as keyof typeof stageTitles]}</h2>
             <p>{selectedZone.detail}</p>
           </div>
           <Image
@@ -91,6 +95,12 @@ export function CompassView() {
             alt={`Representación de la etapa ${selectedZone.stage}`}
           />
         </div>
+
+        <details className="compass-map-terms">
+          <summary>Conocer los nombres de esta escala</summary>
+          <p>{selectedZone.leadership} · {selectedZone.calibration}.</p>
+          <p>{selectedZone.title}. Estos son los nombres del mapa; describen estados simbólicos, no tu identidad ni tu valor.</p>
+        </details>
 
         <div className="frequency-list" aria-label={`Frecuencias de la etapa ${selectedZone.stage}`}>
           {selectedZone.frequencies.map((frequency) => {
@@ -113,11 +123,11 @@ export function CompassView() {
 
       <section className="surface-card compass-result" aria-live="polite">
         <div className="selected-frequency-value">
-          <span>Frecuencia</span>
+          <span>Referencia del mapa</span>
           <strong>{selectedFrequency.value}</strong>
         </div>
         <div className="selected-frequency-copy">
-          <span className="eyebrow">Una guía para este momento</span>
+          <span className="eyebrow">Clarissa y Scarlett te acompañan</span>
           <h2>{selectedFrequency.emotion}</h2>
           <p>{selectedFrequency.guidance}</p>
           <div className="button-row">
@@ -128,9 +138,10 @@ export function CompassView() {
               className="button button-secondary"
               href={`/camino/discovery/${selectedFrequency.discoverySlug}`}
             >
-              Ir a la lección relacionada <ArrowRight size={17} />
+              Ver el descubrimiento relacionado <ArrowRight size={17} />
             </Link>
           </div>
+          <p className="helper-text">Los descubrimientos se abren en el orden de Mi camino. Puedes usar Soltar ahora en cualquier momento del recorrido.</p>
         </div>
       </section>
 

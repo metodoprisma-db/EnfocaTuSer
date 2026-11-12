@@ -24,7 +24,7 @@ export function AuthPage({
           <h1>Vuelve a ti, estés donde estés.</h1>
           <p>{restrictedAccess
             ? "Este piloto está reservado para el equipo autorizado. Tu cuenta permite guardar y recuperar el recorrido de forma sincronizada."
-            : "Este espacio está sostenido para que tus notas y descubrimientos tengan un lugar cuidado, tanto si pruebas el recorrido como invitada como si decides sincronizarlo."}</p>
+            : "Un espacio de Clarissa Acevedo y Scarlett Vargas para escucharte, probar pausas sencillas y explorar nuevas posibilidades en tu día. Puedes comenzar con las indicaciones de cada ejercicio, a tu ritmo."}</p>
         </div>
       </section>
       <section className="auth-form-wrap">

@@ -59,19 +59,19 @@ export function JourneyAssessment({ stage }: { stage: AssessmentStage }) {
   return (
     <section className="assessment-card" aria-labelledby={`${stage}-assessment-title`}>
       <div className="assessment-intro">
-        <span className="eyebrow">{isInitial ? "Fotografía inicial · paso imprescindible" : "Fotografía final"}</span>
+        <span className="eyebrow">{isInitial ? "Fotografía inicial · tu punto de partida" : "Fotografía final"}</span>
         <h2 id={`${stage}-assessment-title`}>
-          {isInitial ? "Antes de dar el primer paso, haz visible cómo estás hoy" : "Al cerrar este camino, ¿cómo te sientes hoy?"}
+          {isInitial ? "¿Cómo te sientes en este momento?" : "Al cerrar este camino, ¿cómo te sientes hoy?"}
         </h2>
         <p>
           {isInitial
-            ? "Esta mirada será tu punto de partida. Al terminar los 15 descubrimientos volverás a responder lo mismo para acercar el antes y el después de tu propio recorrido."
-            : "Responde desde este momento. Después podrás mirar ambas fotografías juntas, sin convertirlas en una competencia."}
+            ? "Son cuatro preguntas para reconocer cómo llegas. Toca un número del 1 al 10 en cada una, usando las frases de los extremos como referencia. Al terminar los quince descubrimientos volverás a responderlas para observar tu recorrido."
+            : "Responde las mismas cuatro preguntas desde cómo estás hoy. Toca un número del 1 al 10 en cada una. Después podrás observar ambos momentos y reconocer qué cambió o qué sigue necesitando cuidado."}
         </p>
         <div className="assessment-purpose" aria-label="Para qué sirve esta fotografía">
-          <p><Info size={17} /> No es un examen ni una medición clínica.</p>
-          <p><Repeat2 size={17} /> No hay respuestas correctas: elige lo que se acerque a tu percepción de hoy.</p>
-          <p><Footprints size={17} /> Nos ayuda a hacer visible el recorrido interno, no a medir tu valor.</p>
+          <p><Info size={17} /> Aquí «fotografía» significa una descripción de cómo te sientes. Se completa con números, sin usar la cámara.</p>
+          <p><Repeat2 size={17} /> Elige el valor que se acerque a tu experiencia. Por ejemplo, puedes elegir 5 si te reconoces cerca de la mitad entre ambas frases.</p>
+          <p><Footprints size={17} /> Cada respuesta es tu percepción de hoy. Puedes cambiarla antes de tocar el botón de abajo. Estos números no son una nota ni una medición clínica.</p>
         </div>
       </div>
       <form className="assessment-form" onSubmit={submit}>
@@ -112,9 +112,9 @@ export function JourneyAssessment({ stage }: { stage: AssessmentStage }) {
             placeholder="Hoy reconozco que..."
           />
         </div>
-        {!complete ? <p className="form-guidance"><Info size={16} /> Elige un valor para cada indicador antes de guardar.</p> : null}
+        {!complete ? <p className="form-guidance"><Info size={16} /> El botón se habilitará cuando elijas un número en las cuatro preguntas. La frase escrita es opcional.</p> : null}
         <button className="button button-primary" type="submit" disabled={!complete}>
-          <Footprints size={18} /> {isInitial ? "Guardar y abrir el Descubrimiento 01" : "Guardar mi fotografía final"}
+          <Footprints size={18} /> {isInitial ? "Conservar mis respuestas y abrir el primer paso" : "Conservar mi fotografía final"}
         </button>
       </form>
     </section>
@@ -139,12 +139,12 @@ export function JourneyComparison() {
     return (
       <section className="journey-comparison comparison-missing" aria-labelledby="journey-comparison-title">
         <span className="eyebrow">Mira cuánto has recorrido</span>
-        <h2 id="journey-comparison-title">Aún no podemos acercar los dos momentos</h2>
+        <h2 id="journey-comparison-title">Tu recorrido puede seguir tomando forma</h2>
         <p>
           {!initial && !final
-            ? "Faltan tu punto de partida y tu mirada de hoy. No mostraremos resultados inventados."
+            ? "Cuando estén completas la fotografía inicial y la final, encontrarás aquí tus respuestas de ambos momentos."
             : !initial
-              ? "Falta tu punto de partida. Conservamos tu mirada de hoy, pero no inventaremos una comparación."
+              ? "Tu fotografía final está conservada. La comparación necesita también las respuestas del inicio. Puedes reconocer tu recorrido a través de tus pausas y tus notas."
               : "Falta tu mirada de hoy. Cuando la completes, podrás ver ambos momentos juntos."}
         </p>
       </section>
@@ -158,7 +158,7 @@ export function JourneyComparison() {
           <span className="eyebrow">Mira cuánto has recorrido</span>
           <h2 id="journey-comparison-title">Dos momentos de tu propia mirada</h2>
         </div>
-        <p>Estos números no miden tu valor ni prometen una transformación. Solo acercan cómo te percibías entonces y cómo te percibes hoy.</p>
+        <p>Estas respuestas muestran cómo te percibías al comenzar y cómo estás hoy. Los valores pueden aumentar, mantenerse o disminuir. Puedes observarlos con curiosidad y preguntarte qué apoyo te gustaría recibir ahora.</p>
       </div>
 
       <div className="comparison-list">

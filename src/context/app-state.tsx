@@ -111,6 +111,7 @@ interface AppStateValue {
     finalAssessment: UserAssessment | null;
     journeyDays: number;
     accessExpired: boolean;
+    currentTimestamp: number | null;
     visibleJournalEntries: JournalEntry[];
     hasMoreJournalEntries: boolean;
     progression: ProgressionState;
@@ -700,9 +701,9 @@ export function AppStateProvider({
         entry.situation ? "Lo que la despertó: " + entry.situation : "",
         entry.bodyPlace ? "Lugar en el cuerpo: " + entry.bodyPlace : "",
         entry.thoughtsReleased.length > 0
-          ? "Lo que aflojé: " + entry.thoughtsReleased.join(", ")
+          ? "Lo que quiero practicar: " + entry.thoughtsReleased.join(", ")
           : "",
-        entry.releaseNote ? "Lo que descubrí: " + entry.releaseNote : "",
+        entry.releaseNote ? "Lo que quiero recordar: " + entry.releaseNote : "",
       ].filter(Boolean);
 
       persist({
@@ -964,6 +965,7 @@ export function AppStateProvider({
       finalAssessment,
       journeyDays: inclusiveJourneyDays(data),
       accessExpired,
+      currentTimestamp,
       visibleJournalEntries,
       hasMoreJournalEntries:
         visibleJournalEntries.length < data.journalEntries.length ||

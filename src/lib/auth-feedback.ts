@@ -16,7 +16,7 @@ export function authRouteFeedback(code: string | undefined): AuthFeedback | null
   switch (code) {
     case "pilot_configuration":
       return {
-        message: "El acceso interno todavía no está configurado por completo. El equipo debe revisar las variables privadas del despliegue.",
+        message: "El equipo está preparando el acceso del piloto. Puedes pedir ayuda y compartir la referencia que aparece debajo.",
         diagnosticCode: "ACCESS-PILOT-CONFIGURATION",
       };
     case "pilot_not_authorized":
@@ -52,11 +52,11 @@ function messageForCode(code: string, operation: AuthOperation) {
     case "captcha_failed":
       return "La verificación de seguridad no pudo validarse. Complétala otra vez antes de continuar.";
     case "email_provider_disabled":
-      return "El acceso con correo está deshabilitado en Supabase. El equipo debe habilitarlo antes de crear cuentas.";
+      return "El acceso con correo todavía está en preparación. Puedes consultar al equipo con la referencia que aparece debajo.";
     case "signup_disabled":
-      return "La creación de cuentas está deshabilitada en Supabase. El equipo debe habilitar nuevos registros.";
+      return "La creación de cuentas todavía está en preparación. Puedes consultar al equipo para saber cómo acceder.";
     case "email_address_not_authorized":
-      return "Supabase no puede enviar el correo de confirmación a esta dirección con la configuración actual. El equipo debe revisar el servicio de correo.";
+      return "El correo de confirmación no pudo enviarse a esta dirección. Consulta al equipo y comparte la referencia que aparece debajo para que podamos ayudarte.";
     case "over_email_send_rate_limit":
       return "Se alcanzó temporalmente el límite de correos de acceso. Espera unos minutos antes de volver a intentarlo.";
     case "over_request_rate_limit":
@@ -74,7 +74,7 @@ function messageForCode(code: string, operation: AuthOperation) {
     case "user_already_exists":
       return "Si ya creaste una cuenta con este correo, vuelve a la pantalla de ingreso.";
     case "unexpected_failure":
-      return "La cuenta no pudo crearse por un problema interno de datos. El equipo puede revisar el trigger de perfil con esta referencia.";
+      return "El servicio de acceso encontró una dificultad. Puedes volver a intentarlo más tarde o compartir esta referencia con el equipo para recibir ayuda.";
     default:
       return operation === "sign_in"
         ? "No pudimos abrir tu espacio. Revisa los datos y comparte la referencia con el equipo si vuelve a ocurrir."

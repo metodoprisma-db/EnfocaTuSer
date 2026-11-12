@@ -59,9 +59,9 @@ export function LessonView({ item }: { item: CatalogItem }) {
     return (
       <div className="page-wrap"><div className="locked-lesson">
         <span className="locked-lesson-icon"><BookHeart size={28} /></span>
-        <span className="eyebrow">Fotografía inicial pendiente</span>
-        <h1>Antes del Descubrimiento 01, necesitamos tu punto de partida</h1>
-        <p>Esta mirada breve no es un examen. Al finalizar los 15 descubrimientos la repetirás para hacer visible tu propio recorrido. Cuando la guardes, este paso se abrirá de inmediato.</p>
+        <span className="eyebrow">Tu punto de partida</span>
+        <h1>Comienza por reconocer cómo estás hoy</h1>
+        <p>La fotografía inicial son cuatro preguntas sobre cómo te sientes; se responde con números, sin usar la cámara. Al completarla podrás abrir el primer descubrimiento. Al final del recorrido volverás a responderlas para observar ambos momentos.</p>
         <Link className="button button-primary" href="/"><ArrowLeft size={18} /> Completar mi fotografía inicial</Link>
       </div></div>
     );
@@ -73,13 +73,13 @@ export function LessonView({ item }: { item: CatalogItem }) {
       <div className="page-wrap"><div className="locked-lesson">
         <span className="locked-lesson-icon"><LockKeyhole size={28} /></span>
         <span className="eyebrow">Un paso a la vez</span>
-        <h1>{integrating ? "Este descubrimiento está encontrando su lugar" : "Este espacio todavía está cerrado"}</h1>
+        <h1>{integrating ? "Un tiempo para llevar lo aprendido a tu día" : "Este paso estará disponible más adelante"}</h1>
         <p>
           {integrating && meta.progression.nextUnlockAt
-            ? `Podrás abrirlo el ${formatLocalMoment(meta.progression.nextUnlockAt)}. La fecha es orientativa y no necesitas esperar en la pantalla.`
+            ? `Podrás abrirlo el ${formatLocalMoment(meta.progression.nextUnlockAt)}, según el horario de este dispositivo. Puedes cerrar la aplicación y volver cuando te venga bien.`
             : item.kind === "extra"
               ? "Las prácticas de profundidad se habilitan juntas al completar el Descubrimiento 15."
-              : "La secuencia cuida el ritmo del camino. Vuelve al paso que está disponible ahora."}
+              : "Cada descubrimiento se abre después del anterior y de su tiempo de integración. En Mi camino encontrarás cuál puedes abrir ahora."}
         </p>
         <Link className="button button-primary" href="/camino"><ArrowLeft size={18} /> Volver a Mi camino</Link>
       </div></div>
@@ -92,9 +92,9 @@ export function LessonView({ item }: { item: CatalogItem }) {
         <section className="completion-hero" aria-labelledby="completion-title">
           <span className="completion-mark"><Check size={27} aria-hidden="true" /></span>
           <span className="eyebrow">Descubrimiento {String(item.number).padStart(2, "0")} completado</span>
-          <h1 id="completion-title">Lo que miraste hoy ya puede acompañarte afuera</h1>
+          <h1 id="completion-title">Te dedicaste un momento para escucharte</h1>
           <p>
-            No hace falta hacer nada más dentro del celular. El siguiente movimiento es sencillo: dejar que esta mirada aparezca, a su manera, en tu vida cotidiana.
+            Puedes cerrar aquí y seguir con tu día. Más abajo tienes una propuesta opcional para recordar este encuentro fuera de la pantalla. Puedes hacerla cuando te resulte útil o simplemente dejarla pasar.
           </p>
         </section>
 
@@ -141,11 +141,17 @@ export function LessonView({ item }: { item: CatalogItem }) {
             <p className="lesson-lead">{item.description}</p>
           </header>
 
+          <details className="lesson-howto" open={item.kind === "discovery" && item.index === 0}>
+            <summary>Cómo recorrer este {item.kind === "discovery" ? "descubrimiento" : "ejercicio"}</summary>
+            <p>Lee una sección a la vez. Cuando llegues a «Paso a paso», sigue las indicaciones a tu ritmo. Puedes mantener los ojos abiertos y elegir una postura cómoda.</p>
+            <p>Las preguntas se pueden responder mentalmente o en el diario opcional. Al terminar por hoy, toca el botón «Completar». Puedes cerrar aunque te sientas igual que al comenzar y volver a leerlo más adelante.</p>
+          </details>
+
           {item.audioUrl ? <section className="lesson-block"><h2><Headphones size={25} /> Escuchar esta práctica</h2><audio controls preload="none" src={item.audioUrl}>Tu navegador no puede reproducir este audio.</audio></section> : null}
 
           {item.focus && item.whyItMatters ? (
             <section className="lesson-guidance-grid" aria-label="Sentido de este descubrimiento">
-              <article><span className="eyebrow">Qué vamos a mirar</span><h2>La mirada de hoy</h2><p>{item.focus}</p></article>
+              <article><span className="eyebrow">Qué vamos a observar</span><h2>La propuesta de hoy</h2><p>{item.focus}</p></article>
               <article><span className="eyebrow">Por qué importa</span><h2>Lo que puede abrir</h2><p>{item.whyItMatters}</p></article>
             </section>
           ) : null}
@@ -163,16 +169,16 @@ export function LessonView({ item }: { item: CatalogItem }) {
             <p>{item.insight}</p>
             {item.perspectives?.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
           </section>
-          <section className="lesson-block"><span className="eyebrow">Preguntas de reflexión</span><h2>Escucha lo que aparece, sin corregirlo</h2><p className="helper-text">No necesitas responderlas todas. Quédate con la que haga espacio dentro de ti.</p><ul className="prompt-list">{item.prompts.map((prompt) => <li key={prompt}>{prompt}</li>)}</ul></section>
-          <section className="lesson-block lesson-gesture"><span className="eyebrow">Una experiencia breve</span><h2>Prueba un gesto pequeño</h2><p>{item.action}</p></section>
+          <section className="lesson-block"><span className="eyebrow">Para reflexionar</span><h2>Escúchate: ¿qué llega primero a tu mente?</h2><p className="helper-text">Elige una pregunta que se acerque a tu experiencia. Puedes responder en silencio, escribir unas palabras más abajo o continuar con el ejercicio.</p><ul className="prompt-list">{item.prompts.map((prompt) => <li key={prompt}>{prompt}</li>)}</ul></section>
+          <section className="lesson-block lesson-gesture"><span className="eyebrow">{item.durationLabel}</span><h2>Paso a paso</h2><p>{item.action}</p><ol className="exercise-steps">{item.actionSteps.map((step) => <li key={step}>{step}</li>)}</ol><p className="helper-text">El tiempo es una referencia. Puedes adaptar la postura, pausar o terminar cuando lo necesites.</p></section>
 
-          <section className="lesson-block lesson-journal"><span className="eyebrow"><BookHeart size={15} /> Diario opcional</span><h2>¿Hay algo que quieras guardar?</h2><p className="helper-text">Puedes seguir sin escribir. Si comienzas una nota, quedará como borrador en este dispositivo.</p><div className="field"><label htmlFor="lesson-reflection">Una nota para ti</label><textarea id="lesson-reflection" value={reflection} onChange={(event) => { setReflection(event.target.value); setSaved(false); }} placeholder="Lo que sentí, comprendí o deseo recordar..." /></div><div className="button-row"><button className="button button-secondary" type="button" onClick={saveReflection} disabled={!reflection.trim()}><Save size={17} /> Guardar en Mi diario</button>{reflection.trim() ? <span className="draft-status">Borrador guardado en este dispositivo</span> : null}{saved ? <span className="completed-badge"><Check size={14} /> Nota guardada</span> : null}</div></section>
+          <section className="lesson-block lesson-journal"><span className="eyebrow"><BookHeart size={15} /> Diario opcional</span><h2>¿Qué te gustaría conservar de este momento?</h2><p className="helper-text">Puedes continuar sin escribir. Si escribes, tu texto se conserva como borrador en este dispositivo. Para que aparezca en Mi diario, toca «Conservar en Mi diario».</p><div className="field"><label htmlFor="lesson-reflection">Una nota para ti</label><textarea id="lesson-reflection" value={reflection} onChange={(event) => { setReflection(event.target.value); setSaved(false); }} placeholder="Hoy noté... / Me gustaría recordar..." /></div><div className="button-row"><button className="button button-secondary" type="button" onClick={saveReflection} disabled={!reflection.trim()}><Save size={17} /> Conservar en Mi diario</button>{reflection.trim() ? <span className="draft-status">Tu borrador se conserva en este dispositivo</span> : null}{saved ? <span className="completed-badge"><Check size={14} /> Ya puedes leer tu nota en Mi diario</span> : null}</div></section>
         </article>
 
         <aside className="lesson-aside">
           <div className="mentor-note"><span className="eyebrow">Para cerrar</span><p>{item.mentorNote}</p>{item.closing ? <p className="lesson-closing">{item.closing}</p> : null}<blockquote className="seed-quote">{item.seed}</blockquote></div>
           <button className={`button ${completed ? "button-secondary" : "button-primary"}`} type="button" onClick={() => actions.toggleProgress(item.kind, item.index)} disabled={completed}>
-            <Check size={18} /> {completed ? "Ya forma parte de tu camino" : item.kind === "discovery" ? "Completar y llevarlo conmigo" : "Completar esta práctica"}
+            <Check size={18} /> {completed ? "Ya forma parte de tu camino" : item.kind === "discovery" ? "Completar este descubrimiento" : "Completar esta práctica"}
           </button>
           <p className="helper-text">{item.kind === "discovery" ? "Al completar, verás una invitación opcional para integrar lo vivido fuera de la pantalla." : "Podrás volver a esta práctica cuando quieras."}</p>
         </aside>

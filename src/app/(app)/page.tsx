@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowRight, BookHeart, CalendarHeart, Footprints, Sparkles } from "lucide-react";
 
 import { AnnouncementBanner } from "@/components/announcement-banner";
+import { ContinuationInvitation } from "@/components/continuation-invitation";
 import { GiftCard } from "@/components/gift-card";
 import { IntegrationInvitation } from "@/components/integration-invitation";
 import { JourneyAssessment } from "@/components/journey-assessment";
@@ -37,11 +38,11 @@ export default function HomePage() {
       <header className="welcome-header">
         <span className="eyebrow">{meta.initialAssessment ? "Mi espacio" : "Tu camino empieza aquí"}</span>
         <h1>{meta.initialAssessment
-          ? state.data.profile.displayName ? `Qué bueno verte, ${state.data.profile.displayName}` : "Qué bueno que volviste"
-          : "Antes de avanzar, detente a mirar cómo estás"}</h1>
+          ? state.data.profile.displayName ? `Qué bueno que regresaste, ${state.data.profile.displayName}` : "Qué bueno que regresaste"
+          : "Bienvenida, puedes empezar tal como estás"}</h1>
         <p>{meta.initialAssessment
-          ? "Este momento no pide prisa. Mira lo que está disponible y elige cómo quieres acompañarte hoy."
-          : "La fotografía inicial te ayudará a reconocer tu punto de partida y, al final, a hacer visible el recorrido. Cuando la guardes, el Descubrimiento 01 se abrirá de inmediato."}</p>
+          ? "Observa qué está disponible y elige cómo acompañarte hoy. Puedes retomar el recorrido o dedicarte una pausa breve."
+          : "Comienza con cuatro preguntas sobre cómo te sientes. Las llamamos fotografía inicial: se responden con números, sin usar la cámara. Al completarlas podrás abrir «Empieza sin prisa», con un primer ejercicio de alrededor de un minuto."}</p>
       </header>
 
       {!meta.initialAssessment ? (
@@ -51,7 +52,7 @@ export default function HomePage() {
           <div className="focus-intro">
             <span className="eyebrow">Tu momento presente</span>
             <h2 id="home-focus-title">Deja que lo recorrido encuentre su lugar</h2>
-            <p>El trabajo de hoy continúa en la vida cotidiana. No hace falta volver a la pantalla ni registrar nada durante este tiempo.</p>
+            <p>Puedes seguir con tu día. Si te apetece, esta propuesta te acompaña fuera de la pantalla; es opcional y puedes dejarla pasar.</p>
           </div>
           <IntegrationInvitation item={activeInvitation} nextUnlockAt={meta.progression.nextUnlockAt} />
         </section>
@@ -65,7 +66,7 @@ export default function HomePage() {
               <Link className="button button-primary" href={meta.pathComplete ? "/camino" : `/camino/discovery/${nextDiscovery?.slug}`}>
                 {meta.pathComplete ? "Mirar mi recorrido" : "Abrir mi descubrimiento"} <ArrowRight size={18} />
               </Link>
-              <Link className="button button-secondary" href="/soltar"><Sparkles size={18} /> Necesito soltar algo</Link>
+              <Link className="button button-secondary" href="/soltar"><Sparkles size={18} /> Hacer una pausa breve</Link>
             </div>
           </div>
           <div className="focus-number" aria-hidden="true">{meta.pathComplete ? "15" : String((nextIndex ?? 0) + 1).padStart(2, "0")}</div>
@@ -77,6 +78,18 @@ export default function HomePage() {
         <Link href="/diario"><BookHeart size={20} /><span><strong>Mi diario</strong><small>Escribe o vuelve a tus notas</small></span></Link>
         <Link href="/soltar"><Sparkles size={20} /><span><strong>Soltar ahora</strong><small>Regálate una pausa breve</small></span></Link>
       </section>
+
+      <details className="home-details">
+        <summary>Cómo usar tu espacio, paso a paso</summary>
+        <ol className="exercise-steps">
+          <li>En «Mi camino» encontrarás los quince descubrimientos en orden. Lee uno, prueba el ejercicio y toca «Completar» cuando termines por hoy. La fecha del siguiente paso aparecerá en Mi espacio.</li>
+          <li>Entre descubrimientos puedes cerrar la aplicación y seguir con tu día. La propuesta «Llévalo contigo» es opcional y no cambia la apertura del siguiente paso.</li>
+          <li>«Soltar ahora» ofrece una pausa guiada. «Mi diario» permite escribir y volver a tus notas. En «Brújula» puedes elegir una emoción y leer una orientación. Estos espacios están disponibles durante el recorrido.</li>
+          <li>Al completar cinco descubrimientos se abre una charla de 30 minutos con Clarissa y Scarlett. Encontrarás aquí el botón para coordinarla con el equipo.</li>
+        </ol>
+      </details>
+
+      <ContinuationInvitation />
 
       <details className="home-details">
         <summary>Tus huellas y preferencias</summary>

@@ -31,7 +31,7 @@ export function IntegrationInvitation({
         </div>
       </div>
       <p className="integration-context">
-        El descubrimiento ya está completo. Ahora puedes dejar que se vuelva experiencia mientras sigues con tu vida.
+        Ya completaste este descubrimiento. Si te apetece, puedes probar esta idea durante una actividad cotidiana, sin usar el teléfono.
       </p>
       <p>{invitation.text}</p>
       <blockquote>{invitation.reminder}</blockquote>
@@ -42,8 +42,8 @@ export function IntegrationInvitation({
         </p>
       ) : null}
       <div className="integration-note">
-        <strong>No es una tarea pendiente.</strong>
-        <span>Es opcional, sucede fuera de la pantalla y no necesitas registrarla ni volver para confirmar nada.</span>
+        <strong>Una invitación para cuando te venga bien.</strong>
+        <span>Es opcional. Puedes hacerla o dejarla pasar, sin escribir ni confirmar nada. El siguiente descubrimiento se abre al cumplirse el tiempo de integración, aunque elijas continuar con tu día.</span>
       </div>
     </article>
   );

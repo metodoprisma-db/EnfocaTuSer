@@ -11,7 +11,7 @@ export default function SoltarPage() {
         <span className="eyebrow">Una pausa de presencia</span>
         <h1>Soltar ahora</h1>
         <p>
-          Cinco pasos breves para reconocer una emoción, escuchar el cuerpo y aflojar una parte del peso. Puedes detenerte cuando lo necesites.
+          Una pausa guiada para reconocer cómo estás, observar el cuerpo y respirar con suavidad. Sigue una pantalla a la vez usando «Continuar» y «Volver». Escribir es opcional. Puedes detenerte cuando lo necesites y cerrar aunque te sientas igual que al comenzar.
         </p>
       </header>
       <ReleasePractice />

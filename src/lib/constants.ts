@@ -29,6 +29,10 @@ export const SUPPORT_URL =
 export const MEMBERSHIP_CHECKOUT_URL =
   process.env.NEXT_PUBLIC_MEMBERSHIP_CHECKOUT_URL?.trim() || SUPPORT_URL;
 
+export const HAS_MEMBERSHIP_CHECKOUT = Boolean(
+  process.env.NEXT_PUBLIC_MEMBERSHIP_CHECKOUT_URL?.trim(),
+);
+
 export const ENFORCE_SUBSCRIPTION =
   process.env.NEXT_PUBLIC_ENFORCE_SUBSCRIPTION === "true";
 

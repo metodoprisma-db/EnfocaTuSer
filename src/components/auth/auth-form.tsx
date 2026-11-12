@@ -12,7 +12,8 @@ import {
   safeAuthDiagnostic,
   type AuthOperation,
 } from "@/lib/auth-feedback";
-import { hasSupabaseEnvironment } from "@/lib/constants";
+import { hasSupabaseEnvironment, SUPPORT_URL } from "@/lib/constants";
+import { membershipOffer } from "@/data/membership-offer";
 import { getBrowserSupabaseClient } from "@/lib/supabase/client";
 
 export function AuthForm({
@@ -63,12 +64,12 @@ export function AuthForm({
       return false;
     }
     if (!hasSupabaseEnvironment) {
-      setMessage("El acceso en la nube estará disponible cuando se conecte Supabase. Puedes entrar en modo local ahora.");
+      setMessage(restrictedAccess ? "El equipo está preparando el acceso con cuenta. Puedes pedir ayuda con la referencia que aparece abajo." : "El acceso con cuenta aún está en preparación. Puedes tocar «Continuar como invitada» y conservar tu recorrido en este dispositivo.");
       setDiagnosticCode("AUTH-SUPABASE-NOT-CONFIGURED");
       return false;
     }
     if (restrictedAccess && !turnstileKey) {
-      setMessage("El acceso interno necesita que el equipo complete la configuración de seguridad antes de crear cuentas.");
+      setMessage("El equipo está preparando el acceso del piloto. Puedes pedir ayuda con la referencia que aparece abajo.");
       setDiagnosticCode("AUTH-TURNSTILE-NOT-CONFIGURED");
       return false;
     }
@@ -128,7 +129,7 @@ export function AuthForm({
         router.refresh();
         return;
       }
-      setMessage("Revisa tu correo para confirmar la cuenta y abrir tu espacio sincronizado.");
+      setMessage("Te enviamos un correo de confirmación. Abre el mensaje y toca el enlace para confirmar tu cuenta. Si no lo encuentras, revisa la carpeta de correo no deseado. Después podrás volver a entrar con tu correo y contraseña.");
     } catch (error) {
       showAuthError(error, mode === "login" ? "sign_in" : "sign_up");
     } finally {
@@ -138,17 +139,18 @@ export function AuthForm({
 
   return (
     <div className="auth-card">
-      <span className="eyebrow">{mode === "login" ? "Volver a tu espacio" : "Guardar tu recorrido"}</span>
-      <h2>{mode === "login" ? "Qué bueno verte" : "Crea tu acceso"}</h2>
+      <span className="eyebrow">{mode === "login" ? "Volver a tu espacio" : "Conservar tu recorrido"}</span>
+      <h2>{mode === "login" ? "Qué bueno que regresaste" : "Crea tu cuenta"}</h2>
       <p>
         {mode === "login"
           ? restrictedAccess
             ? "Entra con el correo habilitado para el piloto y recupera tu recorrido en cualquier dispositivo."
-            : "Sincroniza tus notas y avances entre dispositivos."
+            : "Escribe el correo y la contraseña con los que creaste tu cuenta para recuperar tus notas y avances."
           : restrictedAccess
             ? "Usa el mismo correo al que el equipo envió la invitación."
-            : "Tu progreso local se unirá a tu cuenta después del primer acceso."}
+            : "Escribe cómo quieres que te llamemos, tu correo y una contraseña de al menos ocho caracteres. Así podrás recuperar tus notas y avances al entrar con esta cuenta en otro dispositivo."}
       </p>
+      {mode === "register" && !restrictedAccess ? <p className="helper-text">Empieza con {membershipOffer.trialLabel}. {membershipOffer.continuation}</p> : null}
 
       <form onSubmit={submitEmail}>
         <div className="honeypot" aria-hidden="true">
@@ -170,6 +172,7 @@ export function AuthForm({
         <div className="field">
           <label htmlFor="password">Contraseña</label>
           <input id="password" type="password" minLength={8} autoComplete={mode === "login" ? "current-password" : "new-password"} value={password} onChange={(event) => setPassword(event.target.value)} required />
+          {mode === "register" ? <p className="helper-text">Elige al menos ocho caracteres. Usa una contraseña que puedas recordar y que no compartas con otras personas.</p> : null}
         </div>
 
         {turnstileKey ? (
@@ -185,7 +188,7 @@ export function AuthForm({
               onError={() => {
                 setCaptchaToken("");
                 setCaptchaUnavailable(true);
-                setMessage("La verificación de seguridad no pudo cargarse. Puedes recargar la página o continuar como invitada.");
+                setMessage(restrictedAccess ? "La verificación de seguridad no pudo cargarse. Puedes recargar la página o pedir ayuda al equipo." : "La verificación de seguridad no pudo cargarse. Puedes recargar la página o tocar «Continuar como invitada».");
               }}
               options={{ theme: "light", language: "es" }}
             />
@@ -194,27 +197,27 @@ export function AuthForm({
           <p className={`pilot-access-note${restrictedAccess ? " configuration-error" : ""}`}>
             <LockKeyhole size={14} style={{ verticalAlign: "-2px", marginRight: 5 }} />
             {restrictedAccess
-              ? "Configuración pendiente: falta conectar la verificación de seguridad de este despliegue."
-              : "La verificación visual no está configurada en este entorno."}
+              ? "El equipo está preparando la verificación de acceso. Si necesitas ayuda, encontrarás el enlace más abajo."
+              : "Puedes explorar como invitada y conservar tu recorrido en este dispositivo."}
           </p>
         )}
 
         <button className="button button-primary" style={{ width: "100%", marginTop: 20 }} type="submit" disabled={loading || !canSubmitEmail}>
-          {loading ? "Preparando..." : mode === "login" ? "Entrar a mi espacio" : "Crear mi acceso"} <ArrowRight size={18} />
+          {loading ? "Preparando tu espacio..." : mode === "login" ? "Entrar a mi espacio" : "Crear mi cuenta"} <ArrowRight size={18} />
         </button>
       </form>
 
       {message ? (
         <div className={`form-message${success ? " success" : ""}`} role="status">
           {message}
-          {diagnosticCode ? <small>Referencia segura: {diagnosticCode}</small> : null}
+          {diagnosticCode ? <small>Si pides ayuda al equipo, comparte esta referencia: {diagnosticCode}</small> : null}
         </div>
       ) : null}
 
       {!restrictedAccess ? (
         <div className={`guest-access${captchaUnavailable ? " highlighted" : ""}`}>
-          <span className="eyebrow">Camino de prueba</span>
-          <p>Puedes explorar el piloto sin crear una cuenta. El avance quedará guardado solo en este dispositivo y podrás vincularlo más adelante.</p>
+          <span className="eyebrow">Explorar como invitada</span>
+          <p>Puedes conocer este espacio sin crear una cuenta. Tu avance quedará en este navegador y dispositivo. Para recuperarlo en otro dispositivo, vuelve aquí y crea una cuenta que permita conservarlo en ambos.</p>
           <Link className="button button-secondary" href="/">
             Continuar como invitada <ArrowRight size={18} />
           </Link>
@@ -224,9 +227,10 @@ export function AuthForm({
       <p className="helper-text" style={{ marginTop: 22, textAlign: "center" }}>
         {mode === "login" ? "¿Es tu primera vez?" : "¿Ya tienes un acceso?"}{" "}
         <Link href={mode === "login" ? "/registro" : "/login"} style={{ color: "var(--etq-azul)", fontWeight: 700 }}>
-          {mode === "login" ? "Crear acceso" : "Volver a entrar"}
+          {mode === "login" ? "Crear mi cuenta" : "Volver a entrar"}
         </Link>
       </p>
+      <a className="support-link" href={SUPPORT_URL} target="_blank" rel="noreferrer">Escribe aquí y nuestro equipo te ayudará con gusto</a>
     </div>
   );
 }

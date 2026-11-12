@@ -14,18 +14,19 @@ export default function CaminoPage() {
   const currentIndex = meta.progression.nextDiscoveryIndex;
   const current = currentIndex === null ? null : discoveries[currentIndex];
   const currentStatus = currentIndex === null ? null : meta.progression.discoveryStatus(currentIndex);
+  const integrationTime = meta.unlockIntervalMs === 60_000 ? "un minuto" : "doce horas";
 
   return (
     <div className="page-wrap journey-page">
       <header className="page-header journey-header">
-        <span className="eyebrow">De hacer y tener, hacia ser</span>
+        <span className="eyebrow">Un espacio para escucharte y elegir</span>
         <h1>Mi camino</h1>
-        <p>Quince descubrimientos guiados para mirar una capa a la vez, con un tiempo real de integración entre cada paso. Lo completado queda disponible para volver cuando lo necesites.</p>
+        <p>Quince descubrimientos guiados, en orden. Cada uno incluye una pausa, preguntas y un ejercicio explicado paso a paso. Al completar uno, el siguiente se abre después de {integrationTime}. Puedes cerrar la aplicación durante ese tiempo. Los pasos completados quedan disponibles para volver a leerlos.</p>
       </header>
 
       <section className="path-map" aria-labelledby="path-map-title">
         <div className="section-heading">
-          <div><span className="eyebrow">Tu recorrido</span><h2 id="path-map-title">Una capa a la vez</h2></div>
+          <div><span className="eyebrow">Tu recorrido</span><h2 id="path-map-title">Un descubrimiento a la vez</h2></div>
           <p>{meta.stats.discoveriesCompleted} de 15 descubrimientos recorridos</p>
         </div>
         <ol className="path-steps">
@@ -45,7 +46,7 @@ export default function CaminoPage() {
       {!meta.initialAssessment ? (
         <section className="journey-callout">
           <LockKeyhole size={22} />
-          <div><span className="eyebrow">Antes de comenzar</span><h2>Primero, toma tu fotografía inicial</h2><p>Es un paso breve y necesario para hacer visible tu punto de partida. Cuando la guardes, el Descubrimiento 01 se abrirá de inmediato.</p></div>
+          <div><span className="eyebrow">Antes de comenzar</span><h2>Reconoce tu punto de partida</h2><p>En Mi espacio encontrarás cuatro preguntas sobre cómo te sientes. Se responden con números, sin usar la cámara. Al completarlas se abrirá «Empieza sin prisa».</p></div>
           <Link className="button button-primary" href="/">Ir a Mi espacio <ArrowRight size={18} /></Link>
         </section>
       ) : current ? (
@@ -78,7 +79,7 @@ export default function CaminoPage() {
             {depthPractices.map((item) => <CatalogCard key={item.id} item={item} completed={meta.completedExtras.has(item.index)} />)}
           </div>
         ) : (
-          <div className="depth-locked"><LockKeyhole size={24} /><div><h3>Este espacio todavía está resguardado</h3><p>No necesitas hacer más ahora. Las doce prácticas aparecerán juntas cuando completes el Descubrimiento 15.</p></div></div>
+          <div className="depth-locked"><LockKeyhole size={24} /><div><h3>Más recursos para cuando completes el recorrido</h3><p>Al completar el Descubrimiento 15 se abrirán las doce prácticas. Después podrás elegir la que te resulte útil, en el orden que prefieras.</p></div></div>
         )}
       </section>
     </div>

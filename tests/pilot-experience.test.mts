@@ -23,7 +23,7 @@ test("el catálogo conserva las quince invitaciones aprobadas", () => {
   assert.equal(discoveries.length, 15);
   assert.equal(discoveries.every((item) => item.integrationInvitation), true);
   assert.deepEqual(discoveries[0].integrationInvitation, {
-    title: "Un momento sin lucha",
+    title: "Un momento con suavidad",
     text: "Cuando una emoción aparezca mientras sigues con tu día, haz una pausa por un instante y dile por dentro: «Esto también puede estar aquí por un momento».",
     reminder: "Esto puede estar aquí por un momento.",
   });

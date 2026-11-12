@@ -103,9 +103,9 @@ export function NotificationPreferences() {
     <section className="notification-settings" aria-labelledby="notification-title">
       <div className="notification-copy">
         <span className="eyebrow"><Bell size={15} /> Avisos serenos</span>
-        <h2 id="notification-title">Volver cuando el momento esté disponible</h2>
+        <h2 id="notification-title">Un aviso cuando puedas abrir el siguiente paso</h2>
         <p>
-          El aviso no revela lo que escribiste ni repite recordatorios. La fecha exacta siempre queda visible en Mi espacio.
+          En Mi espacio encontrarás la fecha del próximo descubrimiento. Si quieres, puedes activar además un aviso de este dispositivo. El mensaje solo indica que hay un paso disponible y mantiene privadas tus notas.
         </p>
       </div>
       <label className="preference-toggle">
@@ -116,7 +116,7 @@ export function NotificationPreferences() {
         />
         <span>
           <strong>Quiero un aviso adicional del dispositivo</strong>
-          <small>Solo se pedirá permiso al activar esta opción.</small>
+          <small>Al activar esta opción, tu navegador te pedirá permiso. Puedes desactivarla aquí cuando quieras.</small>
         </span>
       </label>
       {permission === "granted" ? (

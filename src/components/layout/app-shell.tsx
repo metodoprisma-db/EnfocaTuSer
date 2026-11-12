@@ -109,7 +109,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           {state.user ? (
             <span className="auth-link"><CircleUserRound size={17} /> {state.user.email}</span>
           ) : (
-            <Link className="auth-link" href="/login"><LogIn size={17} /> Sincronizar</Link>
+            <Link className="auth-link" href="/login"><LogIn size={17} /> Entrar a mi cuenta</Link>
           )}
         </div>
         {meta.accessExpired ? <MembershipTransition /> : children}
